@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.theusick</groupId>
+        <artifactId>fleet-backend</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>dependencies</artifactId>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <lombok.version>1.18.34</lombok.version>
+        <mapstruct.version>1.6.2</mapstruct.version>
+
+        <!-- Spring-boot core dependencies -->
+        <springdoc.version>2.6.0</springdoc.version>
+        <!-- Spring-boot data dependencies -->
+        <postgresql.driver.version>42.7.4</postgresql.driver.version>
+        <!-- Spring-boot frontend dependencies -->
+        <bootstrap.version>5.3.3</bootstrap.version>
+
+        <spring-boot.version>3.3.5</spring-boot.version>
+    </properties>
+
+    <modules>
+        <module>lombok</module>
+        <module>mapstruct</module>
+        <module>spring-boot</module>
+    </modules>
+
+</project>

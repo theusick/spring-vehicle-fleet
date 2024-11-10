@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.theusick</groupId>
+    <artifactId>fleet-backend</artifactId>
+    <version>${revision}</version>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <revision>0.1</revision>
+
+        <mvn.version>3.9.8</mvn.version>
+
+        <jdk.version>23</jdk.version>
+        <maven.compiler.release>${jdk.version}</maven.compiler.release>
+
+        <!-- Enforcer Plugin to enforce Maven, Java versions, and dependency rules -->
+        <maven.enforce.plugin.version>3.5.0</maven.enforce.plugin.version>
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>3.5.0</maven.surefire.plugin.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <modules>
+        <module>dependencies</module>
+        <module>modules</module>
+    </modules>
+
+</project>

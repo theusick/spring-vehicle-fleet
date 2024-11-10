@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.theusick</groupId>
+        <artifactId>dependencies.spring-boot.core</artifactId>
+        <version>${revision}</version>
+        <relativePath>../core/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>dependencies.spring-boot.launcher</artifactId>
+
+    <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.theusick</groupId>
+            <artifactId>dependencies.spring-boot.data</artifactId>
+            <version>${revision}</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.theusick</groupId>
+            <artifactId>dependencies.spring-boot.frontend</artifactId>
+            <version>${revision}</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.theusick</groupId>
+            <artifactId>dependencies.spring-boot.test</artifactId>
+            <version>${revision}</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Enforcer Plugin to enforce Maven, Java versions, and dependency rules -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven.enforce.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- Ensures the project is built with the specified Maven version -->
+                                <requireMavenVersion>
+                                    <version>${mvn.version}</version>
+                                </requireMavenVersion>
+                                <!-- Ensures the project uses the specified JDK version -->
+                                <requireJavaVersion>
+                                    <version>${jdk.version}</version>
+                                </requireJavaVersion>
+                                <!-- Checks for dependency convergence to prevent conflicts -->
+                                <dependencyConvergence/>
+                                <!-- Disallows duplicate dependency versions in the POM file -->
+                                <banDuplicatePomDependencyVersions/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,30 @@
+root = true
+
+[*]
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
+end_of_line = lf
+indent_style = space
+
+[{*.mustache,*.ftl}]
+insert_final_newline = false
+
+[*.java]
+indent_size = 4
+tab_width = 4
+max_line_length = 100
+ij_java_class_count_to_use_import_on_demand = 99
+ij_java_names_count_to_use_import_on_demand = 99
+
+[{*.pom,*.xml}]
+ij_xml_keep_whitespaces = false
+
+[*.xml]
+indent_size = 4
+
+[{*.yml,*.yaml,*.json}]
+indent_size = 2
+
+[{*.md,*.txt,*.rst}]
+trim_trailing_whitespace = false

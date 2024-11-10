@@ -1,0 +1,59 @@
+# IDE files
+.idea
+*.iml
+*.ipr
+*.iws
+.vscode
+.history
+.project
+.classpath
+.factorypath
+.settings
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Maven
+.m2
+target/
+!.mvn/wrapper/maven-wrapper.jar
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/pom.xml.next
+**/release.properties
+**/dependency-reduced-pom.xml
+**/buildNumber.properties
+.mvn/timing.properties
+bin/
+dist/
+classes/
+out/
+*.db
+
+# Gradle
+.gradle
+
+# Logs
+*.log
+log
+logs/
+
+*.patch
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+
