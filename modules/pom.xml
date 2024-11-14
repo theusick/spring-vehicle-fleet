@@ -17,6 +17,9 @@
 
     <modules>
         <module>application</module>
+        <module>core</module>
+        <module>fleet</module>
+        <module>frontend</module>
     </modules>
 
 </project>

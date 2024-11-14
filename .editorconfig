@@ -23,6 +23,9 @@ ij_xml_keep_whitespaces = false
 [*.xml]
 indent_size = 4
 
+[*.html]
+indent_size = 2
+
 [{*.yml,*.yaml,*.json}]
 indent_size = 2
 

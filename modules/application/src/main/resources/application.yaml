@@ -1,42 +1,84 @@
+server:
+  port: ${BACKEND_SERVER_PORT:8080}
+  # Set server that when it receives the SIGTERM signal, it no longer accepts
+  # new requests, but at the same time completed those that are already in
+  # operation during the time specified in the
+  # `spring.lifecycle.timeout-per-shutdown-phase`
+  # default is 30 seconds
+  # read more here: https://habr.com/en/companies/maxilect/articles/666090/
+  shutdown: graceful
+  servlet:
+    encoding:
+      # Charset of HTTP requests and responses.
+      # Added to the "Content-Type" header if not set explicitly
+      charset: UTF-8
+      # Enable http encoding support
+      enabled: true
+      force: true
+
+  tomcat:
+    # Set Tomcat how long to wait after opening the connection before receiving
+    # the request. It can be useful to protect against DDoS attacks when the client
+    # establishes a connection, the server allocates a stream to process it,
+    # but the request does not arrive.
+    # Tomcat will spend the same time reading the request body.
+    connection-timeout: 3s
+    # Time during which Tomcat keeps the connection open, waiting for new requests
+    keep-alive-timeout: 20s
+    # Tomcat uses a thread pool to handle incoming connections:
+    # one connection is one thread.
+    # By default, the maximum number of threads in the pool is 200.
+    threads:
+      max: 200
+      # Min number of threads that will be created in the pool when the server starts
+      min-spare: 10
+
 #  https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 spring:
   application:
     name: fleet-backend
+
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
 
   datasource:
     url: ${BACKEND_DB_URL:jdbc:postgresql://localhost:5432/database}
     username: ${POSTGRES_USERNAME:user}
     password: ${POSTGRES_PASSWORD:hackme}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      # timeout to receive a connection from the connection pool
+      connection-timeout: 2000 # ms
+      # Recommendation:
+      # connections = ((core_count * 2) + effective_spindle_count)
+      # where
+      # core_count - number of processor cores
+      # effective_spindle_count - the number of rotating disks
+      # Since we assume that an SSD will be used, there will be no rotating disks,
+      # therefore, effective_spindle_count = 0
+      maximum-pool-size: 8
+
+  flyway:
+    enabled: true
+    url: ${BACKEND_DB_URL:jdbc:postgresql://localhost:5432/database}
+    user: ${POSTGRES_USERNAME:user}
+    password: ${POSTGRES_PASSWORD:hackme}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
 
     jpa:
-      show-sql: true
       open-in-view: false
       hibernate:
-        ddl-auto: create
+        ddl-auto: validate
       properties:
-        #  http://docs.jboss.org/hibernate/orm/5.3/userguide/html_single/Hibernate_User_Guide.html#configurations
+        #  https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#envers-configuration
         hibernate:
           format_sql: true
+          show-sql: true
+          default_schema: public
           default_batch_fetch_size: 20
           # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
           jdbc.batch_size: 20
-
-    flyway:
-      user: ${POSTGRES_USERNAME:user}
-      password: ${POSTGRES_PASSWORD:hackme}
-      default-schema: public
-      enabled: true
-      locations: classpath:db/migration
-      baseline-on-migrate: true
-
-server:
-  port: ${BACKEND_SERVER_PORT:8080}
-  servlet:
-    encoding:
-      charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
-      enabled: true # Enable http encoding support
-      force: true
 
 springdoc:
   swagger-ui:

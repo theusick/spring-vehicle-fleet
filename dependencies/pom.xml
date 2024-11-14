@@ -21,10 +21,11 @@
 
         <!-- Spring-boot core dependencies -->
         <springdoc.version>2.6.0</springdoc.version>
-        <!-- Spring-boot data dependencies -->
-        <postgresql.driver.version>42.7.4</postgresql.driver.version>
         <!-- Spring-boot frontend dependencies -->
+        <webjars.locator.version>0.52</webjars.locator.version>
         <bootstrap.version>5.3.3</bootstrap.version>
+        <jquery.version>3.7.1</jquery.version>
+
 
         <spring-boot.version>3.3.5</spring-boot.version>
     </properties>

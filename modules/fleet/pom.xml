@@ -11,19 +11,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>modules.application</artifactId>
+    <artifactId>modules.fleet</artifactId>
 
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.theusick</groupId>
-            <artifactId>modules.fleet</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.theusick</groupId>
-            <artifactId>modules.frontend</artifactId>
+            <artifactId>modules.core</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

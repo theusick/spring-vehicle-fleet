@@ -36,7 +36,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.driver.version}</version>
             <scope>runtime</scope>
         </dependency>
         <!-- Flyway migrations -->
