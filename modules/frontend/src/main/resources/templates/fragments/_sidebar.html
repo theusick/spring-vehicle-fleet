@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<div class="sidebar">
+  <aside id="sidebar" class="collapsed">
+    <nav class="nav flex-column">
+      <!-- Default item -->
+      <li class="sidebar-item">
+        <a class="nav-link" href="/overview">
+          <span class="icon">
+            <i class="bi bi-grid"></i>
+          </span>
+          <span class="description">Overview</span>
+        </a>
+      </li>
+      <!-- Item with submenu -->
+      <li class="sidebar-item">
+        <a class="nav-link" data-bs-toggle="collapse" data-bs-target="#submenu"
+           aria-expanded="false" aria-controls="submenu">
+          <span class="icon">
+            <i class="bi bi-table"></i>
+          </span>
+          <span class="description">Tables <i class="bi bi-chevron-down"></i></span>
+        </a>
+        <!-- Submenu -->
+        <div class="sub-menu collapse" id="submenu">
+          <a class="nav-link" href="/vehicles">
+            <span class="icon">
+              <i class="bi bi-file-earmark-check"></i>
+            </span>
+            <span class="description">Vehicles</span>
+          </a>
+          <a class="nav-link" href="/brands">
+            <span class="icon">
+              <i class="bi bi-file-earmark-check"></i>
+            </span>
+            <span class="description">Brands</span>
+          </a>
+        </div>
+      </li>
+    </nav>
+  </aside>
+</div>

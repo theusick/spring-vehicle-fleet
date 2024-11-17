@@ -18,10 +18,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<VehicleModel> getVehicles() {
-        List<VehicleModel> vehicles = vehicleRepository.findAll().stream()
+        return vehicleRepository.findAll().stream()
             .map(vehicleMapper::vehicleModelFromEntity)
             .toList();
-        return vehicles;
     }
 
 }
