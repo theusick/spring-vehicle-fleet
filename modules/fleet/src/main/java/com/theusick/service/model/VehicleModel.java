@@ -19,6 +19,6 @@ public class VehicleModel {
     private double price;
     private String plateNumber;
 
-    private Long brandId;
+    private VehicleBrandModel brand;
 
 }

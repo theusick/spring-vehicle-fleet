@@ -29,12 +29,12 @@ ALTER TABLE vehicles
     ADD CONSTRAINT FK_VEHICLES_ON_BRAND FOREIGN KEY (brand_id) REFERENCES vehicle_brands (id);
 
 INSERT INTO vehicle_brands (id, name, type, seats, fuel_tank, payload_capacity) VALUES
-(1, 'Toyota', 'Легковой', 5, 50.0, 500),
-(2, 'Mercedes-Benz', 'Легковой', 5, 70.0, 600),
-(3, 'Volvo', 'Грузовой', 2, 120.0, 8000),
-(4, 'Volkswagen', 'Легковой', 5, 55.0, 600),
-(5, 'MAN', 'Грузовой', 2, 150.0, 10000),
-(6, 'Scania', 'Автобус', 50, 200.0, 1000);
+(1, 'Toyota Prius', 'Легковой', 5, 50.0, 500),
+(2, 'Mercedes-Benz S-Class', 'Легковой', 5, 70.0, 600),
+(3, 'Volvo FH16', 'Грузовой', 2, 120.0, 8000),
+(4, 'Volkswagen Golf', 'Легковой', 5, 55.0, 600),
+(5, 'MAN TGX', 'Грузовой', 2, 150.0, 10000),
+(6, 'Scania Citywide', 'Автобус', 50, 200.0, 1000);
 
 INSERT INTO vehicles (id, year, mileage, color, price, plate_number, brand_id) VALUES
 (1, 2023, 5000, 'Красный', 1500000.00, 'O481XX147', 1),

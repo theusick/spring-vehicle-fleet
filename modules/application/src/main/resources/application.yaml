@@ -66,20 +66,6 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-    jpa:
-      open-in-view: false
-      hibernate:
-        ddl-auto: validate
-      properties:
-        #  https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#envers-configuration
-        hibernate:
-          format_sql: true
-          show-sql: true
-          default_schema: public
-          default_batch_fetch_size: 20
-          # https://stackoverflow.com/questions/21257819/what-is-the-difference-between-hibernate-jdbc-fetch-size-and-hibernate-jdbc-batc
-          jdbc.batch_size: 20
-
 springdoc:
   swagger-ui:
     path: /
