@@ -1,0 +1,9 @@
+spring:
+  # Templates reloading during development launch
+  thymeleaf:
+    cache: false
+
+  # Static resources reloading during development launch
+  web:
+    resources:
+      cache.period: 0

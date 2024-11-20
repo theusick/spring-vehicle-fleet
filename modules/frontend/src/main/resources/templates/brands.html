@@ -8,26 +8,30 @@
   <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body class="bg-light">
-<header th:insert="~{fragments/_header :: div}" class="container"></header>
-<div th:insert="~{fragments/_sidebar :: div}"></div>
+<header th:replace="~{fragments/_header :: header}"></header>
+<aside th:replace="~{fragments/_sidebar :: sidebar('brands')}"></aside>
 
-<main role="main" class="container">
-  <section class="main-content-container">
-    <h1>Vehicle Brands List</h1>
-    <div class="vehicleBrandsTable">
-      <iframe th:src="@{components/tables/vehicle_brands_table}"
-              style="width: 100%; height: fit-content; border: none; background-color: transparent;"></iframe>
-    </div>
-  </section>
-</main>
+<div class="main-content">
+  <main>
+    <section class="main-content-container p-3">
+      <h1>Vehicle Brands List</h1>
+      <div class="vehicleBrandsTable">
+        <iframe th:src="@{components/tables/vehicle_brands_table}"
+                style="width: 100%; height: fit-content; border: none; background-color: transparent;"></iframe>
+      </div>
+    </section>
+  </main>
+</div>
 
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script type="module" th:src="@{/js/sidebar/sidebar.js}"></script>
+<script th:src="@{/js/sidebar/toggle-sidebar.js}"></script>
+<script th:src="@{/js/sidebar/activate-sidebar-link.js}"></script>
 <script th:src="@{/js/iframe/iframe-adjust-height.js}"></script>
 </body>
 </html>
