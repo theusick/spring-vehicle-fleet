@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!--/* Title of this template will be passed to the head fragment */-->
+<head th:replace="~{views/tables/layout :: head(title=~{this :: title}, links=~{}, scripts=~{})}">
+  <title>Vehicles List</title>
+</head>
+<body
+  th:replace="~{views/tables/layout :: body(
+  activeSidebarLink='vehicles',
+  content=~{:: #content},
+  pageScripts=~{:: #tableScripts})}">
+<th:block id="content">
+  <h1>Vehicles List</h1>
+  <div th:replace="~{views/tables/components/vehicles-table :: table}"></div>
+</th:block>
+
+<th:block id="tableScripts">
+  <script th:inline="javascript" type="text/javascript"
+          th:src="@{/js/tables/create/vehicles.js}"></script>
+  <script th:inline="javascript" type="text/javascript"
+          th:src="@{/js/tables/modals/common.js}"></script>
+  <script th:inline="javascript" type="text/javascript"
+          th:src="@{/js/tables/modals/vehicles.js}"></script>
+</th:block>
+</body>
+</html>

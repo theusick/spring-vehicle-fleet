@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div id="table-container" th:fragment="table">
+  <table id="vehicleBrandsTable" class="table table-striped table-hover table-bordered"
+         style="width:100%">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Seats</th>
+      <th>Fuel tank</th>
+      <th>Payload</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!--/*@thymesVar id="brands" type="List<VehicleBrandModel>: brand objects list"*/-->
+    <tr th:each="brand : ${brands}"
+        th:with="btnUrl=@{/brands/{id}(id=${brand.id})}">
+      <td th:text="${brand.id}">ID</td>
+      <td th:text="${brand.name}">Name</td>
+      <td th:text="${brand.type}">Type</td>
+      <td th:text="${brand.seats}">Seats</td>
+      <td th:text="${brand.fuelTank}">Fuel tank</td>
+      <td th:text="${brand.payloadCapacity}">Payload</td>
+
+      <td>
+        <!--/* Button in Actions column to edit exec row */-->
+        <a class="btn btn-primary btn-sm" id="editButton" th:href="${btnUrl}">
+        <span>
+          <i class="bi bi-pencil-square"></i>
+        </span>
+          <span>Edit</span>
+        </a>
+        <!--/* Button in Actions column to delete exec row */-->
+        <a class="btn btn-danger btn-sm" id="deleteButton" th:href="${btnUrl}"
+           th:attr="data-delete-url=${btnUrl}">
+          <span>
+          <i class="bi bi-trash"></i>
+        </span>
+          <span>Delete</span>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <!--/* Modal to add new vehicles */-->
+  <div th:with="modalBodyFragment = ~{views/fragments/body/brand/add-body ::
+       vehicleBrandAddForm}">
+    <div
+      th:replace="~{views/fragments/modals/_add-modal :: addModal(
+      modalId='addVehicleBrandModal',
+      modalTitle='Add new brand',
+      modalBody=${modalBodyFragment},
+      modalActionLabel='Save',
+      modalAction='/brands')}">
+    </div>
+  </div>
+  <!--/* Modal to edit existed vehicles from table */-->
+  <div th:with="modalBodyFragment = ~{views/fragments/body/brand/edit-body ::
+       vehicleBrandEditBody}">
+    <div
+      th:replace="~{views/fragments/modals/_edit-modal :: editModal(
+      modalId='editVehicleBrandModal',
+      modalTitle='Edit brand',
+      modalBody=${modalBodyFragment},
+      modalActionLabel='Edit',
+      modalAction='/brands')}">
+    </div>
+  </div>
+  <!--/* Modal to delete existed vehicles from table */-->
+  <div
+    th:replace="~{views/fragments/modals/_delete-modal :: deleteModal(
+    modalAction='/brands',
+    objectTypeName='Brand',
+    additionalText=~{:: #additionalText})}">
+    <th:block id="additionalText">
+      <p><strong>Note!</strong> Deletion will cascade remove all record referring to this one!</p>
+    </th:block>
+  </div>
+</div>

@@ -129,6 +129,7 @@
                 <configuration>
                     <release>${maven.compiler.release}</release>
                     <encoding>${project.reporting.outputEncoding}</encoding>
+                    <parameters>true</parameters>
                     <annotationProcessorPaths combine.children="append">
                         <path>
                             <groupId>org.projectlombok</groupId>

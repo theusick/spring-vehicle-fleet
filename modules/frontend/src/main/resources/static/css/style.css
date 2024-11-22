@@ -21,6 +21,14 @@
     max-width: var(--main-sidebar-not-expand-max-width);
 }
 
+.table {
+    margin: 0;
+    padding: 4px;
+    overflow-x: hidden;
+    background-color: inherit;
+    width:100%;
+}
+
 /* Sidebar */
 #sidebar {
     position: fixed;
@@ -80,7 +88,7 @@ a.sidebar-link {
 }
 
 a.sidebar-link.active {
-    background-color: #007bff;
+    background-color: #0066FFFF;
     color: #ffffff;
     font-weight: bold;
     border-left: 3px solid #ffffff;
@@ -106,7 +114,7 @@ a.sidebar-link:hover {
 }
 
 a.sidebar-link.active:hover {
-    background-color: #0066FFFF;
+    background-color: #007bff;
     color: #ffffff;
     font-weight: bold;
     border-left: 3px solid #ffffff;

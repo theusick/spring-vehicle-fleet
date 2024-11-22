@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="vehicleBrandEditBody">
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" id="vehicleBrandId" class="form-control" name="id" readonly/>
+    <label for="vehicleBrandId" class="form-label">ID</label>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" id="vehicleBrandName" name="name" class="form-control" required/>
+    <label for="vehicleBrandName" class="form-label">Name</label>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" id="vehicleBrandType" name="type" class="form-control" required/>
+    <label for="vehicleBrandType" class="form-label">Type</label>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="number" id="vehicleBrandSeats" name="seats" class="form-control" required/>
+    <label for="vehicleBrandSeats" class="form-label">Seats</label>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="number" id="vehicleBrandFuelTank" name="fuelTank" class="form-control" required/>
+    <label for="vehicleBrandFuelTank" class="form-label">Fuel Tank</label>
+  </div>
+
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="number" id="vehicleBrandPayloadCapacity" name="payloadCapacity" class="form-control" required/>
+    <label for="vehicleBrandPayloadCapacity" class="form-label">Payload Capacity</label>
+  </div>
+</div>

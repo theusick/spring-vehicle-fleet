@@ -66,6 +66,10 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+  mvc:
+    hiddenmethod.filter:
+        enabled: true
+
 springdoc:
   swagger-ui:
     path: /

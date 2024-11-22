@@ -1,8 +1,9 @@
 package com.theusick.controller;
 
 import com.theusick.api.exception.NotFoundApiException;
-import com.theusick.service.VehicleService;
+import com.theusick.service.VehicleBrandService;
 import com.theusick.service.exception.NoSuchException;
+import com.theusick.service.model.VehicleBrandModel;
 import com.theusick.service.model.VehicleModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,54 +20,54 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping("/vehicles")
+@RequestMapping("/brands")
 @AllArgsConstructor
-public class VehicleController {
+public class VehicleBrandController {
 
-    private final VehicleService vehicleService;
+    private final VehicleBrandService vehicleBrandService;
 
     @GetMapping
-    public String getVehicles(Model model) {
-        List<VehicleModel> vehicles = vehicleService.getVehicles();
-        model.addAttribute("vehicles", vehicles);
-        return "views/tables/vehicles";
+    public String getVehicleBrands(Model model) {
+        List<VehicleBrandModel> brands = vehicleBrandService.getVehicleBrands();
+        model.addAttribute("brands", brands);
+        return "views/tables/brands";
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public VehicleModel getVehicle(@PathVariable Long id) {
+    public VehicleBrandModel getVehicleBrand(@PathVariable Long id) {
         try {
-            return vehicleService.getVehicle(id);
+            return vehicleBrandService.getVehicleBrand(id);
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
     }
 
     @PostMapping
-    public String createVehicle(@ModelAttribute VehicleModel vehicle) {
+    public String createVehicleBrand(@ModelAttribute VehicleBrandModel vehicleBrand) {
         try {
-            vehicleService.createVehicle(vehicle.getBrand().getId(), vehicle);
-            return "redirect:/vehicles";
+            vehicleBrandService.createVehicleBrand(vehicleBrand);
+            return "redirect:/brands";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
     }
 
     @PutMapping
-    public String updateVehicle(VehicleModel vehicle) {
+    public String updateVehicleBrand(VehicleBrandModel vehicleBrand) {
         try {
-            vehicleService.updateVehicle(vehicle);
-            return "redirect:/vehicles";
+            vehicleBrandService.updateVehicleBrand(vehicleBrand);
+            return "redirect:/brands";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public String deleteVehicle(@PathVariable Long id) {
+    public String deleteVehicleBrand(@PathVariable Long id) {
         try {
-            vehicleService.deleteVehicle(id);
-            return "redirect:/vehicles";
+            vehicleBrandService.deleteVehicleBrand(id);
+            return "redirect:/brands";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }

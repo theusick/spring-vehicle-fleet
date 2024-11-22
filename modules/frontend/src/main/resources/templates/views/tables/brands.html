@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{views/tables/layout :: head(title=~{this :: title}, links=~{}, scripts=~{})}">
+  <title>Vehicle Brands List</title>
+</head>
+<body
+  th:replace="~{views/tables/layout :: body(
+  activeSidebarLink='brands',
+  content=~{:: #content},
+  pageScripts=~{:: #tableScripts})}">
+<th:block id="content">
+  <h1>Vehicle Brands List</h1>
+  <div th:replace="~{views/tables/components/brands-table :: table}"></div>
+</th:block>
+
+<th:block id="tableScripts">
+  <script th:inline="javascript" type="text/javascript"
+          th:src="@{/js/tables/create/brands.js}"></script>
+  <script th:inline="javascript" type="text/javascript"
+          th:src="@{/js/tables/modals/common.js}"></script>
+  <script th:inline="javascript" type="text/javascript"
+          th:src="@{/js/tables/modals/brands.js}"></script>
+</th:block>
+</body>
+</html>

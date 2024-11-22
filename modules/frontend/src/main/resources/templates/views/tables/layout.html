@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/* Head takes 3 arguments that are fragments */-->
+<head th:fragment="head(title, links, scripts)">
+  <!--/*  Title will be replaced by their respective titles in the calling template. */-->
+  <title th:replace="${title}">Vehicle Fleet</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--/* Default links; can be replaced by the calling templates */-->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" th:href="@{/css/DataTables/datatables.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!--/* Per-page placeholder for additional links */-->
+  <th:block th:replace="${links}"/>
+  <!--/* Default scripts; can be replaced by the calling templates */-->
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/DataTables/datatables.min.js}"></script>
+  <!--/* Per-page placeholder for additional scripts */-->
+  <th:block th:replace="${scripts}"/>
+</head>
+<!--/* Body with arguments */-->
+<body class="bg-light" th:fragment="body(activeSidebarLink, content, pageScripts)">
+<!--/* Header fragment */-->
+<header th:replace="~{views/fragments/_header :: header}"></header>
+<!--/* Sidebar fragment */-->
+<aside th:replace="~{views/fragments/_sidebar :: sidebar(${activeSidebarLink})}"></aside>
+<!--/* Content value passed from calling template will be inserted in this element */-->
+<div class="main-content">
+  <main>
+    <section class="main-content-container p-3">
+      <th:block th:replace="${content}"/>
+    </section>
+  </main>
+</div>
+<!--/* Default scripts; can be replaced by the calling templates */-->
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/sidebar/toggle-sidebar.js}"></script>
+<script th:src="@{/js/sidebar/activate-sidebar-link.js}"></script>
+<!--/* Scripts value passed from calling template will be inserted in this element */-->
+<th:block th:replace="${pageScripts}"/>
+</body>

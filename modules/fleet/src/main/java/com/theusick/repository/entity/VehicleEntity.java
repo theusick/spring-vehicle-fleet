@@ -2,6 +2,7 @@ package com.theusick.repository.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,6 +13,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "vehicles")
@@ -23,7 +26,7 @@ import lombok.Setter;
 public class VehicleEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private int year;
@@ -35,6 +38,7 @@ public class VehicleEntity {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private VehicleBrandEntity brand;
 
 }

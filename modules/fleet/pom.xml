@@ -16,7 +16,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.theusick</groupId>
+            <artifactId>modules.core</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>
