@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="vehicleAddForm">
-  <div data-mdb-input-init class="form-outline mb-4">
+<div th:fragment="vehicleAddForm" class="row g-3">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleYear" class="form-label">Year</label>
     <input type="number" id="vehicleYear" name="year" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleMileage" class="form-label">Mileage</label>
     <input type="number" id="vehicleMileage" name="mileage" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleColor" class="form-label">Color</label>
     <input type="text" id="vehicleColor" name="color" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-6">
     <label for="vehiclePrice" class="form-label">Price</label>
     <input type="number" id="vehiclePrice" name="price" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-6">
     <label for="vehiclePlateNumber" class="form-label">Plate Number</label>
     <input type="text" id="vehiclePlateNumber" name="plateNumber" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
-    <label for="brandId" class="form-label">Brand ID</label>
-    <input type="number" id="brandId" name="brand.id" class="form-control" required/>
+  <div data-mdb-input-init class="form-outline col-md-12">
+    <label for="vehicleBrand" class="form-label">Brand</label>
+    <select id="vehicleBrand" name="brand.id" class="form-select" required>
+      <option selected>Select brand</option>
+      <option th:each="brand : ${brands}"
+              th:value="${brand.id}"
+              th:text="${'[' + brand.id + ']' + ' ' + brand.name}">
+      </option>
+    </select>
   </div>
 </div>

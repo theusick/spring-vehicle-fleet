@@ -1,6 +1,7 @@
 package com.theusick.controller;
 
 import com.theusick.api.exception.NotFoundApiException;
+import com.theusick.service.VehicleBrandService;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.model.VehicleModel;
@@ -24,11 +25,12 @@ import java.util.List;
 public class VehicleController {
 
     private final VehicleService vehicleService;
+    private final VehicleBrandService vehicleBrandService;
 
     @GetMapping
     public String getVehicles(Model model) {
-        List<VehicleModel> vehicles = vehicleService.getVehicles();
-        model.addAttribute("vehicles", vehicles);
+        model.addAttribute("vehicles", vehicleService.getVehicles());
+        model.addAttribute("brands", vehicleBrandService.getVehicleBrands());
         return "views/tables/vehicles";
     }
 

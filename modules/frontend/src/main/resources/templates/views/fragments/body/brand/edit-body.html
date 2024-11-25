@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="vehicleBrandEditBody">
-  <div data-mdb-input-init class="form-outline mb-4">
+<div th:fragment="vehicleBrandEditBody" class="row g-3">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleBrandId" class="form-label">ID</label>
     <input type="text" id="vehicleBrandId" class="form-control" name="id" readonly/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-8">
     <label for="vehicleBrandName" class="form-label">Name</label>
     <input type="text" id="vehicleBrandName" name="name" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-12">
     <label for="vehicleBrandType" class="form-label">Type</label>
     <input type="text" id="vehicleBrandType" name="type" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleBrandSeats" class="form-label">Seats</label>
     <input type="number" id="vehicleBrandSeats" name="seats" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleBrandFuelTank" class="form-label">Fuel Tank</label>
     <input type="number" id="vehicleBrandFuelTank" name="fuelTank" class="form-control" required/>
   </div>
 
-  <div data-mdb-input-init class="form-outline mb-4">
+  <div data-mdb-input-init class="form-outline col-md-4">
     <label for="vehicleBrandPayloadCapacity" class="form-label">Payload Capacity</label>
     <input type="number" id="vehicleBrandPayloadCapacity" name="payloadCapacity" class="form-control" required/>
   </div>

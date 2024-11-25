@@ -1,4 +1,4 @@
-function openModal(modalId, formId, data, fieldsMapping) {
+function openAndFillModal(modalId, formId, data, fieldsMapping) {
     const form = $(formId);
 
     for (let field in fieldsMapping) {
@@ -18,21 +18,13 @@ function openModal(modalId, formId, data, fieldsMapping) {
             }
 
             const fieldElement = form.find(fieldSelector);
-            if (fieldElement.length) {
+            if (fieldElement.length && fieldElement.is('select')) {
+                fieldElement.val(value).change();
+            } else if (fieldElement.length) {
                 fieldElement.val(value);
             }
         }
     }
 
     $(modalId).modal('show');
-}
-
-function showErrorToast(message) {
-    const toast = $('#errorToast');
-    $('#errorMessage').text(message);
-    toast.removeClass('d-none');
-
-    const bootstrapToast = new bootstrap.Toast(toast[0]);
-
-    bootstrapToast.show();
 }

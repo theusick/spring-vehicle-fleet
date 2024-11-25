@@ -32,12 +32,15 @@
     <section class="main-content-container p-3">
       <th:block th:replace="${content}"/>
     </section>
+    <!--/* Error toast */-->
+    <div th:replace="~{views/fragments/toasts/_error-toast :: errorToast}"></div>
   </main>
 </div>
 <!--/* Default scripts; can be replaced by the calling templates */-->
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/sidebar/toggle-sidebar.js}"></script>
 <script th:src="@{/js/sidebar/activate-sidebar-link.js}"></script>
+<script th:src="@{/js/toasts/show-error-toast.js}"></script>
 <!--/* Scripts value passed from calling template will be inserted in this element */-->
 <th:block th:replace="${pageScripts}"/>
 </body>

@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#addButton').on('click', function (event) {
         event.preventDefault();
 
-        openModal('#addVehicleBrandModal', '#addForm', {}, {});
+        openAndFillModal('#addVehicleBrandModal', '#addForm', {}, {});
     });
 
     $('table #editButton').on('click', function (event) {
@@ -20,7 +20,7 @@ $(document).ready(function () {
         };
 
         $.get(href, function (brand) {
-            openModal('#editVehicleBrandModal', '#editForm', brand, fieldsMapping);
+            openAndFillModal('#editVehicleBrandModal', '#editForm', brand, fieldsMapping);
         }).fail(function (jqXHR) {
             showErrorToast(jqXHR.responseText || 'Failed to load brand data.');
         });

@@ -61,7 +61,7 @@
   </div>
   <!--/* Modal to edit existed vehicles from table */-->
   <div th:with="modalBodyFragment = ~{views/fragments/body/vehicle/edit-body ::
-       vehicleEditBody}">
+       vehicleEditBody(currentBrandId=vehicle.brand.id)}">
     <div
       th:replace="~{views/fragments/modals/_edit-modal :: editModal(
       modalId='editVehicleModal',

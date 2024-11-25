@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#addButton').on('click', function (event) {
         event.preventDefault();
 
-        openModal('#addVehicleModal', '#addForm', {}, {});
+        openAndFillModal('#addVehicleModal', '#addForm', {}, {});
     });
 
     $('table #editButton').on('click', function (event) {
@@ -21,7 +21,7 @@ $(document).ready(function () {
         };
 
         $.get(href, function (vehicle) {
-            openModal('#editVehicleModal', '#editForm', vehicle, fieldsMapping);
+            openAndFillModal('#editVehicleModal', '#editForm', vehicle, fieldsMapping);
         }).fail(function (jqXHR) {
             showErrorToast(jqXHR.responseText || 'Failed to load vehicle data.');
         });
