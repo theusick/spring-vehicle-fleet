@@ -4,7 +4,7 @@ import com.theusick.api.exception.NotFoundApiException;
 import com.theusick.service.VehicleBrandService;
 import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.model.VehicleBrandModel;
-import com.theusick.service.model.VehicleModel;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+@Hidden
 @Controller
 @RequestMapping("/brands")
 @AllArgsConstructor
-public class VehicleBrandController {
+public class VehicleBrandViewController {
 
     private final VehicleBrandService vehicleBrandService;
 

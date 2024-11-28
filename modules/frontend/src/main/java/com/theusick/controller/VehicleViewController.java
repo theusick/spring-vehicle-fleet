@@ -5,6 +5,7 @@ import com.theusick.service.VehicleBrandService;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.model.VehicleModel;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
+@Hidden
 @Controller
 @RequestMapping("/vehicles")
 @AllArgsConstructor
-public class VehicleController {
+public class VehicleViewController {
 
     private final VehicleService vehicleService;
     private final VehicleBrandService vehicleBrandService;
