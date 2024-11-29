@@ -12,20 +12,11 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface VehicleMapper {
 
+    @Mapping(source = "brand.id", target = "brandId")
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "brand", qualifiedByName = "updateBrandId")
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
-
-    @Named("updateBrandId")
-    default void updateBrandId(@MappingTarget VehicleBrandEntity brandEntity,
-                               VehicleBrandModel brandModel) {
-        if (brandEntity == null) {
-            brandEntity = new VehicleBrandEntity();
-        }
-        brandEntity.setId(brandModel.getId());
-    }
 
 }

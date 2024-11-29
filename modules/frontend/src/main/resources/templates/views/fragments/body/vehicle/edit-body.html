@@ -33,10 +33,11 @@
 
   <div data-mdb-input-init class="form-outline col-md-12">
     <label for="vehicleBrandId" class="form-label">Brand</label>
-    <select id="vehicleBrandId" name="brand.id" class="form-select" required>
-      <option value="">Select brand</option>
+    <select id="vehicleBrandId" name="brandId" class="form-select" required>
+      <option value="" disabled>Select brand</option>
       <option th:each="brand : ${brands}"
               th:value="${brand.id}"
+              th:selected="${brand.id == brandId}"
               th:text="${'[' + brand.id + ']' + ' ' + brand.name}">
       </option>
     </select>

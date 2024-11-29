@@ -17,7 +17,7 @@ $(document).ready(function () {
             'color': '#vehicleColor',
             'price': '#vehiclePrice',
             'plateNumber': '#vehiclePlateNumber',
-            'brand.id': '#vehicleBrandId'
+            'brandId': '#vehicleBrandId'
         };
 
         $.get(href, function (vehicle) {

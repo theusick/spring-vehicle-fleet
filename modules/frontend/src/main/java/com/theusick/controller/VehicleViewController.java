@@ -47,7 +47,7 @@ public class VehicleViewController {
     @PostMapping
     public String createVehicle(@ModelAttribute VehicleModel vehicle) {
         try {
-            vehicleService.createVehicle(vehicle.getBrand().getId(), vehicle);
+            vehicleService.createVehicle(vehicle.getBrandId(), vehicle);
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());

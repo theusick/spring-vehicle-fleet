@@ -25,8 +25,10 @@
       <td th:text="${vehicle.color}">Color</td>
       <td th:text="${vehicle.price}">Price</td>
       <td th:text="${vehicle.plateNumber}">Number</td>
-      <td th:text="${vehicle.brand.name}">Brand</td>
-
+      <!--/*@thymesVar id="brands" type="List<VehicleBrandModel: brand objects list"*/-->
+      <th:block th:with="vehicleBrandId=${vehicle.brandId}">
+        <td th:text="${brands.^[id==#root.vehicleBrandId].name}">Brand</td>
+      </th:block>
       <td>
         <!--/* Button in Actions column to edit exec row */-->
         <a class="btn btn-primary btn-sm" id="editButton" th:href="${btnUrl}">
@@ -61,7 +63,7 @@
   </div>
   <!--/* Modal to edit existed vehicles from table */-->
   <div th:with="modalBodyFragment = ~{views/fragments/body/vehicle/edit-body ::
-       vehicleEditBody(currentBrandId=vehicle.brand.id)}">
+       vehicleEditBody(currentBrandId=vehicle.brandId)}">
     <div
       th:replace="~{views/fragments/modals/_edit-modal :: editModal(
       modalId='editVehicleModal',
