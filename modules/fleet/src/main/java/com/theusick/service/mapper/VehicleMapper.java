@@ -1,5 +1,6 @@
 package com.theusick.service.mapper;
 
+import com.theusick.controller.dto.VehicleDTO;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.model.VehicleBrandModel;
@@ -13,10 +14,25 @@ import org.mapstruct.Named;
 public interface VehicleMapper {
 
     @Mapping(source = "brand.id", target = "brandId")
+    VehicleDTO vehicleDTOFromModel(VehicleModel vehicleModel);
+
+    @Mapping(source = "brandId", target = "brand.id")
+    VehicleModel vehicleModelFromDTO(VehicleDTO vehicleDTO);
+
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "brand", qualifiedByName = "updateBrandId")
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
+
+    @Named("updateBrandId")
+    default void updateBrandId(@MappingTarget VehicleBrandEntity brandEntity,
+                               VehicleBrandModel brandModel) {
+        if (brandEntity == null) {
+            brandEntity = new VehicleBrandEntity();
+        }
+        brandEntity.setId(brandModel.getId());
+    }
 
 }

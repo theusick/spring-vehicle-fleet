@@ -1,8 +1,9 @@
 package com.theusick.controller;
 
 
+import com.theusick.controller.dto.VehicleDTO;
 import com.theusick.service.VehicleService;
-import com.theusick.service.model.VehicleModel;
+import com.theusick.service.mapper.VehicleMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +19,14 @@ import java.util.List;
 public class VehicleApiController {
 
     private final VehicleService vehicleService;
+    private final VehicleMapper vehicleMapper;
 
     @GetMapping
-    public List<VehicleModel> getVehicles() {
-        return vehicleService.getVehicles();
+    public List<VehicleDTO> getVehicles() {
+        return vehicleService.getVehicles()
+            .stream()
+            .map(vehicleMapper::vehicleDTOFromModel)
+            .toList();
     }
 
 }

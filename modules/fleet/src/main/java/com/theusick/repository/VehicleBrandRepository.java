@@ -1,4 +1,4 @@
-package com.theusick.repository.repository;
+package com.theusick.repository;
 
 import com.theusick.repository.entity.VehicleBrandEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

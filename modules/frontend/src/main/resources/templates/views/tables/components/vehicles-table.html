@@ -16,7 +16,7 @@
     </thead>
     <tbody>
 
-    <!--/*@thymesVar id="vehicles" type="List<VehicleModel>: vehicle objects list"*/-->
+    <!--/*@thymesVar id="vehicles" type="List<VehicleDTO>: vehicle objects list"*/-->
     <tr th:each="vehicle : ${vehicles}"
         th:with="btnUrl=@{/vehicles/{id}(id=${vehicle.id})}">
       <td th:text="${vehicle.id}">ID</td>

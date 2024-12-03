@@ -1,7 +1,7 @@
 package com.theusick.service.impl;
 
+import com.theusick.repository.VehicleBrandRepository;
 import com.theusick.repository.entity.VehicleBrandEntity;
-import com.theusick.repository.repository.VehicleBrandRepository;
 import com.theusick.service.VehicleBrandService;
 import com.theusick.service.exception.NoSuchVehicleBrandException;
 import com.theusick.service.mapper.VehicleBrandMapper;

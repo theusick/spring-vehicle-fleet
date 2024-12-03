@@ -1,9 +1,9 @@
 package com.theusick.service.impl;
 
+import com.theusick.repository.VehicleBrandRepository;
+import com.theusick.repository.VehicleRepository;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
-import com.theusick.repository.repository.VehicleBrandRepository;
-import com.theusick.repository.repository.VehicleRepository;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchVehicleBrandException;
 import com.theusick.service.exception.NoSuchVehicleException;
@@ -64,7 +64,7 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleEntity vehicleEntity = vehicleRepository.findById(vehicleModel.getId())
             .orElseThrow(() -> new NoSuchVehicleException(vehicleModel.getId()));
 
-        final Long newBrandId = vehicleModel.getBrandId();
+        final Long newBrandId = vehicleModel.getBrand().getId();
         if (!Objects.equals(newBrandId, vehicleEntity.getBrand().getId())) {
             VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
                 .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));
