@@ -32,7 +32,7 @@ public class VehicleBrandServiceImpl implements VehicleBrandService {
     }
 
     @Override
-    public VehicleBrandModel createVehicleBrand(VehicleBrandModel vehicleBrandModel) throws NoSuchVehicleBrandException {
+    public VehicleBrandModel createVehicleBrand(VehicleBrandModel vehicleBrandModel) {
         VehicleBrandEntity brandEntity = new VehicleBrandEntity();
         vehicleBrandMapper.updateVehicleBrandEntityFromModel(brandEntity, vehicleBrandModel);
         vehicleBrandRepository.save(brandEntity);

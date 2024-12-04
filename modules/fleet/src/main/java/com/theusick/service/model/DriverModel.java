@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VehicleModel {
+public class DriverModel {
 
     private Long id;
 
-    private int year;
-    private int mileage;
-    private String color;
-    private double price;
-    private String licensePlate;
+    private String name;
+    private int age;
+    private double salary;
 
     private Long enterpriseId;
-    private Long brandId;
+    private Long vehicleId;
+
+    private boolean active;
 
 }

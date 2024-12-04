@@ -27,8 +27,20 @@
   </div>
 
   <div data-mdb-input-init class="form-outline col-md-4">
-    <label for="vehiclePlateNumber" class="form-label">Plate Number</label>
-    <input type="text" id="vehiclePlateNumber" name="plateNumber" class="form-control" required/>
+    <label for="vehicleLicensePlate" class="form-label">Plate Number</label>
+    <input type="text" id="vehicleLicensePlate" name="licensePlate" class="form-control" required/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-12">
+    <label for="vehicleEnterpriseId" class="form-label">Enterprise</label>
+    <select id="vehicleEnterpriseId" name="enterpriseId" class="form-select" required>
+      <option value="" disabled>Select enterprise</option>
+      <option th:each="enterprise : ${enterprises}"
+              th:value="${enterprise.id}"
+              th:selected="${enterprise.id == enterpriseId}"
+              th:text="${'[' + enterprise.id + ']' + ' ' + enterprise.name}">
+      </option>
+    </select>
   </div>
 
   <div data-mdb-input-init class="form-outline col-md-12">

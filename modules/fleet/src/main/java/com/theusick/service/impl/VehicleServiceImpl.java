@@ -1,10 +1,14 @@
 package com.theusick.service.impl;
 
+import com.theusick.repository.EnterpriseRepository;
 import com.theusick.repository.VehicleBrandRepository;
 import com.theusick.repository.VehicleRepository;
+import com.theusick.repository.entity.EnterpriseEntity;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.VehicleService;
+import com.theusick.service.exception.NoSuchEnterpriseException;
+import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.exception.NoSuchVehicleBrandException;
 import com.theusick.service.exception.NoSuchVehicleException;
 import com.theusick.service.mapper.VehicleMapper;
@@ -25,6 +29,8 @@ public class VehicleServiceImpl implements VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
 
+    private final EnterpriseRepository enterpriseRepository;
+
     private final VehicleBrandRepository brandRepository;
 
     @Override
@@ -42,12 +48,27 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     @Transactional
-    public VehicleModel createVehicle(Long brandId,
-                                      VehicleModel vehicleModel) throws NoSuchVehicleBrandException {
+    public List<VehicleModel> getEnterpriseVehicles(Long enterpriseId) throws NoSuchEnterpriseException {
+        EnterpriseEntity enterpriseEntity = enterpriseRepository.findById(enterpriseId)
+            .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
+        return enterpriseEntity.getVehicles().stream()
+            .map(vehicleMapper::vehicleModelFromEntity)
+            .toList();
+    }
+
+    @Override
+    @Transactional
+    public VehicleModel createVehicle(Long enterpriseId,
+                                      Long brandId,
+                                      VehicleModel vehicleModel) throws NoSuchException {
+        EnterpriseEntity enterpriseEntity = enterpriseRepository.findById(enterpriseId)
+            .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
+
         VehicleBrandEntity brandEntity = brandRepository.findById(brandId)
             .orElseThrow(() -> new NoSuchVehicleBrandException(brandId));
 
         VehicleEntity vehicleEntity = VehicleEntity.builder()
+            .enterprise(enterpriseEntity)
             .brand(brandEntity)
             .build();
 
@@ -59,18 +80,26 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     @Transactional
-    public void updateVehicle(VehicleModel vehicleModel) throws NoSuchVehicleException,
-        NoSuchVehicleBrandException {
+    public void updateVehicle(VehicleModel vehicleModel) throws NoSuchException {
         VehicleEntity vehicleEntity = vehicleRepository.findById(vehicleModel.getId())
             .orElseThrow(() -> new NoSuchVehicleException(vehicleModel.getId()));
 
-        final Long newBrandId = vehicleModel.getBrand().getId();
+        final Long newEnterpriseId = vehicleModel.getEnterpriseId();
+        if (!Objects.equals(newEnterpriseId, vehicleEntity.getEnterprise().getId())) {
+            EnterpriseEntity enterpriseEntity = enterpriseRepository.findById(newEnterpriseId)
+                .orElseThrow(() -> new NoSuchEnterpriseException(newEnterpriseId));
+
+            vehicleEntity.setEnterprise(enterpriseEntity);
+        }
+
+        final Long newBrandId = vehicleModel.getBrandId();
         if (!Objects.equals(newBrandId, vehicleEntity.getBrand().getId())) {
             VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
                 .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));
 
             vehicleEntity.setBrand(brandEntity);
         }
+
         vehicleMapper.updateVehicleEntityFromModel(vehicleEntity, vehicleModel);
         vehicleRepository.save(vehicleEntity);
     }

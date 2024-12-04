@@ -1,6 +1,7 @@
 package com.theusick.service;
 
-import com.theusick.service.exception.NoSuchVehicleBrandException;
+import com.theusick.service.exception.NoSuchEnterpriseException;
+import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.exception.NoSuchVehicleException;
 import com.theusick.service.model.VehicleModel;
 
@@ -12,11 +13,13 @@ public interface VehicleService {
 
     List<VehicleModel> getVehicles();
 
-    VehicleModel createVehicle(Long brandId,
-                               VehicleModel vehicleModel) throws NoSuchVehicleBrandException;
+    List<VehicleModel> getEnterpriseVehicles(Long enterpriseId) throws NoSuchEnterpriseException;
 
-    void updateVehicle(VehicleModel vehicleModel) throws NoSuchVehicleException,
-        NoSuchVehicleBrandException;
+    VehicleModel createVehicle(Long enterpriseId,
+                               Long brandId,
+                               VehicleModel vehicleModel) throws NoSuchException;
+
+    void updateVehicle(VehicleModel vehicleModel) throws NoSuchException;
 
     void deleteVehicle(Long vehicleId) throws NoSuchVehicleException;
 

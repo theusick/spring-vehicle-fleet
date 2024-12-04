@@ -2,6 +2,7 @@ package com.theusick.controller;
 
 import com.theusick.api.exception.NotFoundApiException;
 import com.theusick.controller.dto.VehicleDTO;
+import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleBrandService;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchException;
@@ -28,6 +29,8 @@ public class VehicleViewController {
     private final VehicleService vehicleService;
     private final VehicleMapper vehicleMapper;
 
+    private final EnterpriseService enterpriseService;
+
     private final VehicleBrandService vehicleBrandService;
 
     @GetMapping
@@ -37,15 +40,16 @@ public class VehicleViewController {
                 .stream()
                 .map(vehicleMapper::vehicleDTOFromModel)
                 .toList());
+        model.addAttribute("enterprises", enterpriseService.getEnterprises());
         model.addAttribute("brands", vehicleBrandService.getVehicleBrands());
         return "views/tables/vehicles";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{vehicleId}")
     @ResponseBody
-    public VehicleDTO getVehicle(@PathVariable Long id) {
+    public VehicleDTO getVehicle(@PathVariable Long vehicleId) {
         try {
-            return vehicleMapper.vehicleDTOFromModel(vehicleService.getVehicle(id));
+            return vehicleMapper.vehicleDTOFromModel(vehicleService.getVehicle(vehicleId));
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
@@ -54,7 +58,8 @@ public class VehicleViewController {
     @PostMapping
     public String createVehicle(@ModelAttribute VehicleDTO vehicleDTO) {
         try {
-            vehicleService.createVehicle(vehicleDTO.getBrandId(),
+            vehicleService.createVehicle(vehicleDTO.getEnterpriseId(),
+                vehicleDTO.getBrandId(),
                 vehicleMapper.vehicleModelFromDTO(vehicleDTO));
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
@@ -72,10 +77,10 @@ public class VehicleViewController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteVehicle(@PathVariable Long id) {
+    @DeleteMapping("/{vehicleId}")
+    public String deleteVehicle(@PathVariable Long vehicleId) {
         try {
-            vehicleService.deleteVehicle(id);
+            vehicleService.deleteVehicle(vehicleId);
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());

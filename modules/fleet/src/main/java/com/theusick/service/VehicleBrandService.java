@@ -11,7 +11,7 @@ public interface VehicleBrandService {
 
     List<VehicleBrandModel> getVehicleBrands();
 
-    VehicleBrandModel createVehicleBrand(VehicleBrandModel vehicleBrandModel) throws NoSuchVehicleBrandException;
+    VehicleBrandModel createVehicleBrand(VehicleBrandModel vehicleBrandModel);
 
     void updateVehicleBrand(VehicleBrandModel vehicleBrandModel) throws NoSuchVehicleBrandException;
 

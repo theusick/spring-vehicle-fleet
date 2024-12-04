@@ -18,7 +18,7 @@ public class VehicleBrandApiController {
 
     private final VehicleBrandService vehicleBrandService;
 
-    @GetMapping
+    @GetMapping(produces = {"application/json"})
     public List<VehicleBrandModel> getVehicleBrands() {
         return vehicleBrandService.getVehicleBrands();
     }

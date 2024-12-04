@@ -17,8 +17,9 @@ public class VehicleDTO {
     private int mileage;
     private String color;
     private double price;
-    private String plateNumber;
+    private String licensePlate;
 
+    private Long enterpriseId;
     private Long brandId;
 
 }

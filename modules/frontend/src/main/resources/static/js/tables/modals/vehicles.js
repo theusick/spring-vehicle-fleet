@@ -16,7 +16,8 @@ $(document).ready(function () {
             'mileage': '#vehicleMileage',
             'color': '#vehicleColor',
             'price': '#vehiclePrice',
-            'plateNumber': '#vehiclePlateNumber',
+            'licensePlate': '#vehicleLicensePlate',
+            'enterpriseId': '#vehicleEnterpriseId',
             'brandId': '#vehicleBrandId'
         };
 

@@ -34,11 +34,11 @@ public class VehicleBrandViewController {
         return "views/tables/brands";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{vehicleBrandId}")
     @ResponseBody
-    public VehicleBrandModel getVehicleBrand(@PathVariable Long id) {
+    public VehicleBrandModel getVehicleBrand(@PathVariable Long vehicleBrandId) {
         try {
-            return vehicleBrandService.getVehicleBrand(id);
+            return vehicleBrandService.getVehicleBrand(vehicleBrandId);
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
@@ -46,12 +46,8 @@ public class VehicleBrandViewController {
 
     @PostMapping
     public String createVehicleBrand(@ModelAttribute VehicleBrandModel vehicleBrand) {
-        try {
-            vehicleBrandService.createVehicleBrand(vehicleBrand);
-            return "redirect:/brands";
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
-        }
+        vehicleBrandService.createVehicleBrand(vehicleBrand);
+        return "redirect:/brands";
     }
 
     @PutMapping
@@ -64,10 +60,10 @@ public class VehicleBrandViewController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteVehicleBrand(@PathVariable Long id) {
+    @DeleteMapping("/{vehicleBrandId}")
+    public String deleteVehicleBrand(@PathVariable Long vehicleBrandId) {
         try {
-            vehicleBrandService.deleteVehicleBrand(id);
+            vehicleBrandService.deleteVehicleBrand(vehicleBrandId);
             return "redirect:/brands";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());

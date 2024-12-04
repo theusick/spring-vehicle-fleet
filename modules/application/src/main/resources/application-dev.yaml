@@ -7,3 +7,9 @@ spring:
   web:
     resources:
       cache.period: 0
+
+logging:
+  level.org.hibernate:
+    SQL: DEBUG
+    jdbc.bind: TRACE
+    type.descriptor.sql.BasicBinder: TRACE

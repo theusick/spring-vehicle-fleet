@@ -1,13 +1,13 @@
 package com.theusick.repository.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,44 +15,37 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name = "vehicles")
+@Table(name = "drivers")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VehicleEntity {
+public class DriverEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int year;
-    private int mileage;
-    private String color;
-    private double price;
-    private String licensePlate;
+    private String name;
+    private int age;
+    private double salary;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "enterprise_id", nullable = false)
     private EnterpriseEntity enterprise;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "brand_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private VehicleBrandEntity brand;
+    @JoinColumn(name = "vehicle_id")
+    private VehicleEntity vehicle;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "driver_id")
-    private final Set<DriverEntity> drivers = new HashSet<>();
+    @ColumnDefault("false")
+    @Column(columnDefinition = "BIT")
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
+    private boolean active;
 
 }

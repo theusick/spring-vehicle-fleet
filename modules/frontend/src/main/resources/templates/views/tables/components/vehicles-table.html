@@ -9,7 +9,8 @@
       <th>Mileage</th>
       <th>Color</th>
       <th>Price</th>
-      <th>Number</th>
+      <th>Plate</th>
+      <th>Enterprise</th>
       <th>Brand</th>
       <th>Actions</th>
     </tr>
@@ -24,7 +25,11 @@
       <td th:text="${vehicle.mileage}">Mileage</td>
       <td th:text="${vehicle.color}">Color</td>
       <td th:text="${vehicle.price}">Price</td>
-      <td th:text="${vehicle.plateNumber}">Number</td>
+      <td th:text="${vehicle.licensePlate}">Number</td>
+      <!--/*@thymesVar id="enterprises" type="List<EnterpriseModel: enterprise objects list"*/-->
+      <th:block th:with="vehicleEnterpriseId=${vehicle.enterpriseId}">
+        <td th:text="${enterprises.^[id==#root.vehicleEnterpriseId].name}">Enterprise</td>
+      </th:block>
       <!--/*@thymesVar id="brands" type="List<VehicleBrandModel: brand objects list"*/-->
       <th:block th:with="vehicleBrandId=${vehicle.brandId}">
         <td th:text="${brands.^[id==#root.vehicleBrandId].name}">Brand</td>
@@ -63,7 +68,7 @@
   </div>
   <!--/* Modal to edit existed vehicles from table */-->
   <div th:with="modalBodyFragment = ~{views/fragments/body/vehicle/edit-body ::
-       vehicleEditBody(currentBrandId=vehicle.brandId)}">
+       vehicleEditBody}">
     <div
       th:replace="~{views/fragments/modals/_edit-modal :: editModal(
       modalId='editVehicleModal',

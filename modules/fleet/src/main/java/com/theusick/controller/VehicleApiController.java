@@ -21,7 +21,7 @@ public class VehicleApiController {
     private final VehicleService vehicleService;
     private final VehicleMapper vehicleMapper;
 
-    @GetMapping
+    @GetMapping(produces = {"application/json"})
     public List<VehicleDTO> getVehicles() {
         return vehicleService.getVehicles()
             .stream()
