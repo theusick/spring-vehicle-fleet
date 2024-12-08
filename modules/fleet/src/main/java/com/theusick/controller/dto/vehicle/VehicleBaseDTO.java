@@ -1,4 +1,4 @@
-package com.theusick.controller.dto;
+package com.theusick.controller.dto.vehicle;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -8,8 +8,8 @@ import lombok.extern.jackson.Jacksonized;
 @Data
 @Builder
 @Jacksonized
-@Schema(description = "VehicleBrand")
-public class VehicleDTO {
+@Schema(description = "Vehicle")
+public class VehicleBaseDTO {
 
     private Long id;
 
@@ -19,7 +19,6 @@ public class VehicleDTO {
     private double price;
     private String licensePlate;
 
-    private Long enterpriseId;
     private Long brandId;
 
 }

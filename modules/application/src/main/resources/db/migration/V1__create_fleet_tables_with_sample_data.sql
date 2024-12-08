@@ -15,7 +15,6 @@ CREATE TABLE drivers
     enterprise_id BIGINT                                  NOT NULL,
     vehicle_id    BIGINT,
     active        BIT,
-    driver_id     BIGINT,
     CONSTRAINT pk_drivers PRIMARY KEY (id)
 );
 
@@ -44,9 +43,6 @@ CREATE TABLE vehicles
 );
 
 ALTER TABLE drivers
-    ADD CONSTRAINT FK_DRIVERS_ON_DRIVER FOREIGN KEY (driver_id) REFERENCES vehicles (id);
-
-ALTER TABLE drivers
     ADD CONSTRAINT FK_DRIVERS_ON_ENTERPRISE FOREIGN KEY (enterprise_id) REFERENCES enterprises (id);
 
 ALTER TABLE drivers
@@ -57,6 +53,10 @@ ALTER TABLE vehicles
 
 ALTER TABLE vehicles
     ADD CONSTRAINT FK_VEHICLES_ON_ENTERPRISE FOREIGN KEY (enterprise_id) REFERENCES enterprises (id);
+
+CREATE UNIQUE INDEX unique_active_driver_per_vehicle
+    ON drivers (vehicle_id)
+    WHERE active = B'1';
 
 INSERT INTO enterprises (id, name, city)
 VALUES (1, 'Логистика ООО', 'Москва'),
@@ -89,14 +89,14 @@ VALUES (1, 2023, 5000, 'Красный', 1500000.00, 'O481XX147', 1, 1),
 
 SELECT setval(pg_get_serial_sequence('vehicles', 'id'), (SELECT MAX(id) FROM vehicles));
 
-INSERT INTO drivers (id, name, age, salary, enterprise_id, vehicle_id, active, driver_id)
-VALUES (1, 'Иван Иванов', 35, 70000.00, 1, 1, B'1', NULL),
-       (2, 'Петр Петров', 40, 80000.00, 1, 2, B'1', NULL),
-       (3, 'Алексей Смирнов', 29, 60000.00, 2, 3, B'1', NULL),
-       (4, 'Евгений Сидоров', 50, 90000.00, 2, 4, B'1', NULL),
-       (5, 'Ольга Кузнецова', 33, 75000.00, 3, 5, B'1', NULL),
-       (6, 'Анна Орлова', 28, 65000.00, 3, 6, B'1', NULL),
-       (7, 'Максим Васильев', 45, 85000.00, 2, NULL, B'0', NULL),
-       (8, 'Екатерина Новикова', 39, 72000.00, 1, NULL, B'0', NULL);
+INSERT INTO drivers (id, name, age, salary, enterprise_id, vehicle_id, active)
+VALUES (1, 'Иван Иванов', 35, 70000.00, 1, 1, B'1'),
+       (2, 'Петр Петров', 40, 80000.00, 1, 2, B'1'),
+       (3, 'Алексей Смирнов', 29, 60000.00, 2, 3, B'1'),
+       (4, 'Евгений Сидоров', 50, 90000.00, 2, 4, B'1'),
+       (5, 'Ольга Кузнецова', 33, 75000.00, 3, 5, B'1'),
+       (6, 'Анна Орлова', 28, 65000.00, 3, 6, B'1'),
+       (7, 'Максим Васильев', 45, 85000.00, 2, NULL, B'0'),
+       (8, 'Екатерина Новикова', 39, 72000.00, 1, NULL, B'0');
 
 SELECT setval(pg_get_serial_sequence('drivers', 'id'), (SELECT MAX(id) FROM drivers));

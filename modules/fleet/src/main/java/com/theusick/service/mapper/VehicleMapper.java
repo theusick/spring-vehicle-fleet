@@ -1,6 +1,7 @@
 package com.theusick.service.mapper;
 
-import com.theusick.controller.dto.VehicleDTO;
+import com.theusick.controller.dto.vehicle.EnterpriseVehicleDTO;
+import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.model.VehicleModel;
 import org.mapstruct.Mapper;
@@ -10,9 +11,12 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface VehicleMapper {
 
-    VehicleDTO vehicleDTOFromModel(VehicleModel vehicleModel);
+    VehicleBaseDTO vehicleBaseDTOFromModel(VehicleModel vehicleModel);
 
-    VehicleModel vehicleModelFromDTO(VehicleDTO vehicleDTO);
+    @Mapping(target = "vehicle", source = ".")
+    EnterpriseVehicleDTO enterpriseVehicleDTOFromModel(VehicleModel vehicleModel);
+
+    VehicleModel vehicleModelFromEnterpriseDTO(EnterpriseVehicleDTO enterpriseVehicleDTO);
 
     @Mapping(target = "brandId", source = "brand.id")
     @Mapping(target = "enterpriseId", source = "enterprise.id")

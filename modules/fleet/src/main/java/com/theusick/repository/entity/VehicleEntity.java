@@ -51,8 +51,7 @@ public class VehicleEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private VehicleBrandEntity brand;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "driver_id")
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
     private final Set<DriverEntity> drivers = new HashSet<>();
 
 }

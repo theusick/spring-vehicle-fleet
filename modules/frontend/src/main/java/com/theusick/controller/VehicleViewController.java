@@ -1,7 +1,7 @@
 package com.theusick.controller;
 
 import com.theusick.api.exception.NotFoundApiException;
-import com.theusick.controller.dto.VehicleDTO;
+import com.theusick.controller.dto.vehicle.EnterpriseVehicleDTO;
 import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleBrandService;
 import com.theusick.service.VehicleService;
@@ -38,7 +38,7 @@ public class VehicleViewController {
         model.addAttribute("vehicles",
             vehicleService.getVehicles()
                 .stream()
-                .map(vehicleMapper::vehicleDTOFromModel)
+                .map(vehicleMapper::enterpriseVehicleDTOFromModel)
                 .toList());
         model.addAttribute("enterprises", enterpriseService.getEnterprises());
         model.addAttribute("brands", vehicleBrandService.getVehicleBrands());
@@ -47,20 +47,20 @@ public class VehicleViewController {
 
     @GetMapping("/{vehicleId}")
     @ResponseBody
-    public VehicleDTO getVehicle(@PathVariable Long vehicleId) {
+    public EnterpriseVehicleDTO getVehicle(@PathVariable Long vehicleId) {
         try {
-            return vehicleMapper.vehicleDTOFromModel(vehicleService.getVehicle(vehicleId));
+            return vehicleMapper.enterpriseVehicleDTOFromModel(vehicleService.getVehicle(vehicleId));
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
     }
 
     @PostMapping
-    public String createVehicle(@ModelAttribute VehicleDTO vehicleDTO) {
+    public String createVehicle(@ModelAttribute EnterpriseVehicleDTO vehicleDTO) {
         try {
             vehicleService.createVehicle(vehicleDTO.getEnterpriseId(),
-                vehicleDTO.getBrandId(),
-                vehicleMapper.vehicleModelFromDTO(vehicleDTO));
+                vehicleDTO.getVehicle().getBrandId(),
+                vehicleMapper.vehicleModelFromEnterpriseDTO(vehicleDTO));
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
@@ -68,9 +68,9 @@ public class VehicleViewController {
     }
 
     @PutMapping
-    public String updateVehicle(VehicleDTO vehicleDTO) {
+    public String updateVehicle(EnterpriseVehicleDTO vehicleDTO) {
         try {
-            vehicleService.updateVehicle(vehicleMapper.vehicleModelFromDTO(vehicleDTO));
+            vehicleService.updateVehicle(vehicleMapper.vehicleModelFromEnterpriseDTO(vehicleDTO));
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
