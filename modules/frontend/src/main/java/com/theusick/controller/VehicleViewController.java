@@ -1,12 +1,13 @@
 package com.theusick.controller;
 
 import com.theusick.api.exception.NotFoundApiException;
-import com.theusick.controller.dto.vehicle.EnterpriseVehicleDTO;
+import com.theusick.controller.dto.VehicleViewDTO;
+import com.theusick.controller.mapper.EnterpriseViewMapper;
+import com.theusick.controller.mapper.VehicleViewMapper;
 import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleBrandService;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchException;
-import com.theusick.service.mapper.VehicleMapper;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -27,9 +28,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class VehicleViewController {
 
     private final VehicleService vehicleService;
-    private final VehicleMapper vehicleMapper;
+    private final VehicleViewMapper vehicleViewMapper;
 
     private final EnterpriseService enterpriseService;
+    private final EnterpriseViewMapper enterpriseViewMapper;
 
     private final VehicleBrandService vehicleBrandService;
 
@@ -38,29 +40,33 @@ public class VehicleViewController {
         model.addAttribute("vehicles",
             vehicleService.getVehicles()
                 .stream()
-                .map(vehicleMapper::enterpriseVehicleDTOFromModel)
+                .map(vehicleViewMapper::vehicleViewDTOFromModel)
                 .toList());
-        model.addAttribute("enterprises", enterpriseService.getEnterprises());
+        model.addAttribute("enterprises",
+            enterpriseService.getEnterprises()
+                .stream()
+                .map(enterpriseViewMapper::enterpriseViewDTOFromModel)
+                .toList());
         model.addAttribute("brands", vehicleBrandService.getVehicleBrands());
         return "views/tables/vehicles";
     }
 
     @GetMapping("/{vehicleId}")
     @ResponseBody
-    public EnterpriseVehicleDTO getVehicle(@PathVariable Long vehicleId) {
+    public VehicleViewDTO getVehicle(@PathVariable Long vehicleId) {
         try {
-            return vehicleMapper.enterpriseVehicleDTOFromModel(vehicleService.getVehicle(vehicleId));
+            return vehicleViewMapper.vehicleViewDTOFromModel(vehicleService.getVehicle(vehicleId));
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }
     }
 
     @PostMapping
-    public String createVehicle(@ModelAttribute EnterpriseVehicleDTO vehicleDTO) {
+    public String createVehicle(@ModelAttribute VehicleViewDTO vehicleDTO) {
         try {
             vehicleService.createVehicle(vehicleDTO.getEnterpriseId(),
-                vehicleDTO.getVehicle().getBrandId(),
-                vehicleMapper.vehicleModelFromEnterpriseDTO(vehicleDTO));
+                vehicleDTO.getBrandId(),
+                vehicleViewMapper.vehicleModelFromDTO(vehicleDTO));
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
@@ -68,9 +74,9 @@ public class VehicleViewController {
     }
 
     @PutMapping
-    public String updateVehicle(EnterpriseVehicleDTO vehicleDTO) {
+    public String updateVehicle(VehicleViewDTO vehicleDTO) {
         try {
-            vehicleService.updateVehicle(vehicleMapper.vehicleModelFromEnterpriseDTO(vehicleDTO));
+            vehicleService.updateVehicle(vehicleViewMapper.vehicleModelFromDTO(vehicleDTO));
             return "redirect:/vehicles";
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
