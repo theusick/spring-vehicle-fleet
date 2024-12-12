@@ -2,13 +2,10 @@ package com.theusick.service.mapper;
 
 import com.theusick.controller.dto.driver.DriverBaseDTO;
 import com.theusick.repository.entity.DriverEntity;
-import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.model.DriverModel;
-import com.theusick.service.model.VehicleModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring", uses = {VehicleMapper.class, VehicleDriverMapper.class})
 public interface DriverMapper {

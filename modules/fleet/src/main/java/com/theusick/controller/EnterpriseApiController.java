@@ -11,7 +11,6 @@ import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.mapper.DriverMapper;
 import com.theusick.service.mapper.EnterpriseMapper;
 import com.theusick.service.mapper.VehicleMapper;
-import com.theusick.service.model.DriverModel;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
