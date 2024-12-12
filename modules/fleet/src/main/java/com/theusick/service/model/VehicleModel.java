@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,6 +22,8 @@ public class VehicleModel {
     private String licensePlate;
 
     private Long enterpriseId;
-    private Long brandId;
+    private VehicleBrandModel brand;
+
+    private List<VehicleDriverModel> vehicleDrivers;
 
 }

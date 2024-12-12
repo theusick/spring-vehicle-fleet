@@ -1,9 +1,13 @@
 package com.theusick.controller.dto.vehicle;
 
+import com.theusick.controller.dto.brand.VehicleBrandBaseDTO;
+import com.theusick.controller.dto.driver.VehicleDriverWithoutDriverIdDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -19,6 +23,8 @@ public class VehicleBaseDTO {
     private double price;
     private String licensePlate;
 
-    private Long brandId;
+    private VehicleBrandBaseDTO brand;
+
+    private List<VehicleDriverWithoutVehicleIdDTO> drivers;
 
 }

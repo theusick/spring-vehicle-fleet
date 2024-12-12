@@ -13,8 +13,6 @@ CREATE TABLE drivers
     age           INTEGER                                 NOT NULL,
     salary        DOUBLE PRECISION                        NOT NULL,
     enterprise_id BIGINT                                  NOT NULL,
-    vehicle_id    BIGINT,
-    active        BIT,
     CONSTRAINT pk_drivers PRIMARY KEY (id)
 );
 
@@ -27,6 +25,14 @@ CREATE TABLE vehicle_brands
     fuel_tank        DOUBLE PRECISION                        NOT NULL,
     payload_capacity DOUBLE PRECISION                        NOT NULL,
     CONSTRAINT pk_vehicle_brands PRIMARY KEY (id)
+);
+
+CREATE TABLE vehicle_drivers
+(
+    active     BIT    NOT NULL,
+    vehicle_id BIGINT NOT NULL,
+    driver_id  BIGINT NOT NULL,
+    CONSTRAINT pk_vehicle_drivers PRIMARY KEY (vehicle_id, driver_id)
 );
 
 CREATE TABLE vehicles
@@ -45,18 +51,17 @@ CREATE TABLE vehicles
 ALTER TABLE drivers
     ADD CONSTRAINT FK_DRIVERS_ON_ENTERPRISE FOREIGN KEY (enterprise_id) REFERENCES enterprises (id);
 
-ALTER TABLE drivers
-    ADD CONSTRAINT FK_DRIVERS_ON_VEHICLE FOREIGN KEY (vehicle_id) REFERENCES vehicles (id);
-
 ALTER TABLE vehicles
     ADD CONSTRAINT FK_VEHICLES_ON_BRAND FOREIGN KEY (brand_id) REFERENCES vehicle_brands (id) ON DELETE CASCADE;
 
 ALTER TABLE vehicles
     ADD CONSTRAINT FK_VEHICLES_ON_ENTERPRISE FOREIGN KEY (enterprise_id) REFERENCES enterprises (id);
 
-CREATE UNIQUE INDEX unique_active_driver_per_vehicle
-    ON drivers (vehicle_id)
-    WHERE active = B'1';
+ALTER TABLE vehicle_drivers
+    ADD CONSTRAINT FK_VEHICLE_DRIVERS_ON_DRIVER FOREIGN KEY (driver_id) REFERENCES drivers (id);
+
+ALTER TABLE vehicle_drivers
+    ADD CONSTRAINT FK_VEHICLE_DRIVERS_ON_VEHICLE FOREIGN KEY (vehicle_id) REFERENCES vehicles (id);
 
 INSERT INTO enterprises (id, name, city)
 VALUES (1, 'Логистика ООО', 'Москва'),
@@ -89,14 +94,30 @@ VALUES (1, 2023, 5000, 'Красный', 1500000.00, 'O481XX147', 1, 1),
 
 SELECT setval(pg_get_serial_sequence('vehicles', 'id'), (SELECT MAX(id) FROM vehicles));
 
-INSERT INTO drivers (id, name, age, salary, enterprise_id, vehicle_id, active)
-VALUES (1, 'Иван Иванов', 35, 70000.00, 1, 1, B'1'),
-       (2, 'Петр Петров', 40, 80000.00, 1, 2, B'1'),
-       (3, 'Алексей Смирнов', 29, 60000.00, 2, 3, B'1'),
-       (4, 'Евгений Сидоров', 50, 90000.00, 2, 4, B'1'),
-       (5, 'Ольга Кузнецова', 33, 75000.00, 3, 5, B'1'),
-       (6, 'Анна Орлова', 28, 65000.00, 3, 6, B'1'),
-       (7, 'Максим Васильев', 45, 85000.00, 2, NULL, B'0'),
-       (8, 'Екатерина Новикова', 39, 72000.00, 1, NULL, B'0');
+INSERT INTO drivers (id, name, age, salary, enterprise_id)
+VALUES (1, 'Иван Иванов', 35, 70000.00, 1),
+       (2, 'Петр Петров', 40, 80000.00, 1),
+       (3, 'Алексей Смирнов', 29, 60000.00, 2),
+       (4, 'Евгений Сидоров', 50, 90000.00, 2),
+       (5, 'Ольга Кузнецова', 33, 75000.00, 3),
+       (6, 'Анна Орлова', 28, 65000.00, 3),
+       (7, 'Максим Васильев', 45, 85000.00, 2),
+       (8, 'Екатерина Новикова', 39, 72000.00, 1);
 
 SELECT setval(pg_get_serial_sequence('drivers', 'id'), (SELECT MAX(id) FROM drivers));
+
+INSERT INTO vehicle_drivers (vehicle_id, driver_id, active)
+VALUES (1, 1, B'1'),
+       (1, 2, B'0'),
+       (2, 3, B'1'),
+       (2, 4, B'0'),
+       (3, 5, B'1'),
+       (4, 6, B'1'),
+       (4, 7, B'0'),
+       (5, 7, B'1'),
+       (6, 8, B'1'),
+       (7, 3, B'1'),
+       (8, 1, B'1'),
+       (8, 6, B'0'),
+       (9, 2, B'1'),
+       (9, 8, B'0');

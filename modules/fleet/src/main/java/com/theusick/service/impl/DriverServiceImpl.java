@@ -2,6 +2,7 @@ package com.theusick.service.impl;
 
 import com.theusick.repository.DriverRepository;
 import com.theusick.repository.EnterpriseRepository;
+import com.theusick.repository.VehicleDriverRepository;
 import com.theusick.repository.entity.DriverEntity;
 import com.theusick.repository.entity.EnterpriseEntity;
 import com.theusick.service.DriverService;
@@ -23,6 +24,8 @@ public class DriverServiceImpl implements DriverService {
     private final DriverMapper driverMapper;
 
     private final EnterpriseRepository enterpriseRepository;
+
+    private final VehicleDriverRepository vehicleDriverRepository;
 
     @Override
     public DriverModel getDriver(Long driverId) throws NoSuchDriverException {
@@ -48,12 +51,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    @Transactional
     public DriverModel createDriver(DriverModel driverModel) {
-        if (driverModel.isActive() && hasVehicleActiveDriver(driverModel.getVehicleId())) {
-            throw new IllegalStateException("Vehicle already has an active driver");
-        }
-
         DriverEntity driverEntity = new DriverEntity();
         driverMapper.updateDriverEntityFromModel(driverEntity, driverModel);
         driverRepository.save(driverEntity);
@@ -66,11 +64,6 @@ public class DriverServiceImpl implements DriverService {
         DriverEntity driverEntity = driverRepository.findById(driverModel.getId())
             .orElseThrow(() -> new NoSuchDriverException(driverModel.getId()));
 
-        boolean toggleActiveFlag = !driverEntity.isActive() && driverModel.isActive();
-        if (toggleActiveFlag && hasVehicleActiveDriver(driverModel.getVehicleId())) {
-            throw new IllegalStateException("Vehicle already has an active driver");
-        }
-
         driverMapper.updateDriverEntityFromModel(driverEntity, driverModel);
         driverRepository.save(driverEntity);
     }
@@ -80,10 +73,6 @@ public class DriverServiceImpl implements DriverService {
         DriverEntity driverEntity = driverRepository.findById(driverId)
             .orElseThrow(() -> new NoSuchDriverException(driverId));
         driverRepository.delete(driverEntity);
-    }
-
-    protected boolean hasVehicleActiveDriver(Long vehicleId) {
-        return driverRepository.existsByVehicleIdAndActive(vehicleId, true);
     }
 
 }

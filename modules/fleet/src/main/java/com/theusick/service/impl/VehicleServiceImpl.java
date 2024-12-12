@@ -92,7 +92,7 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleEntity.setEnterprise(enterpriseEntity);
         }
 
-        final Long newBrandId = vehicleModel.getBrandId();
+        final Long newBrandId = vehicleModel.getBrand().getId();
         if (!Objects.equals(newBrandId, vehicleEntity.getBrand().getId())) {
             VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
                 .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));

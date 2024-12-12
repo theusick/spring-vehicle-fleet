@@ -1,12 +1,14 @@
 package com.theusick.controller;
 
 import com.theusick.api.exception.NotFoundApiException;
+import com.theusick.controller.dto.driver.DriverBaseDTO;
 import com.theusick.controller.dto.enterprise.EnterpriseBaseDTO;
-import com.theusick.controller.dto.vehicle.EnterpriseVehicleDTO;
+import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.service.DriverService;
 import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchException;
+import com.theusick.service.mapper.DriverMapper;
 import com.theusick.service.mapper.EnterpriseMapper;
 import com.theusick.service.mapper.VehicleMapper;
 import com.theusick.service.model.DriverModel;
@@ -29,6 +31,7 @@ public class EnterpriseApiController {
     private final EnterpriseMapper enterpriseMapper;
 
     private final DriverService driverService;
+    private final DriverMapper driverMapper;
 
     private final VehicleService vehicleService;
     private final VehicleMapper vehicleMapper;
@@ -41,10 +44,10 @@ public class EnterpriseApiController {
     }
 
     @GetMapping(value = "/{enterpriseId}/vehicles", produces = {"application/json"})
-    public List<EnterpriseVehicleDTO> getEnterpriseVehicles(@PathVariable Long enterpriseId) {
+    public List<VehicleBaseDTO> getEnterpriseVehicles(@PathVariable Long enterpriseId) {
         try {
             return vehicleService.getEnterpriseVehicles(enterpriseId).stream()
-                .map(vehicleMapper::enterpriseVehicleDTOFromModel)
+                .map(vehicleMapper::vehicleBaseDTOFromModel)
                 .toList();
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
@@ -52,9 +55,11 @@ public class EnterpriseApiController {
     }
 
     @GetMapping(value = "/{enterpriseId}/drivers", produces = {"application/json"})
-    public List<DriverModel> getEnterpriseDrivers(@PathVariable Long enterpriseId) {
+    public List<DriverBaseDTO> getEnterpriseDrivers(@PathVariable Long enterpriseId) {
         try {
-            return driverService.getEnterpriseDrivers(enterpriseId);
+            return driverService.getEnterpriseDrivers(enterpriseId).stream()
+                .map(driverMapper::driverBaseDTOFromModel)
+                .toList();
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         }

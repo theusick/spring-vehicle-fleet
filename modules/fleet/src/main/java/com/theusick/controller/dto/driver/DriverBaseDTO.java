@@ -1,9 +1,12 @@
 package com.theusick.controller.dto.driver;
 
+import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -17,8 +20,6 @@ public class DriverBaseDTO {
     private int age;
     private double salary;
 
-    private Long vehicleId;
-
-    private boolean active;
+    private List<VehicleDriverWithoutDriverIdDTO> vehicles;
 
 }

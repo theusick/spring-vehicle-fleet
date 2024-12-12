@@ -1,5 +1,6 @@
 package com.theusick.repository.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -51,7 +52,7 @@ public class VehicleEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private VehicleBrandEntity brand;
 
-    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
-    private final Set<DriverEntity> drivers = new HashSet<>();
+    @OneToMany(mappedBy = "primaryKey.vehicle", cascade = CascadeType.ALL)
+    private Set<VehicleDriverEntity> vehicleDrivers;
 
 }

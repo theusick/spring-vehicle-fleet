@@ -31,10 +31,10 @@ public class EnterpriseEntity {
     private String name;
     private String city;
 
-    @OneToMany(mappedBy = "enterprise", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "enterprise", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<VehicleEntity> vehicles;
 
-    @OneToMany(mappedBy = "enterprise", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "enterprise", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DriverEntity> drivers;
 
 }

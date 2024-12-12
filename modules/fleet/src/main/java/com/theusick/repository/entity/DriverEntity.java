@@ -1,13 +1,13 @@
 package com.theusick.repository.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "drivers")
@@ -39,13 +41,7 @@ public class DriverEntity {
     @JoinColumn(name = "enterprise_id", nullable = false)
     private EnterpriseEntity enterprise;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id")
-    private VehicleEntity vehicle;
-
-    @ColumnDefault("false")
-    @Column(columnDefinition = "BIT")
-    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
-    private boolean active;
+    @OneToMany(mappedBy = "primaryKey.driver", cascade = CascadeType.ALL)
+    private Set<VehicleDriverEntity> vehicleDrivers;
 
 }

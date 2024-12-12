@@ -1,32 +1,38 @@
 package com.theusick.service.mapper;
 
-import com.theusick.controller.dto.vehicle.EnterpriseVehicleDTO;
 import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
+import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
+import com.theusick.service.model.VehicleBrandModel;
 import com.theusick.service.model.VehicleModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {VehicleBrandMapper.class, VehicleDriverMapper.class})
 public interface VehicleMapper {
 
+    @Mapping(target = "drivers", source = "vehicleDrivers")
     VehicleBaseDTO vehicleBaseDTOFromModel(VehicleModel vehicleModel);
 
-    @Mapping(target = "vehicle", source = ".")
-    EnterpriseVehicleDTO enterpriseVehicleDTOFromModel(VehicleModel vehicleModel);
-
-    VehicleModel vehicleModelFromEnterpriseDTO(EnterpriseVehicleDTO enterpriseVehicleDTO);
-
-    @Mapping(target = "brandId", source = "brand.id")
     @Mapping(target = "enterpriseId", source = "enterprise.id")
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "enterprise", ignore = true)
-    @Mapping(target = "drivers", ignore = true)
-    @Mapping(target = "brand.id", source = "brandId")
+    @Mapping(target = "vehicleDrivers", ignore = true)
+    @Mapping(target = "brand", qualifiedByName = "updateBrandId")
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
+
+    @Named("updateBrandId")
+    default void updateBrandId(@MappingTarget VehicleBrandEntity brandEntity,
+                               VehicleBrandModel brandModel) {
+        if (brandEntity == null) {
+            brandEntity = new VehicleBrandEntity();
+        }
+        brandEntity.setId(brandModel.getId());
+    }
 
 }

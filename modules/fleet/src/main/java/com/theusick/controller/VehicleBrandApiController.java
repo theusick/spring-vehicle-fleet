@@ -1,7 +1,8 @@
 package com.theusick.controller;
 
+import com.theusick.controller.dto.brand.VehicleBrandBaseDTO;
 import com.theusick.service.VehicleBrandService;
-import com.theusick.service.model.VehicleBrandModel;
+import com.theusick.service.mapper.VehicleBrandMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,14 @@ import java.util.List;
 public class VehicleBrandApiController {
 
     private final VehicleBrandService vehicleBrandService;
+    private final VehicleBrandMapper vehicleBrandMapper;
 
     @GetMapping(produces = {"application/json"})
-    public List<VehicleBrandModel> getVehicleBrands() {
-        return vehicleBrandService.getVehicleBrands();
+    public List<VehicleBrandBaseDTO> getVehicleBrands() {
+        return vehicleBrandService.getVehicleBrands()
+            .stream()
+            .map(vehicleBrandMapper::vehicleBrandBaseDTOFromModel)
+            .toList();
     }
 
 }

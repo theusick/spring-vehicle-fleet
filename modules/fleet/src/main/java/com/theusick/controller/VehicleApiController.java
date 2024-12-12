@@ -1,7 +1,7 @@
 package com.theusick.controller;
 
 
-import com.theusick.controller.dto.vehicle.EnterpriseVehicleDTO;
+import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.service.VehicleService;
 import com.theusick.service.mapper.VehicleMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,10 +22,10 @@ public class VehicleApiController {
     private final VehicleMapper vehicleMapper;
 
     @GetMapping(produces = {"application/json"})
-    public List<EnterpriseVehicleDTO> getVehicles() {
+    public List<VehicleBaseDTO> getVehicles() {
         return vehicleService.getVehicles()
             .stream()
-            .map(vehicleMapper::enterpriseVehicleDTOFromModel)
+            .map(vehicleMapper::vehicleBaseDTOFromModel)
             .toList();
     }
 

@@ -1,5 +1,6 @@
 package com.theusick.service.mapper;
 
+import com.theusick.controller.dto.brand.VehicleBrandBaseDTO;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.service.model.VehicleBrandModel;
 import org.mapstruct.Mapper;
@@ -8,6 +9,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface VehicleBrandMapper {
+
+    VehicleBrandBaseDTO vehicleBrandBaseDTOFromModel(VehicleBrandModel vehicleBrandModel);
 
     VehicleBrandModel vehicleBrandModelFromEntity(VehicleBrandEntity vehicleBrandEntity);
 
