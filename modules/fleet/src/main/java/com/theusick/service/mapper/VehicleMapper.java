@@ -4,16 +4,26 @@ import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.model.VehicleBrandModel;
+import com.theusick.service.model.VehicleDriverModel;
 import com.theusick.service.model.VehicleModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = {VehicleBrandMapper.class, VehicleDriverMapper.class})
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Mapper(
+    componentModel = "spring",
+    uses = {
+        VehicleBrandMapper.class, VehicleDriverMapper.class
+    }
+)
 public interface VehicleMapper {
 
-    @Mapping(target = "drivers", source = "vehicleDrivers")
+    @Mapping(target = "drivers", source = "vehicleDrivers", qualifiedByName = "mapVehicleDriverIdsToList")
     VehicleBaseDTO vehicleBaseDTOFromModel(VehicleModel vehicleModel);
 
     @Mapping(target = "enterpriseId", source = "enterprise.id")
@@ -33,6 +43,16 @@ public interface VehicleMapper {
             brandEntity = new VehicleBrandEntity();
         }
         brandEntity.setId(brandModel.getId());
+    }
+
+    @Named("mapVehicleDriverIdsToList")
+    default List<Long> mapVehicleDriverIdsToList(List<VehicleDriverModel> vehicleDrivers) {
+        if (vehicleDrivers == null) {
+            return Collections.emptyList();
+        }
+        return vehicleDrivers.stream()
+            .map(VehicleDriverModel::getDriverId)
+            .collect(Collectors.toList());
     }
 
 }

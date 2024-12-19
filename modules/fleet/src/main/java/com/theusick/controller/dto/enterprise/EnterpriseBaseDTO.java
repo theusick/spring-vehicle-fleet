@@ -1,7 +1,5 @@
 package com.theusick.controller.dto.enterprise;
 
-import com.theusick.controller.dto.driver.DriverBaseDTO;
-import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +17,7 @@ public class EnterpriseBaseDTO {
     private String name;
     private String city;
 
-    private List<VehicleBaseDTO> vehicles;
-    private List<DriverBaseDTO> drivers;
+    private List<Long> vehicles;
+    private List<Long> drivers;
 
 }

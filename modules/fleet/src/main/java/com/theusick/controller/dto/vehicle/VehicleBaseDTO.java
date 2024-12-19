@@ -1,6 +1,6 @@
 package com.theusick.controller.dto.vehicle;
 
-import com.theusick.controller.dto.brand.VehicleBrandBaseDTO;
+import com.theusick.controller.dto.brand.VehicleBrandIdDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +22,8 @@ public class VehicleBaseDTO {
     private double price;
     private String licensePlate;
 
-    private VehicleBrandBaseDTO brand;
+    private VehicleBrandIdDTO brand;
 
-    private List<VehicleDriverWithoutVehicleIdDTO> drivers;
+    private List<Long> drivers;
 
 }

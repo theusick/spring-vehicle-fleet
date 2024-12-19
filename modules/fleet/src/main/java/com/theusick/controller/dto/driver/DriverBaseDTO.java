@@ -19,6 +19,6 @@ public class DriverBaseDTO {
     private int age;
     private double salary;
 
-    private List<VehicleDriverWithoutDriverIdDTO> vehicles;
+    private List<Long> vehicles;
 
 }

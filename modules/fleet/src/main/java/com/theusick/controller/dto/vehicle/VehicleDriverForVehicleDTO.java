@@ -8,10 +8,10 @@ import lombok.extern.jackson.Jacksonized;
 @Data
 @Builder
 @Jacksonized
-@Schema(description = "VehicleDriverWithoutVehicleIdDTO")
-public class VehicleDriverWithoutVehicleIdDTO {
+@Schema(description = "VehicleDriverForVehicle")
+public class VehicleDriverForVehicleDTO {
 
-    private Long driverId;
-    private boolean active;
+    // Contains only driverId
+    private Long id;
 
 }
