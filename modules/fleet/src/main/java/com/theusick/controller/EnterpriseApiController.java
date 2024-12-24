@@ -64,4 +64,15 @@ public class EnterpriseApiController {
         }
     }
 
+    @GetMapping(value = "/{enterpriseId}/drivers/active", produces = {"application/json"})
+    public List<DriverBaseDTO> getEnterpriseActiveDrivers(@PathVariable Long enterpriseId) {
+        try {
+            return driverService.getEnterpriseDrivers(enterpriseId).stream()
+                .map(driverMapper::driverBaseDTOFromModel)
+                .toList();
+        } catch (NoSuchException exception) {
+            throw new NotFoundApiException(exception.getMessage());
+        }
+    }
+
 }

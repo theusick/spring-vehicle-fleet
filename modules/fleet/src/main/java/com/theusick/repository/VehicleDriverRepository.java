@@ -7,7 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VehicleDriverRepository extends JpaRepository<VehicleDriverEntity,
     VehicleDriverEntity.VehicleDriverId> {
-
-    boolean existsByPrimaryKeyVehicleIdAndActive(Long vehicleId, boolean active);
-
 }

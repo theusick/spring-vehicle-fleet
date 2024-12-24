@@ -21,4 +21,6 @@ public class DriverBaseDTO {
 
     private List<Long> vehicles;
 
+    private Long activeVehicle;
+
 }

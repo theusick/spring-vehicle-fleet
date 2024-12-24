@@ -23,4 +23,6 @@ public class DriverModel {
 
     private List<VehicleDriverModel> vehicleDrivers;
 
+    private VehicleModel activeVehicle;
+
 }

@@ -3,20 +3,18 @@ package com.theusick.repository.entity;
 import jakarta.persistence.AssociationOverride;
 import jakarta.persistence.AssociationOverrides;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.io.Serializable;
 
@@ -42,11 +40,6 @@ public class VehicleDriverEntity {
     @Builder.Default
     private VehicleDriverId primaryKey = new VehicleDriverId();
 
-    @ColumnDefault("false")
-    @Column(columnDefinition = "BIT", nullable = false)
-    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
-    private boolean active;
-
     @Getter
     @Setter
     @Embeddable
@@ -57,5 +50,15 @@ public class VehicleDriverEntity {
         @ManyToOne(cascade = CascadeType.ALL)
         private DriverEntity driver;
 
+    }
+
+    @PreRemove
+    public void onRemoveSetActiveVehicleNull() {
+        DriverEntity driver = primaryKey.getDriver();
+        VehicleEntity vehicle = primaryKey.getVehicle();
+
+        if (vehicle.equals(driver.getActiveVehicle())) {
+            driver.setActiveVehicle(null);
+        }
     }
 }

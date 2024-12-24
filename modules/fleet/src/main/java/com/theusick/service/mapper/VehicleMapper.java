@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public interface VehicleMapper {
 
     @Mapping(target = "drivers", source = "vehicleDrivers", qualifiedByName = "mapVehicleDriverIdsToList")
+    @Mapping(target = "brand", source = "brand.id")
     VehicleBaseDTO vehicleBaseDTOFromModel(VehicleModel vehicleModel);
 
     @Mapping(target = "enterpriseId", source = "enterprise.id")
@@ -32,6 +33,7 @@ public interface VehicleMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "enterprise", ignore = true)
     @Mapping(target = "vehicleDrivers", ignore = true)
+    @Mapping(target = "currentDriver", ignore = true)
     @Mapping(target = "brand", qualifiedByName = "updateBrandId")
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);

@@ -22,7 +22,7 @@ public class VehicleBaseDTO {
     private double price;
     private String licensePlate;
 
-    private VehicleBrandIdDTO brand;
+    private Long brand;
 
     private List<Long> drivers;
 

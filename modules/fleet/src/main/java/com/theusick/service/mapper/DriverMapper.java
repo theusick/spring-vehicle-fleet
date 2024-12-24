@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public interface DriverMapper {
 
     @Mapping(target = "vehicles", source = "vehicleDrivers", qualifiedByName = "mapDriverVehicleIdsToList")
+    @Mapping(target = "activeVehicle", source = "activeVehicle.id")
     DriverBaseDTO driverBaseDTOFromModel(DriverModel driverModel);
 
     @Mapping(target = "enterpriseId", source = "enterprise.id")

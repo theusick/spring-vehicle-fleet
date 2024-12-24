@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -50,7 +52,17 @@ public class VehicleEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private VehicleBrandEntity brand;
 
-    @OneToMany(mappedBy = "primaryKey.vehicle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "primaryKey.vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VehicleDriverEntity> vehicleDrivers;
+
+    @OneToOne(mappedBy = "activeVehicle")
+    private DriverEntity currentDriver;
+
+    @PreRemove
+    public void onRemoveSetActiveVehicleNull() {
+        if (currentDriver != null) {
+            currentDriver.setActiveVehicle(null);
+        }
+    }
 
 }
