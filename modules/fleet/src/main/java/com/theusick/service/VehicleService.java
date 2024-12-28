@@ -15,6 +15,8 @@ public interface VehicleService {
 
     List<VehicleModel> getEnterpriseVehicles(Long enterpriseId) throws NoSuchEnterpriseException;
 
+    List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId, Long enterpriseId) throws NoSuchException;
+
     VehicleModel createVehicle(Long enterpriseId,
                                Long brandId,
                                VehicleModel vehicleModel) throws NoSuchException;

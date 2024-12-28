@@ -1,5 +1,6 @@
 package com.theusick.service.mapper;
 
+import com.theusick.controller.dto.driver.ActiveDriverDTO;
 import com.theusick.controller.dto.driver.DriverBaseDTO;
 import com.theusick.repository.entity.DriverEntity;
 import com.theusick.service.model.DriverModel;
@@ -22,8 +23,10 @@ import java.util.stream.Collectors;
 public interface DriverMapper {
 
     @Mapping(target = "vehicles", source = "vehicleDrivers", qualifiedByName = "mapDriverVehicleIdsToList")
-    @Mapping(target = "activeVehicle", source = "activeVehicle.id")
     DriverBaseDTO driverBaseDTOFromModel(DriverModel driverModel);
+
+    @Mapping(target = "vehicle", source = "activeVehicle.id")
+    ActiveDriverDTO activeDriverDTOFromModel(DriverModel driverModel);
 
     @Mapping(target = "enterpriseId", source = "enterprise.id")
     DriverModel driverModelFromEntity(DriverEntity driverEntity);

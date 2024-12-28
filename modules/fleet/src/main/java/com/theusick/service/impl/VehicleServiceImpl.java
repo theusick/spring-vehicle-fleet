@@ -6,6 +6,7 @@ import com.theusick.repository.VehicleRepository;
 import com.theusick.repository.entity.EnterpriseEntity;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
+import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleService;
 import com.theusick.service.exception.NoSuchEnterpriseException;
 import com.theusick.service.exception.NoSuchException;
@@ -30,6 +31,7 @@ public class VehicleServiceImpl implements VehicleService {
     private final VehicleMapper vehicleMapper;
 
     private final EnterpriseRepository enterpriseRepository;
+    private final EnterpriseService enterpriseService;
 
     private final VehicleBrandRepository brandRepository;
 
@@ -53,6 +55,24 @@ public class VehicleServiceImpl implements VehicleService {
             .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
         return enterpriseEntity.getVehicles().stream()
             .map(vehicleMapper::vehicleModelFromEntity)
+            .toList();
+    }
+
+    @Override
+    public List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId,
+                                                              Long enterpriseId) throws NoSuchException {
+        return enterpriseService.getVisibleEntitiesForManager(
+            managerId,
+            enterpriseId,
+            this::getVisibleEnterpriseIdsForManager,
+            vehicleRepository::findByEnterpriseId,
+            vehicleMapper::vehicleModelFromEntity
+        );
+    }
+
+    private List<Long> getVisibleEnterpriseIdsForManager(Long managerId) {
+        return enterpriseRepository.findByManagersId(managerId).stream()
+            .map(EnterpriseEntity::getId)
             .toList();
     }
 

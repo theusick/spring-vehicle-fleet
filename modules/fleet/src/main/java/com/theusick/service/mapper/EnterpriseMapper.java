@@ -31,6 +31,7 @@ public interface EnterpriseMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "vehicles", ignore = true)
     @Mapping(target = "drivers", ignore = true)
+    @Mapping(target = "managers", ignore = true)
     void updateEnterpriseEntityFromModel(@MappingTarget EnterpriseEntity enterpriseEntity,
                                          EnterpriseModel enterpriseModel);
 

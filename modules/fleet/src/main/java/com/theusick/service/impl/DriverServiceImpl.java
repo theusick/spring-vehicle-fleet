@@ -6,8 +6,10 @@ import com.theusick.repository.VehicleDriverRepository;
 import com.theusick.repository.entity.DriverEntity;
 import com.theusick.repository.entity.EnterpriseEntity;
 import com.theusick.service.DriverService;
+import com.theusick.service.EnterpriseService;
 import com.theusick.service.exception.NoSuchDriverException;
 import com.theusick.service.exception.NoSuchEnterpriseException;
+import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.mapper.DriverMapper;
 import com.theusick.service.model.DriverModel;
 import jakarta.transaction.Transactional;
@@ -24,6 +26,7 @@ public class DriverServiceImpl implements DriverService {
     private final DriverMapper driverMapper;
 
     private final EnterpriseRepository enterpriseRepository;
+    private final EnterpriseService enterpriseService;
 
     private final VehicleDriverRepository vehicleDriverRepository;
 
@@ -47,6 +50,24 @@ public class DriverServiceImpl implements DriverService {
             .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
         return enterpriseEntity.getDrivers().stream()
             .map(driverMapper::driverModelFromEntity)
+            .toList();
+    }
+
+    @Override
+    public List<DriverModel> getEnterpriseDriversForManager(Long managerId,
+                                                            Long enterpriseId) throws NoSuchException {
+        return enterpriseService.getVisibleEntitiesForManager(
+            managerId,
+            enterpriseId,
+            this::getVisibleEnterpriseIdsForManager,
+            driverRepository::findByEnterpriseId,
+            driverMapper::driverModelFromEntity
+        );
+    }
+
+    private List<Long> getVisibleEnterpriseIdsForManager(Long managerId) {
+        return enterpriseRepository.findByManagersId(managerId).stream()
+            .map(EnterpriseEntity::getId)
             .toList();
     }
 

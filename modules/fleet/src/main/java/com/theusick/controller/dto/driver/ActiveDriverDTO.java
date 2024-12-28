@@ -1,5 +1,7 @@
 package com.theusick.controller.dto.driver;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,7 @@ import java.util.List;
 @Builder
 @Jacksonized
 @Schema(description = "Driver")
-public class DriverBaseDTO {
+public class ActiveDriverDTO {
 
     private Long id;
 
@@ -19,6 +21,6 @@ public class DriverBaseDTO {
     private int age;
     private double salary;
 
-    private List<Long> vehicles;
+    private Long vehicle;
 
 }

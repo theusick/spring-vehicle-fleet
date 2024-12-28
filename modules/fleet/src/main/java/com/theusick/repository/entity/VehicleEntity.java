@@ -11,7 +11,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,8 +39,16 @@ public class VehicleEntity {
 
     private int year;
     private int mileage;
+
+    @NotNull
+    @NotBlank
     private String color;
+
     private double price;
+
+    @Size(max = 30)
+    @NotNull
+    @NotBlank
     private String licensePlate;
 
     @NotNull

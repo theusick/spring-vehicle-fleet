@@ -8,8 +8,17 @@ spring:
     resources:
       cache.period: 0
 
+  devtools:
+    restart:
+      enabled: true
+
 logging:
-  level.org.hibernate:
-    SQL: DEBUG
-    jdbc.bind: TRACE
-    type.descriptor.sql.BasicBinder: TRACE
+  level.org:
+    hibernate:
+      SQL: DEBUG
+      jdbc.bind: TRACE
+      type.descriptor.sql.BasicBinder: TRACE
+
+    springframework:
+      security: DEBUG
+      web: DEBUG
