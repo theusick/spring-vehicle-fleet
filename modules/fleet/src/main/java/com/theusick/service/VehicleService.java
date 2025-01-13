@@ -17,12 +17,26 @@ public interface VehicleService {
 
     List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId, Long enterpriseId) throws NoSuchException;
 
-    VehicleModel createVehicle(Long enterpriseId,
-                               Long brandId,
-                               VehicleModel vehicleModel) throws NoSuchException;
+    void createVehicle(Long enterpriseId,
+                       Long brandId,
+                       VehicleModel vehicleModel) throws NoSuchException;
+
+    VehicleModel createVehicleForManager(Long enterpriseId,
+                                         Long brandId,
+                                         Long managerId,
+                                         VehicleModel vehicleModel) throws NoSuchException;
 
     void updateVehicle(VehicleModel vehicleModel) throws NoSuchException;
 
+    VehicleModel updateVehicleForManager(Long enterpriseId,
+                                         Long brandId,
+                                         Long managerId,
+                                         VehicleModel vehicleModel) throws NoSuchException;
+
     void deleteVehicle(Long vehicleId) throws NoSuchVehicleException;
+
+    void deleteVehicleForManager(Long enterpriseId,
+                                 Long vehicleId,
+                                 Long managerId) throws NoSuchException;
 
 }

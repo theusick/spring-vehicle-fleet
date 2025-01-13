@@ -1,6 +1,7 @@
 package com.theusick.service.mapper;
 
 import com.theusick.controller.dto.enterprise.EnterpriseBaseDTO;
+import com.theusick.controller.dto.enterprise.EnterpriseInfoDTO;
 import com.theusick.repository.entity.EnterpriseEntity;
 import com.theusick.service.model.DriverModel;
 import com.theusick.service.model.EnterpriseModel;
@@ -27,6 +28,11 @@ public interface EnterpriseMapper {
     EnterpriseBaseDTO enterpriseBaseDTOFromModel(EnterpriseModel enterpriseModel);
 
     EnterpriseModel enterpriseModelFromEntity(EnterpriseEntity enterpriseEntity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "vehicles", ignore = true)
+    @Mapping(target = "drivers", ignore = true)
+    EnterpriseModel enterpriseModelFromInfoDTO(EnterpriseInfoDTO enterpriseDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "vehicles", ignore = true)

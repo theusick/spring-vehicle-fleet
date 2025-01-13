@@ -1,6 +1,8 @@
 package com.theusick.service.mapper;
 
+import com.theusick.controller.dto.brand.VehicleBrandIdDTO;
 import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
+import com.theusick.controller.dto.vehicle.VehicleInfoDTO;
 import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.model.VehicleBrandModel;
@@ -31,6 +33,12 @@ public interface VehicleMapper {
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "vehicleDrivers", ignore = true)
+    @Mapping(target = "enterpriseId", ignore = true)
+    @Mapping(target = "brand", source = "brand", qualifiedByName = "mapBrandIdToModel")
+    VehicleModel vehicleModelFromInfoDTO(VehicleInfoDTO vehicleDTO);
+
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "enterprise", ignore = true)
     @Mapping(target = "vehicleDrivers", ignore = true)
     @Mapping(target = "currentDriver", ignore = true)
@@ -55,6 +63,17 @@ public interface VehicleMapper {
         return vehicleDrivers.stream()
             .map(VehicleDriverModel::getDriverId)
             .collect(Collectors.toList());
+    }
+
+    @Named("mapBrandIdToModel")
+    default VehicleBrandModel mapBrandIdToModel(VehicleBrandIdDTO brandIdDTO) {
+        if (brandIdDTO == null) {
+            return null;
+        }
+        
+        return VehicleBrandModel.builder()
+            .id(brandIdDTO.getId())
+            .build();
     }
 
 }

@@ -59,16 +59,9 @@ public class DriverServiceImpl implements DriverService {
         return enterpriseService.getVisibleEntitiesForManager(
             managerId,
             enterpriseId,
-            this::getVisibleEnterpriseIdsForManager,
             driverRepository::findByEnterpriseId,
             driverMapper::driverModelFromEntity
         );
-    }
-
-    private List<Long> getVisibleEnterpriseIdsForManager(Long managerId) {
-        return enterpriseRepository.findByManagersId(managerId).stream()
-            .map(EnterpriseEntity::getId)
-            .toList();
     }
 
     @Override

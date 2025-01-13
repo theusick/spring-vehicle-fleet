@@ -2,6 +2,7 @@ package com.theusick.service;
 
 import com.theusick.service.exception.NoSuchEnterpriseException;
 import com.theusick.service.exception.NoSuchException;
+import com.theusick.service.exception.NoSuchUserException;
 import com.theusick.service.model.EnterpriseModel;
 
 import java.util.List;
@@ -11,8 +12,12 @@ public interface EnterpriseService {
 
     EnterpriseModel getEnterprise(Long enterpriseId) throws NoSuchEnterpriseException;
 
-    <T, R> List<R> getVisibleEntitiesForManager(Long managerId, Long enterpriseId,
-                                                Function<Long, List<Long>> visibleEnterpriseIdsFetcher,
+    EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoSuchEnterpriseException;
+
+    List<Long> getVisibleEnterpriseIdsForManager(Long managerId);
+
+    <T, R> List<R> getVisibleEntitiesForManager(Long managerId,
+                                                Long enterpriseId,
                                                 Function<Long, List<T>> entitiesFetcher,
                                                 Function<T, R> mapper) throws NoSuchException;
 
@@ -20,10 +25,12 @@ public interface EnterpriseService {
 
     List<EnterpriseModel> getEnterprisesForManager(Long managerId);
 
-    EnterpriseModel createEnterprise(EnterpriseModel enterpriseModel);
+    EnterpriseModel createEnterprise(EnterpriseModel enterpriseModel,
+                                     Long managerId) throws NoSuchUserException;
 
-    void updateEnterprise(EnterpriseModel enterpriseModel) throws NoSuchEnterpriseException;
+    EnterpriseModel updateEnterprise(EnterpriseModel enterpriseModel,
+                          Long managerId) throws NoSuchEnterpriseException;
 
-    void deleteEnterprise(Long enterpriseId) throws NoSuchEnterpriseException;
+    void deleteEnterprise(Long enterpriseId, Long managerId) throws NoSuchEnterpriseException;
 
 }

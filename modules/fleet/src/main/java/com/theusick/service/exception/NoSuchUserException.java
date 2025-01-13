@@ -6,4 +6,8 @@ public class NoSuchUserException extends NoSuchException {
         super("User not found: " + username);
     }
 
+    public NoSuchUserException(Long id) {
+        super("User not found by id: " + id);
+    }
+
 }

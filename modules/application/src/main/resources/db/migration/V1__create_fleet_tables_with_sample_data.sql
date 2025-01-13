@@ -184,7 +184,8 @@ VALUES (1, 1),
 INSERT INTO managers (id, username, password, enabled)
 VALUES
     (1, 'manager1', '$2a$10$xFA33DOUCWXY2dWigYKIMe0vTqpQmZ6CPzubj8imzvcCTmBB/x9w6', B'1'),
-    (2, 'manager2', '$2a$10$kx59TQifTCb4U0gD2QbOCOD5XIFnmb0afMW7BG927h..zRuB7gGoW', B'1');
+    (2, 'manager2', '$2a$10$kx59TQifTCb4U0gD2QbOCOD5XIFnmb0afMW7BG927h..zRuB7gGoW', B'1'),
+    (3, 'user1', '$2a$10$xFA33DOUCWXY2dWigYKIMe0vTqpQmZ6CPzubj8imzvcCTmBB/x9w6', B'1');
 
 INSERT INTO manager_entity_roles (manager_entity_id, roles)
 VALUES

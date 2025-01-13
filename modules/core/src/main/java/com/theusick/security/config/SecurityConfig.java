@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -28,12 +29,10 @@ public class SecurityConfig {
     public SecurityFilterChain apiHttpSecurity(HttpSecurity http) throws Exception {
         return http
             .securityMatcher("/api/**")
-            .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.csrfTokenRepository(new CookieCsrfTokenRepository()))
             .formLogin(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((request) -> request
                 .requestMatchers("/api/**").authenticated()
-                .requestMatchers("/api/enterprises/**").hasAnyRole("MANAGER")
-                .requestMatchers("/api/vehicles/**").hasAnyRole("MANAGER")
                 .anyRequest().permitAll())
             .httpBasic(Customizer.withDefaults())
             .sessionManagement((configurer) -> configurer
