@@ -1,6 +1,6 @@
 package com.theusick.repository.entity;
 
-import com.theusick.security.repository.entity.Manager;
+import com.theusick.security.repository.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -55,6 +55,6 @@ public class EnterpriseEntity {
         joinColumns = @JoinColumn(name = "enterprise_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "manager_id", referencedColumnName = "id")
     )
-    private Set<Manager> managers;
+    private Set<User> managers;
 
 }

@@ -1,70 +1,36 @@
 package com.theusick.security.repository.entity;
 
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.CollectionTable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.util.Collection;
-import java.util.List;
-
-@MappedSuperclass
+@Entity
+@Table(name = "managers")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class User implements UserDetails {
+public class User extends UserEntity {
 
-    @NotNull
-    @NotBlank
-    @Size(min = 5, max = 256)
-    private String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull
-    @NotBlank
-    @Size(min = 5, max = 128)
-    private String password;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-        name = "manager_entity_roles",
-        joinColumns = @JoinColumn(name = "manager_entity_id"))
-    @Column(name = "roles")
-    @Convert(converter = RoleConverter.class)
-    private List<Role> roles;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
-
-    @Converter(autoApply = true)
-    public static class RoleConverter implements AttributeConverter<Role, Integer> {
-
-        @Override
-        public Integer convertToDatabaseColumn(Role role) {
-            return role != null ? role.getCode() : null;
-        }
-
-        @Override
-        public Role convertToEntityAttribute(Integer value) {
-            return value != null ? Role.fromCode(value) : null;
-        }
-    }
+    @ColumnDefault("true")
+    @Column(columnDefinition = "BIT", nullable = false)
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
+    private boolean enabled;
 
 }

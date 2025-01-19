@@ -8,10 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -28,12 +31,15 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(exception.getStatus()).body(problemDetail);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ProblemDetail> handleGeneralException(Exception exception,
-                                                                WebRequest request) {
-        log.error("Unhandled exception occurred: ", exception);
-        ApiException apiException = new GeneralApiException(exception);
+    @ExceptionHandler({
+        HttpRequestMethodNotSupportedException.class,
+        NoResourceFoundException.class,
+        AuthorizationDeniedException.class
+    })
+    @ResponseStatus()
+    public ResponseEntity<ProblemDetail> handleNoResourceException(Exception exception,
+                                                                   WebRequest request) {
+        ApiException apiException = new GeneralApiException(HttpStatus.UNAUTHORIZED, "Unauthorized");
 
         ProblemDetail problemDetail = apiExceptionMapper.toProblemDetail(apiException, request);
         return ResponseEntity.status(apiException.getStatus()).body(problemDetail);

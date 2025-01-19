@@ -8,6 +8,7 @@ import com.theusick.repository.entity.VehicleBrandEntity;
 import com.theusick.repository.entity.VehicleEntity;
 import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleService;
+import com.theusick.service.exception.NoAccessException;
 import com.theusick.service.exception.NoSuchEnterpriseException;
 import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.exception.NoSuchVehicleBrandException;
@@ -60,7 +61,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId,
-                                                              Long enterpriseId) throws NoSuchException {
+                                                              Long enterpriseId) throws NoAccessException {
         return enterpriseService.getVisibleEntitiesForManager(
             managerId,
             enterpriseId,
@@ -85,10 +86,10 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleModel createVehicleForManager(Long enterpriseId,
                                                 Long brandId,
                                                 Long managerId,
-                                                VehicleModel vehicleModel) throws NoSuchException {
+                                                VehicleModel vehicleModel) throws NoSuchException, NoAccessException {
         EnterpriseEntity enterpriseEntity =
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
+                .orElseThrow(() -> new NoAccessException(enterpriseId));
 
         return createVehicle(brandId, vehicleModel, enterpriseEntity);
     }
@@ -132,10 +133,9 @@ public class VehicleServiceImpl implements VehicleService {
     public VehicleModel updateVehicleForManager(Long enterpriseId,
                                                 Long brandId,
                                                 Long managerId,
-                                                VehicleModel vehicleModel) throws NoSuchException {
-        EnterpriseEntity enterpriseEntity =
-            enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
+                                                VehicleModel vehicleModel) throws NoSuchException, NoAccessException {
+        enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
+            .orElseThrow(() -> new NoAccessException(enterpriseId));
 
         VehicleEntity vehicleEntity = vehicleRepository.findById(vehicleModel.getId())
             .orElseThrow(() -> new NoSuchVehicleException(vehicleModel.getId()));
@@ -171,10 +171,9 @@ public class VehicleServiceImpl implements VehicleService {
     @Transactional
     public void deleteVehicleForManager(Long enterpriseId,
                                         Long vehicleId,
-                                        Long managerId) throws NoSuchException {
-        EnterpriseEntity enterpriseEntity =
-            enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
+                                        Long managerId) throws NoSuchException, NoAccessException {
+        enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
+            .orElseThrow(() -> new NoAccessException(enterpriseId));
 
         VehicleEntity vehicleEntity = vehicleRepository.findByIdAndEnterpriseId(vehicleId, enterpriseId)
             .orElseThrow(() -> new NoSuchVehicleException(vehicleId));

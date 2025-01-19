@@ -1,6 +1,6 @@
 package com.theusick.security.service;
 
-import com.theusick.security.repository.ManagerRepository;
+import com.theusick.security.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class DBUserDetailsService implements UserDetailsService {
 
-    private final ManagerRepository managerRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return managerRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 

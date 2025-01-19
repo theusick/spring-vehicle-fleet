@@ -8,4 +8,8 @@ public class GeneralApiException extends ApiException {
         super(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 
+    public GeneralApiException(HttpStatus status, String message) {
+        super(status, message);
+    }
+
 }

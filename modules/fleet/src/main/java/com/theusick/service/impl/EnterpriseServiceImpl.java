@@ -2,11 +2,11 @@ package com.theusick.service.impl;
 
 import com.theusick.repository.EnterpriseRepository;
 import com.theusick.repository.entity.EnterpriseEntity;
-import com.theusick.security.repository.ManagerRepository;
-import com.theusick.security.repository.entity.Manager;
+import com.theusick.security.repository.UserRepository;
+import com.theusick.security.repository.entity.User;
 import com.theusick.service.EnterpriseService;
+import com.theusick.service.exception.NoAccessException;
 import com.theusick.service.exception.NoSuchEnterpriseException;
-import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.exception.NoSuchUserException;
 import com.theusick.service.mapper.EnterpriseMapper;
 import com.theusick.service.model.EnterpriseModel;
@@ -24,7 +24,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseMapper enterpriseMapper;
-    private final ManagerRepository managerRepository;
+    private final UserRepository userRepository;
 
     @Override
     public EnterpriseModel getEnterprise(Long enterpriseId) throws NoSuchEnterpriseException {
@@ -33,10 +33,10 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
-    public EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoSuchEnterpriseException {
+    public EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException {
         return enterpriseMapper.enterpriseModelFromEntity(
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId)));
+                .orElseThrow(() -> new NoAccessException(enterpriseId)));
     }
 
     @Override
@@ -51,11 +51,11 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     public <T, R> List<R> getVisibleEntitiesForManager(Long managerId,
                                                        Long enterpriseId,
                                                        Function<Long, List<T>> entitiesFetcher,
-                                                       Function<T, R> mapper) throws NoSuchException {
+                                                       Function<T, R> mapper) throws NoAccessException {
         List<Long> visibleEnterpriseIds = getVisibleEnterpriseIdsForManager(managerId);
 
         if (!visibleEnterpriseIds.contains(enterpriseId)) {
-            throw new NoSuchEnterpriseException(enterpriseId);
+            throw new NoAccessException(enterpriseId);
         }
         return entitiesFetcher.apply(enterpriseId).stream()
             .map(mapper)
@@ -84,7 +84,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         EnterpriseEntity enterpriseEntity = new EnterpriseEntity();
         enterpriseMapper.updateEnterpriseEntityFromModel(enterpriseEntity, enterpriseModel);
 
-        Manager manager = managerRepository.findById(managerId)
+        User manager = userRepository.findById(managerId)
             .orElseThrow(() -> new NoSuchUserException(managerId));
 
         if (enterpriseEntity.getManagers() == null) {
@@ -99,20 +99,20 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     public EnterpriseModel updateEnterprise(EnterpriseModel enterpriseModel,
-                                            Long managerId) throws NoSuchEnterpriseException {
+                                            Long managerId) throws NoAccessException {
         EnterpriseEntity enterpriseEntity =
             enterpriseRepository.findByIdAndManagersId(enterpriseModel.getId(), managerId)
-                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseModel.getId()));
+                .orElseThrow(() -> new NoAccessException(enterpriseModel.getId()));
         enterpriseMapper.updateEnterpriseEntityFromModel(enterpriseEntity, enterpriseModel);
         enterpriseRepository.save(enterpriseEntity);
         return enterpriseMapper.enterpriseModelFromEntity(enterpriseEntity);
     }
 
     @Override
-    public void deleteEnterprise(Long enterpriseId, Long managerId) throws NoSuchEnterpriseException {
+    public void deleteEnterprise(Long enterpriseId, Long managerId) throws NoAccessException {
         EnterpriseEntity enterpriseEntity =
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
+                .orElseThrow(() -> new NoAccessException(enterpriseId));
         enterpriseRepository.delete(enterpriseEntity);
     }
 

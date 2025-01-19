@@ -1,5 +1,6 @@
 package com.theusick.controller;
 
+import com.theusick.api.exception.ForbiddenApiException;
 import com.theusick.api.exception.NotFoundApiException;
 import com.theusick.controller.dto.driver.ActiveDriverDTO;
 import com.theusick.controller.dto.driver.DriverBaseDTO;
@@ -7,10 +8,11 @@ import com.theusick.controller.dto.enterprise.EnterpriseBaseDTO;
 import com.theusick.controller.dto.enterprise.EnterpriseInfoDTO;
 import com.theusick.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.controller.dto.vehicle.VehicleInfoDTO;
-import com.theusick.security.repository.entity.Manager;
+import com.theusick.security.repository.entity.User;
 import com.theusick.service.DriverService;
 import com.theusick.service.EnterpriseService;
 import com.theusick.service.VehicleService;
+import com.theusick.service.exception.NoAccessException;
 import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.mapper.DriverMapper;
 import com.theusick.service.mapper.EnterpriseMapper;
@@ -51,22 +53,27 @@ public class EnterpriseApiController {
 
     @GetMapping(value = "/{enterpriseId}/vehicles", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<VehicleBaseDTO> getEnterpriseVehicles(@AuthenticationPrincipal Manager manager,
+    public List<VehicleBaseDTO> getEnterpriseVehicles(@AuthenticationPrincipal User manager,
                                                       @PathVariable Long enterpriseId) {
         try {
             return vehicleService.getEnterpriseVehiclesForManager(manager.getId(), enterpriseId).stream()
                 .map(vehicleMapper::vehicleBaseDTOFromModel)
                 .toList();
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
-    @PostMapping(value = "/{enterpriseId}/vehicles", produces = {"application/json"})
+    @PostMapping(
+        value = "/{enterpriseId}/vehicles",
+        produces = {"application/json"},
+        consumes = {"application/json"}
+    )
     @PreAuthorize("hasRole('MANAGER')")
+    @ResponseStatus(HttpStatus.CREATED)
     public VehicleBaseDTO createEnterpriseVehicle(@PathVariable Long enterpriseId,
                                                   @RequestBody VehicleInfoDTO vehicleDTO,
-                                                  @AuthenticationPrincipal Manager manager) {
+                                                  @AuthenticationPrincipal User manager) {
         try {
             return vehicleMapper.vehicleBaseDTOFromModel(
                 vehicleService.createVehicleForManager(
@@ -77,15 +84,21 @@ public class EnterpriseApiController {
             );
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
-    @PutMapping(value = "/{enterpriseId}/vehicles/{vehicleId}", produces = {"application/json"})
+    @PutMapping(
+        value = "/{enterpriseId}/vehicles/{vehicleId}",
+        produces = {"application/json"},
+        consumes = {"application/json"}
+    )
     @PreAuthorize("hasRole('MANAGER')")
     public VehicleBaseDTO updateEnterpriseVehicle(@PathVariable Long enterpriseId,
                                                   @PathVariable Long vehicleId,
                                                   @RequestBody VehicleInfoDTO vehicleDTO,
-                                                  @AuthenticationPrincipal Manager manager) {
+                                                  @AuthenticationPrincipal User manager) {
         try {
             return vehicleMapper.vehicleBaseDTOFromModel(
                 vehicleService.updateVehicleForManager(
@@ -96,6 +109,8 @@ public class EnterpriseApiController {
             );
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
@@ -104,65 +119,71 @@ public class EnterpriseApiController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEnterpriseVehicle(@PathVariable Long enterpriseId,
                                         @PathVariable Long vehicleId,
-                                        @AuthenticationPrincipal Manager manager) {
+                                        @AuthenticationPrincipal User manager) {
         try {
             vehicleService.deleteVehicleForManager(enterpriseId, vehicleId, manager.getId());
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
     @GetMapping(value = "/{enterpriseId}/drivers", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<DriverBaseDTO> getEnterpriseDrivers(@AuthenticationPrincipal Manager manager,
+    public List<DriverBaseDTO> getEnterpriseDrivers(@AuthenticationPrincipal User manager,
                                                     @PathVariable Long enterpriseId) {
         try {
             return driverService.getEnterpriseDriversForManager(manager.getId(), enterpriseId).stream()
                 .map(driverMapper::driverBaseDTOFromModel)
                 .toList();
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
     @GetMapping(value = "/{enterpriseId}/drivers/active", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<ActiveDriverDTO> getEnterpriseActiveDrivers(@AuthenticationPrincipal Manager manager,
+    public List<ActiveDriverDTO> getEnterpriseActiveDrivers(@AuthenticationPrincipal User manager,
                                                             @PathVariable Long enterpriseId) {
         try {
             return driverService.getEnterpriseDriversForManager(manager.getId(), enterpriseId).stream()
                 .map(driverMapper::activeDriverDTOFromModel)
                 .filter(activeDriverDTO -> Objects.nonNull(activeDriverDTO.getVehicle()))
                 .toList();
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
     @PostMapping(value = "/{enterpriseId}", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
     public EnterpriseBaseDTO getEnterprise(@PathVariable Long enterpriseId,
-                                           @AuthenticationPrincipal Manager manager) {
+                                           @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
                 enterpriseService.getEnterpriseForManager(enterpriseId, manager.getId()));
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
     @GetMapping(produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<EnterpriseBaseDTO> getEnterprises(@AuthenticationPrincipal Manager manager) {
+    public List<EnterpriseBaseDTO> getEnterprises(@AuthenticationPrincipal User manager) {
         return enterpriseService.getEnterprisesForManager(manager.getId()).stream()
             .map(enterpriseMapper::enterpriseBaseDTOFromModel)
             .toList();
     }
 
-    @PostMapping(produces = {"application/json"})
+    @PostMapping(
+        produces = {"application/json"},
+        consumes = {"application/json"}
+    )
     @PreAuthorize("hasRole('MANAGER')")
+    @ResponseStatus(HttpStatus.CREATED)
     public EnterpriseBaseDTO createEnterprise(@RequestBody EnterpriseInfoDTO enterpriseDTO,
-                                              @AuthenticationPrincipal Manager manager) {
+                                              @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
                 enterpriseService.createEnterprise(
@@ -173,19 +194,23 @@ public class EnterpriseApiController {
         }
     }
 
-    @PutMapping(value = "/{enterpriseId}", produces = {"application/json"})
+    @PutMapping(
+        value = "/{enterpriseId}",
+        produces = {"application/json"},
+        consumes = {"application/json"}
+    )
     @PreAuthorize("hasRole('MANAGER')")
     public EnterpriseBaseDTO updateEnterprise(@PathVariable Long enterpriseId,
                                               @RequestBody EnterpriseInfoDTO enterpriseDTO,
-                                              @AuthenticationPrincipal Manager manager) {
+                                              @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
                 enterpriseService.updateEnterprise(
                     enterpriseMapper.enterpriseModelFromInfoDTO(enterpriseDTO).withId(enterpriseId),
                     manager.getId())
             );
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 
@@ -193,11 +218,11 @@ public class EnterpriseApiController {
     @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEnterprise(@PathVariable Long enterpriseId,
-                                 @AuthenticationPrincipal Manager manager) {
+                                 @AuthenticationPrincipal User manager) {
         try {
             enterpriseService.deleteEnterprise(enterpriseId, manager.getId());
-        } catch (NoSuchException exception) {
-            throw new NotFoundApiException(exception.getMessage());
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
         }
     }
 

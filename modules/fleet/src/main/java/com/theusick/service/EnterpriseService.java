@@ -1,7 +1,7 @@
 package com.theusick.service;
 
+import com.theusick.service.exception.NoAccessException;
 import com.theusick.service.exception.NoSuchEnterpriseException;
-import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.exception.NoSuchUserException;
 import com.theusick.service.model.EnterpriseModel;
 
@@ -12,14 +12,14 @@ public interface EnterpriseService {
 
     EnterpriseModel getEnterprise(Long enterpriseId) throws NoSuchEnterpriseException;
 
-    EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoSuchEnterpriseException;
+    EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException;
 
     List<Long> getVisibleEnterpriseIdsForManager(Long managerId);
 
     <T, R> List<R> getVisibleEntitiesForManager(Long managerId,
                                                 Long enterpriseId,
                                                 Function<Long, List<T>> entitiesFetcher,
-                                                Function<T, R> mapper) throws NoSuchException;
+                                                Function<T, R> mapper) throws NoAccessException;
 
     List<EnterpriseModel> getEnterprises();
 
@@ -29,8 +29,8 @@ public interface EnterpriseService {
                                      Long managerId) throws NoSuchUserException;
 
     EnterpriseModel updateEnterprise(EnterpriseModel enterpriseModel,
-                          Long managerId) throws NoSuchEnterpriseException;
+                                     Long managerId) throws NoAccessException;
 
-    void deleteEnterprise(Long enterpriseId, Long managerId) throws NoSuchEnterpriseException;
+    void deleteEnterprise(Long enterpriseId, Long managerId) throws NoAccessException;
 
 }

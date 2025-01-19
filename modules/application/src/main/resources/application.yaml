@@ -67,8 +67,10 @@ spring:
     baseline-on-migrate: true
 
   mvc:
+    # is used for HTML pages to allow usage of PUT/POST methods
+    # by setting up hidden input form
     hiddenmethod.filter:
-        enabled: true
+      enabled: true
 
 springdoc:
   swagger-ui:

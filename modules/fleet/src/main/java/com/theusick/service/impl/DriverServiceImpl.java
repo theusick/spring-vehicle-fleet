@@ -2,14 +2,13 @@ package com.theusick.service.impl;
 
 import com.theusick.repository.DriverRepository;
 import com.theusick.repository.EnterpriseRepository;
-import com.theusick.repository.VehicleDriverRepository;
 import com.theusick.repository.entity.DriverEntity;
 import com.theusick.repository.entity.EnterpriseEntity;
 import com.theusick.service.DriverService;
 import com.theusick.service.EnterpriseService;
+import com.theusick.service.exception.NoAccessException;
 import com.theusick.service.exception.NoSuchDriverException;
 import com.theusick.service.exception.NoSuchEnterpriseException;
-import com.theusick.service.exception.NoSuchException;
 import com.theusick.service.mapper.DriverMapper;
 import com.theusick.service.model.DriverModel;
 import jakarta.transaction.Transactional;
@@ -27,8 +26,6 @@ public class DriverServiceImpl implements DriverService {
 
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseService enterpriseService;
-
-    private final VehicleDriverRepository vehicleDriverRepository;
 
     @Override
     public DriverModel getDriver(Long driverId) throws NoSuchDriverException {
@@ -55,7 +52,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<DriverModel> getEnterpriseDriversForManager(Long managerId,
-                                                            Long enterpriseId) throws NoSuchException {
+                                                            Long enterpriseId) throws NoAccessException {
         return enterpriseService.getVisibleEntitiesForManager(
             managerId,
             enterpriseId,

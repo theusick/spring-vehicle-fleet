@@ -48,7 +48,7 @@ public class DriverEntity {
     private Set<VehicleDriverEntity> vehicleDrivers;
 
     @OneToOne
-    @JoinColumn(name = "active_vehicle_id", unique = true, nullable = true)
+    @JoinColumn(name = "active_vehicle_id", unique = true)
     private VehicleEntity activeVehicle;
 
 }

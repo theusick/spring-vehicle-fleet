@@ -1,6 +1,5 @@
 package com.theusick.controller.dto.vehicle;
 
-import com.theusick.controller.dto.brand.VehicleBrandIdDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

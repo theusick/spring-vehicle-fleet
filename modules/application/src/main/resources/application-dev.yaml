@@ -1,3 +1,8 @@
+server:
+  # Turns off 'trace' field in HTTP body error-return
+  error:
+    include-stacktrace: never
+
 spring:
   # Templates reloading during development launch
   thymeleaf:
