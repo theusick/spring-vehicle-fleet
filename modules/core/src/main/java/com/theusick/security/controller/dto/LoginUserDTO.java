@@ -1,4 +1,4 @@
-package com.theusick.controller.dto.enterprise;
+package com.theusick.security.controller.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,12 +9,12 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-@Schema(name = "EnterpriseInfo")
-public class EnterpriseInfoDTO {
+@Schema(name = "LoginUser")
+public class LoginUserDTO {
 
     @NotBlank
-    String name;
+    String username;
     @NotBlank
-    String city;
+    String password;
 
 }

@@ -18,11 +18,11 @@ import com.theusick.service.mapper.DriverMapper;
 import com.theusick.service.mapper.EnterpriseMapper;
 import com.theusick.service.mapper.VehicleMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,7 +72,7 @@ public class EnterpriseApiController {
     @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.CREATED)
     public VehicleBaseDTO createEnterpriseVehicle(@PathVariable Long enterpriseId,
-                                                  @RequestBody VehicleInfoDTO vehicleDTO,
+                                                  @RequestBody @Valid VehicleInfoDTO vehicleDTO,
                                                   @AuthenticationPrincipal User manager) {
         try {
             return vehicleMapper.vehicleBaseDTOFromModel(
@@ -97,7 +97,7 @@ public class EnterpriseApiController {
     @PreAuthorize("hasRole('MANAGER')")
     public VehicleBaseDTO updateEnterpriseVehicle(@PathVariable Long enterpriseId,
                                                   @PathVariable Long vehicleId,
-                                                  @RequestBody VehicleInfoDTO vehicleDTO,
+                                                  @RequestBody @Valid VehicleInfoDTO vehicleDTO,
                                                   @AuthenticationPrincipal User manager) {
         try {
             return vehicleMapper.vehicleBaseDTOFromModel(
@@ -182,7 +182,7 @@ public class EnterpriseApiController {
     )
     @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public EnterpriseBaseDTO createEnterprise(@RequestBody EnterpriseInfoDTO enterpriseDTO,
+    public EnterpriseBaseDTO createEnterprise(@RequestBody @Valid EnterpriseInfoDTO enterpriseDTO,
                                               @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
@@ -201,7 +201,7 @@ public class EnterpriseApiController {
     )
     @PreAuthorize("hasRole('MANAGER')")
     public EnterpriseBaseDTO updateEnterprise(@PathVariable Long enterpriseId,
-                                              @RequestBody EnterpriseInfoDTO enterpriseDTO,
+                                              @RequestBody @Valid EnterpriseInfoDTO enterpriseDTO,
                                               @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
@@ -224,11 +224,6 @@ public class EnterpriseApiController {
         } catch (NoAccessException exception) {
             throw new ForbiddenApiException(exception.getMessage());
         }
-    }
-
-    @GetMapping("/csrf")
-    public CsrfToken csrf(CsrfToken csrfToken) {
-        return csrfToken;
     }
 
 }

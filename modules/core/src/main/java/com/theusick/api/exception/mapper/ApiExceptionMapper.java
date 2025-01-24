@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public interface ApiExceptionMapper {
 
     @Mapping(target = "type", expression = "java(URI.create(getRequestURI(request)))")
-    @Mapping(target = "title", expression = "java(exception.getClass().getSimpleName())")
+    @Mapping(target = "title", expression = "java(exception.getStatus().getReasonPhrase())")
     @Mapping(target = "status", expression = "java(exception.getStatus().value())")
     @Mapping(target = "detail", source = "exception.message")
     @Mapping(target = "instance", expression = "java(URI.create(getServerBasePath(request)))")

@@ -1,23 +1,30 @@
 package com.theusick.controller.dto.enterprise;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@Data
+@Value
 @Builder
 @Jacksonized
 @Schema(name = "EnterpriseResponse")
 public class EnterpriseBaseDTO {
 
-    private Long id;
-    private String name;
-    private String city;
+    @NotNull
+    Long id;
+    @NotBlank
+    String name;
+    @NotBlank
+    String city;
 
-    private List<Long> vehicles;
-    private List<Long> drivers;
+    @NotNull
+    List<Long> vehicles;
+    @NotNull
+    List<Long> drivers;
 
 }

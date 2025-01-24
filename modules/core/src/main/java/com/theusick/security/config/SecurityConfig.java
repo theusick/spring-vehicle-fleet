@@ -1,7 +1,7 @@
 package com.theusick.security.config;
 
 import com.theusick.security.service.DBUserDetailsService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,32 +11,38 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class SecurityConfig {
 
     private final DBUserDetailsService userDetailsService;
 
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+
     @Bean
-    public SecurityFilterChain apiHttpSecurity(HttpSecurity http) throws Exception {
+    public SecurityFilterChain apiHttpSecurity(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http
             .securityMatcher("/api/**")
-            .csrf(csrf -> csrf.csrfTokenRepository(new CookieCsrfTokenRepository()))
+            .csrf(CsrfConfigurer::disable)
+            .cors(Customizer.withDefaults())
+            .sessionManagement((configurer) -> configurer
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .formLogin(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((request) -> request
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll())
-            .httpBasic(Customizer.withDefaults())
-            .sessionManagement((configurer) -> configurer
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint(authenticationEntryPoint))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 

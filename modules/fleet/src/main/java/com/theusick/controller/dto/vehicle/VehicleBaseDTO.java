@@ -1,28 +1,44 @@
 package com.theusick.controller.dto.vehicle;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@Data
+@Value
 @Builder
 @Jacksonized
 @Schema(description = "Vehicle")
 public class VehicleBaseDTO {
 
-    private Long id;
+    @NotNull
+    Long id;
 
-    private int year;
-    private int mileage;
-    private String color;
-    private double price;
-    private String licensePlate;
+    @PositiveOrZero
+    int year;
+    @PositiveOrZero
+    int mileage;
+    @NotBlank
+    String color;
+    @DecimalMin(
+        value = "0.0",
+        inclusive = false,
+        message = "Price must be greater than 0"
+    )
+    double price;
+    @NotBlank
+    String licensePlate;
 
-    private Long brand;
+    @NotNull
+    Long brand;
 
-    private List<Long> drivers;
+    @NotNull
+    List<Long> drivers;
 
 }

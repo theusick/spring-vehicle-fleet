@@ -72,6 +72,11 @@ spring:
     hiddenmethod.filter:
       enabled: true
 
+security:
+  jwt:
+    secret-key: ${BACKEND_JWT_SECRET}
+    expiration-time: 1800000
+
 springdoc:
   swagger-ui:
     path: /

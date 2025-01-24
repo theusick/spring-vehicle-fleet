@@ -16,7 +16,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name = "managers")
+@Table(name = "users")
 @Builder
 @Getter
 @Setter
@@ -32,5 +32,15 @@ public class User extends UserEntity {
     @Column(columnDefinition = "BIT", nullable = false)
     @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
     private boolean enabled;
+
+    @ColumnDefault("false")
+    @Column(columnDefinition = "BIT", nullable = false)
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
+    private boolean locked;
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
 
 }

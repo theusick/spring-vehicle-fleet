@@ -2,22 +2,27 @@ package com.theusick.controller.dto.brand;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-@Data
+@Value
 @Builder
 @Jacksonized
 @Schema(description = "VehicleBrand")
 public class VehicleBrandBaseDTO {
 
-    private Long id;
+    @NotNull
+    Long id;
 
-    private String name;
-    private String type;
-    private int seats;
-    private double fuelTank;
-    private double payloadCapacity;
+    @NotBlank
+    String name;
+    @NotBlank
+    String type;
+    int seats;
+    double fuelTank;
+    double payloadCapacity;
 
 }

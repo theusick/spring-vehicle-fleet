@@ -1,22 +1,27 @@
 package com.theusick.controller.dto.driver;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-@Data
+@Value
 @Builder
 @Jacksonized
 @Schema(description = "Driver")
 public class ActiveDriverDTO {
 
-    private Long id;
+    @NotNull
+    Long id;
 
-    private String name;
-    private int age;
-    private double salary;
+    @NotBlank
+    String name;
+    int age;
+    double salary;
 
-    private Long vehicle;
+    @NotNull
+    Long vehicle;
 
 }
