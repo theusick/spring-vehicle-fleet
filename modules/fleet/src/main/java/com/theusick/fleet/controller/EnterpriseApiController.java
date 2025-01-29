@@ -2,18 +2,18 @@ package com.theusick.fleet.controller;
 
 import com.theusick.core.api.exception.ForbiddenApiException;
 import com.theusick.core.api.exception.NotFoundApiException;
+import com.theusick.core.security.repository.entity.User;
+import com.theusick.core.service.exception.NoAccessException;
+import com.theusick.core.service.exception.NoSuchException;
 import com.theusick.fleet.controller.dto.driver.ActiveDriverDTO;
 import com.theusick.fleet.controller.dto.driver.DriverBaseDTO;
 import com.theusick.fleet.controller.dto.enterprise.EnterpriseBaseDTO;
 import com.theusick.fleet.controller.dto.enterprise.EnterpriseInfoDTO;
 import com.theusick.fleet.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.fleet.controller.dto.vehicle.VehicleInfoDTO;
-import com.theusick.core.security.repository.entity.User;
 import com.theusick.fleet.service.DriverService;
 import com.theusick.fleet.service.EnterpriseService;
 import com.theusick.fleet.service.VehicleService;
-import com.theusick.core.service.exception.NoAccessException;
-import com.theusick.core.service.exception.NoSuchException;
 import com.theusick.fleet.service.mapper.DriverMapper;
 import com.theusick.fleet.service.mapper.EnterpriseMapper;
 import com.theusick.fleet.service.mapper.VehicleMapper;
@@ -186,7 +186,7 @@ public class EnterpriseApiController {
                                               @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
-                enterpriseService.createEnterprise(
+                enterpriseService.createEnterpriseForManager(
                     enterpriseMapper.enterpriseModelFromInfoDTO(enterpriseDTO), manager.getId())
             );
         } catch (NoSuchException exception) {
@@ -205,7 +205,7 @@ public class EnterpriseApiController {
                                               @AuthenticationPrincipal User manager) {
         try {
             return enterpriseMapper.enterpriseBaseDTOFromModel(
-                enterpriseService.updateEnterprise(
+                enterpriseService.updateEnterpriseForManager(
                     enterpriseMapper.enterpriseModelFromInfoDTO(enterpriseDTO).withId(enterpriseId),
                     manager.getId())
             );
@@ -220,7 +220,7 @@ public class EnterpriseApiController {
     public void deleteEnterprise(@PathVariable Long enterpriseId,
                                  @AuthenticationPrincipal User manager) {
         try {
-            enterpriseService.deleteEnterprise(enterpriseId, manager.getId());
+            enterpriseService.deleteEnterpriseForManager(enterpriseId, manager.getId());
         } catch (NoAccessException exception) {
             throw new ForbiddenApiException(exception.getMessage());
         }

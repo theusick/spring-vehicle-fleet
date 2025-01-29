@@ -32,7 +32,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <!-- Lombok -->
             <dependency>
                 <groupId>com.theusick</groupId>
@@ -46,6 +45,14 @@
                 <groupId>com.theusick</groupId>
                 <artifactId>dependencies.mapstruct</artifactId>
                 <version>${revision}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring shell -->
+            <dependency>
+                <groupId>org.springframework.shell</groupId>
+                <artifactId>spring-shell-dependencies</artifactId>
+                <version>${spring.shell.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -90,6 +97,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+        <!-- Spring shell -->
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
         </dependency>
         <!-- Springdoc / Swagger -->
         <dependency>

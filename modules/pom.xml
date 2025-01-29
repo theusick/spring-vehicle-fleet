@@ -20,6 +20,7 @@
         <module>core</module>
         <module>fleet</module>
         <module>frontend</module>
+        <module>data-generator</module>
     </modules>
 
 </project>

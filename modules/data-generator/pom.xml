@@ -11,10 +11,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>modules.fleet</artifactId>
+    <artifactId>modules.data-generator</artifactId>
 
     <packaging>jar</packaging>
-
+    
     <dependencies>
         <dependency>
             <groupId>com.theusick</groupId>
@@ -22,10 +22,9 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>13.0</version>
-            <scope>compile</scope>
+            <groupId>com.theusick</groupId>
+            <artifactId>modules.fleet</artifactId>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 

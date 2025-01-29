@@ -42,7 +42,7 @@ public interface VehicleMapper {
     @Mapping(target = "enterprise", ignore = true)
     @Mapping(target = "vehicleDrivers", ignore = true)
     @Mapping(target = "currentDriver", ignore = true)
-    @Mapping(target = "brand", qualifiedByName = "updateBrandId")
+    @Mapping(target = "brand", ignore = true)
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
 

@@ -1,8 +1,9 @@
 package com.theusick.fleet.service;
 
 import com.theusick.core.service.exception.NoAccessException;
-import com.theusick.fleet.service.exception.NoSuchEnterpriseException;
 import com.theusick.core.service.exception.NoSuchException;
+import com.theusick.fleet.service.exception.NoSuchEnterpriseException;
+import com.theusick.fleet.service.exception.NoSuchVehicleBrandException;
 import com.theusick.fleet.service.exception.NoSuchVehicleException;
 import com.theusick.fleet.service.model.VehicleModel;
 
@@ -19,9 +20,10 @@ public interface VehicleService {
     List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId,
                                                        Long enterpriseId) throws NoAccessException;
 
-    void createVehicle(Long enterpriseId,
-                       Long brandId,
-                       VehicleModel vehicleModel) throws NoSuchException;
+    VehicleModel createVehicle(Long enterpriseId,
+                               Long brandId,
+                               VehicleModel vehicleModel)
+        throws NoSuchEnterpriseException, NoSuchVehicleBrandException;
 
     VehicleModel createVehicleForManager(Long enterpriseId,
                                          Long brandId,

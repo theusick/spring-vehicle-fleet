@@ -21,6 +21,7 @@
 
         <!-- Spring-boot core dependencies -->
         <springdoc.version>2.6.0</springdoc.version>
+        <spring.shell.version>3.4.0</spring.shell.version>
         <!-- Spring-boot frontend dependencies -->
         <webjars.locator.version>0.52</webjars.locator.version>
         <bootstrap.version>5.3.3</bootstrap.version>

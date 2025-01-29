@@ -3,6 +3,7 @@ package com.theusick.fleet.service;
 import com.theusick.core.service.exception.NoAccessException;
 import com.theusick.fleet.service.exception.NoSuchDriverException;
 import com.theusick.fleet.service.exception.NoSuchEnterpriseException;
+import com.theusick.fleet.service.exception.NoSuchVehicleException;
 import com.theusick.fleet.service.model.DriverModel;
 
 import java.util.List;
@@ -18,7 +19,9 @@ public interface DriverService {
     List<DriverModel> getEnterpriseDriversForManager(Long managerId,
                                                      Long enterpriseId) throws NoAccessException;
 
-    DriverModel createDriver(DriverModel driverModel);
+    DriverModel createDriver(Long enterpriseId,
+                             DriverModel driverModel)
+        throws NoSuchEnterpriseException, NoSuchVehicleException, NoSuchDriverException;
 
     void updateDriver(DriverModel driverModel) throws NoSuchDriverException;
 

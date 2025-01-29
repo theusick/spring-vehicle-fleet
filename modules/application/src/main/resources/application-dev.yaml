@@ -17,6 +17,10 @@ spring:
     restart:
       enabled: true
 
+  shell:
+    interactive:
+      enabled: true
+
 logging:
   level.org:
     hibernate:

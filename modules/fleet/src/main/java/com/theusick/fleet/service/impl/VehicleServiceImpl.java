@@ -1,5 +1,7 @@
 package com.theusick.fleet.service.impl;
 
+import com.theusick.core.service.exception.NoAccessException;
+import com.theusick.core.service.exception.NoSuchException;
 import com.theusick.fleet.repository.EnterpriseRepository;
 import com.theusick.fleet.repository.VehicleBrandRepository;
 import com.theusick.fleet.repository.VehicleRepository;
@@ -8,9 +10,7 @@ import com.theusick.fleet.repository.entity.VehicleBrandEntity;
 import com.theusick.fleet.repository.entity.VehicleEntity;
 import com.theusick.fleet.service.EnterpriseService;
 import com.theusick.fleet.service.VehicleService;
-import com.theusick.core.service.exception.NoAccessException;
 import com.theusick.fleet.service.exception.NoSuchEnterpriseException;
-import com.theusick.core.service.exception.NoSuchException;
 import com.theusick.fleet.service.exception.NoSuchVehicleBrandException;
 import com.theusick.fleet.service.exception.NoSuchVehicleException;
 import com.theusick.fleet.service.mapper.VehicleMapper;
@@ -72,13 +72,14 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     @Transactional
-    public void createVehicle(Long enterpriseId,
-                              Long brandId,
-                              VehicleModel vehicleModel) throws NoSuchException {
+    public VehicleModel createVehicle(Long enterpriseId,
+                                      Long brandId,
+                                      VehicleModel vehicleModel)
+        throws NoSuchEnterpriseException, NoSuchVehicleBrandException {
         EnterpriseEntity enterpriseEntity = enterpriseRepository.findById(enterpriseId)
             .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId));
 
-        createVehicle(brandId, vehicleModel, enterpriseEntity);
+        return createVehicle(brandId, vehicleModel, enterpriseEntity);
     }
 
     @Override

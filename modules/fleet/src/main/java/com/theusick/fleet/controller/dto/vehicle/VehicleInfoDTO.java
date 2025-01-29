@@ -18,6 +18,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(name = "VehicleInfo")
 public class VehicleInfoDTO {
 
+    @PositiveOrZero
     int year;
     @PositiveOrZero
     int mileage;
