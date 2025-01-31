@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -19,10 +19,8 @@ public class DriverModel {
     private int age;
     private double salary;
 
-    private Long enterpriseId;
+    private Set<Long> vehicleIds;
 
-    private List<VehicleDriverModel> vehicleDrivers;
-
-    private VehicleModel activeVehicle;
+    private Long activeVehicleId;
 
 }

@@ -1,5 +1,6 @@
 package com.theusick.fleet.controller.dto.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -39,6 +40,7 @@ public class VehicleBaseDTO {
     Long brand;
 
     @NotNull
-    List<Long> drivers;
+    @JsonProperty("drivers")
+    List<Long> driverIds;
 
 }

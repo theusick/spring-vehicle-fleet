@@ -1,20 +1,18 @@
 package com.theusick.fleet.service.mapper;
 
-import com.theusick.fleet.controller.dto.brand.VehicleBrandIdDTO;
 import com.theusick.fleet.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.fleet.controller.dto.vehicle.VehicleInfoDTO;
-import com.theusick.fleet.repository.entity.VehicleBrandEntity;
+import com.theusick.fleet.repository.entity.VehicleDriverEntity;
 import com.theusick.fleet.repository.entity.VehicleEntity;
-import com.theusick.fleet.service.model.VehicleBrandModel;
-import com.theusick.fleet.service.model.VehicleDriverModel;
 import com.theusick.fleet.service.model.VehicleModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.springframework.data.domain.Page;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(
@@ -25,55 +23,47 @@ import java.util.stream.Collectors;
 )
 public interface VehicleMapper {
 
-    @Mapping(target = "drivers", source = "vehicleDrivers", qualifiedByName = "mapVehicleDriverIdsToList")
-    @Mapping(target = "brand", source = "brand.id")
+    @Mapping(target = "brand", source = "brandId")
     VehicleBaseDTO vehicleBaseDTOFromModel(VehicleModel vehicleModel);
 
+    default Page<VehicleBaseDTO> vehicleDTOPageFromModels(Page<VehicleModel> models) {
+        return models.map(this::vehicleBaseDTOFromModel);
+    }
+
     @Mapping(target = "enterpriseId", source = "enterprise.id")
+    @Mapping(target = "brandId", source = "brand.id")
+    @Mapping(
+        target = "driverIds",
+        source = "vehicleDrivers",
+        qualifiedByName = "mapDriverIdsFromVehicleDrivers"
+    )
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
 
+    @Named("mapDriverIdsFromVehicleDrivers")
+    default Set<Long> mapDriverIdsFromVehicleDrivers(Set<VehicleDriverEntity> vehicleDrivers) {
+        if (vehicleDrivers == null) {
+            return Collections.emptySet();
+        }
+        return vehicleDrivers.stream()
+            .map(vehicleDriver -> vehicleDriver.getPrimaryKey().getDriver().getId())
+            .collect(Collectors.toSet());
+    }
+
+    default Page<VehicleModel> vehicleModelsPageFromEntities(Page<VehicleEntity> entities) {
+        return entities.map(this::vehicleModelFromEntity);
+    }
+
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "vehicleDrivers", ignore = true)
+    @Mapping(target = "driverIds", ignore = true)
     @Mapping(target = "enterpriseId", ignore = true)
-    @Mapping(target = "brand", source = "brand", qualifiedByName = "mapBrandIdToModel")
+    @Mapping(target = "brandId", source = "brand.id")
     VehicleModel vehicleModelFromInfoDTO(VehicleInfoDTO vehicleDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "enterprise", ignore = true)
     @Mapping(target = "vehicleDrivers", ignore = true)
-    @Mapping(target = "currentDriver", ignore = true)
     @Mapping(target = "brand", ignore = true)
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
-
-    @Named("updateBrandId")
-    default void updateBrandId(@MappingTarget VehicleBrandEntity brandEntity,
-                               VehicleBrandModel brandModel) {
-        if (brandEntity == null) {
-            brandEntity = new VehicleBrandEntity();
-        }
-        brandEntity.setId(brandModel.getId());
-    }
-
-    @Named("mapVehicleDriverIdsToList")
-    default List<Long> mapVehicleDriverIdsToList(List<VehicleDriverModel> vehicleDrivers) {
-        if (vehicleDrivers == null) {
-            return Collections.emptyList();
-        }
-        return vehicleDrivers.stream()
-            .map(VehicleDriverModel::getDriverId)
-            .collect(Collectors.toList());
-    }
-
-    @Named("mapBrandIdToModel")
-    default VehicleBrandModel mapBrandIdToModel(VehicleBrandIdDTO brandIdDTO) {
-        if (brandIdDTO == null) {
-            return null;
-        }
-
-        return VehicleBrandModel.builder()
-            .id(brandIdDTO.getId())
-            .build();
-    }
 
 }

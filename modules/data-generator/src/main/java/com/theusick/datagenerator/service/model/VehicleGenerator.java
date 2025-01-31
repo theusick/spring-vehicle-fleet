@@ -23,8 +23,6 @@ public class VehicleGenerator extends AbstractModelGenerator<VehicleModel> {
     private static final List<String> REGIONS =
         List.of("01", "02", "05", "21", "47", "69", "77", "78", "97");
 
-    private final Long enterpriseId;
-
     @Override
     public VehicleModel generateFields() {
         return VehicleModel.builder()
@@ -33,7 +31,6 @@ public class VehicleGenerator extends AbstractModelGenerator<VehicleModel> {
             .color(generateColor())
             .price(generatePrice())
             .licensePlate(generateLicensePlate())
-            .enterpriseId(enterpriseId)
             .build();
     }
 

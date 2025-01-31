@@ -2,8 +2,6 @@ package com.theusick.datagenerator.command;
 
 import com.theusick.core.service.exception.NoSuchException;
 import com.theusick.datagenerator.service.GeneratorService;
-import com.theusick.fleet.service.model.DriverModel;
-import com.theusick.fleet.service.model.VehicleModel;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -29,19 +27,19 @@ public class EnterpriseGeneratorCommand {
         @Option(shortNames = 'v', required = true) @Min(1) @Max(10000) int vehiclesCount,
         @Option(shortNames = 'd', required = true) @Min(1) @Max(10000) int driversCount
     ) throws NoSuchException {
-        List<VehicleModel> vehicles = generatorService.generateAndSaveVehicles(
+        List<Long> vehicleIds = generatorService.generateAndSaveVehicles(
             enterpriseId,
             vehiclesCount);
 
-        List<DriverModel> drivers = generatorService.generateAndSaveDrivers(
+        List<Long> driverIds = generatorService.generateAndSaveDrivers(
             enterpriseId,
             driversCount,
-            vehicles);
+            vehicleIds);
 
         return String.format("Successfully generated for enterprise with ID %d:%n" +
                 "- Vehicles: %d%n" +
                 "- Drivers: %d",
-            enterpriseId, vehicles.size(), drivers.size());
+            enterpriseId, vehicleIds.size(), driverIds.size());
     }
 
     @ExceptionResolver({

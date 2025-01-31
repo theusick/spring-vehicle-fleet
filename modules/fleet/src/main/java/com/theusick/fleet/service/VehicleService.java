@@ -6,6 +6,8 @@ import com.theusick.fleet.service.exception.NoSuchEnterpriseException;
 import com.theusick.fleet.service.exception.NoSuchVehicleBrandException;
 import com.theusick.fleet.service.exception.NoSuchVehicleException;
 import com.theusick.fleet.service.model.VehicleModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,6 +18,10 @@ public interface VehicleService {
     List<VehicleModel> getVehicles();
 
     List<VehicleModel> getEnterpriseVehicles(Long enterpriseId) throws NoSuchEnterpriseException;
+
+    Page<VehicleModel> getEnterpriseVehiclesPageForManager(Long managerId,
+                                                           Long enterpriseId,
+                                                           Pageable pageable) throws NoAccessException;
 
     List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId,
                                                        Long enterpriseId) throws NoAccessException;

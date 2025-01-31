@@ -2,6 +2,7 @@ package com.theusick.fleet.repository.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,14 +41,19 @@ public class DriverEntity {
     private double salary;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enterprise_id", nullable = false)
     private EnterpriseEntity enterprise;
 
-    @OneToMany(mappedBy = "primaryKey.driver", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "primaryKey.driver",
+        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
     private Set<VehicleDriverEntity> vehicleDrivers;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "active_vehicle_id", unique = true)
     private VehicleEntity activeVehicle;
 

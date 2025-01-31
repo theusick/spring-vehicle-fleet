@@ -2,14 +2,13 @@ package com.theusick.fleet.repository.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -52,27 +51,22 @@ public class VehicleEntity {
     private String licensePlate;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enterprise_id", nullable = false)
     private EnterpriseEntity enterprise;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private VehicleBrandEntity brand;
 
-    @OneToMany(mappedBy = "primaryKey.vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "primaryKey.vehicle",
+        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
     private Set<VehicleDriverEntity> vehicleDrivers;
-
-    @OneToOne(mappedBy = "activeVehicle")
-    private DriverEntity currentDriver;
-
-    @PreRemove
-    public void onRemoveSetActiveVehicleNull() {
-        if (currentDriver != null) {
-            currentDriver.setActiveVehicle(null);
-        }
-    }
 
 }

@@ -20,7 +20,7 @@ public class EnterpriseModel {
     private String name;
     private String city;
 
-    List<VehicleModel> vehicles;
-    List<DriverModel> drivers;
+    List<Long> vehicleIds;
+    List<Long> driverIds;
 
 }

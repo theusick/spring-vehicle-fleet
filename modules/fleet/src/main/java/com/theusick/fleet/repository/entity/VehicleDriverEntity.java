@@ -2,10 +2,10 @@ package com.theusick.fleet.repository.entity;
 
 import jakarta.persistence.AssociationOverride;
 import jakarta.persistence.AssociationOverrides;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PreRemove;
@@ -43,11 +43,13 @@ public class VehicleDriverEntity {
     @Getter
     @Setter
     @Embeddable
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class VehicleDriverId implements Serializable {
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(fetch = FetchType.LAZY)
         private VehicleEntity vehicle;
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(fetch = FetchType.LAZY)
         private DriverEntity driver;
 
     }
@@ -61,4 +63,5 @@ public class VehicleDriverEntity {
             driver.setActiveVehicle(null);
         }
     }
+
 }

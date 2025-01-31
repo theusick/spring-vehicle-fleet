@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Vehicle Brand")
-@RequestMapping("/api/brands")
+@RequestMapping("/api/v1/brands")
 @RequiredArgsConstructor
 public class VehicleBrandApiController {
 

@@ -18,6 +18,8 @@ import com.theusick.fleet.service.model.VehicleModel;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +59,20 @@ public class VehicleServiceImpl implements VehicleService {
         return enterpriseEntity.getVehicles().stream()
             .map(vehicleMapper::vehicleModelFromEntity)
             .toList();
+    }
+
+    @Override
+    public Page<VehicleModel> getEnterpriseVehiclesPageForManager(Long managerId,
+                                                                  Long enterpriseId,
+                                                                  Pageable pageable)
+        throws NoAccessException {
+        return enterpriseService.getVisiblePageEntitiesForManager(
+            managerId,
+            enterpriseId,
+            vehicleRepository::findByEnterpriseId,
+            vehicleMapper::vehicleModelsPageFromEntities,
+            pageable
+        );
     }
 
     @Override
@@ -148,7 +164,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     private VehicleEntity updateVehicleWithBrand(VehicleModel vehicleModel,
                                                  VehicleEntity vehicleEntity) throws NoSuchVehicleBrandException {
-        final Long newBrandId = vehicleModel.getBrand().getId();
+        final Long newBrandId = vehicleModel.getBrandId();
         if (!Objects.equals(newBrandId, vehicleEntity.getBrand().getId())) {
             VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
                 .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));

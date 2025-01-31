@@ -12,10 +12,13 @@ import com.theusick.fleet.service.mapper.EnterpriseMapper;
 import com.theusick.fleet.service.model.EnterpriseModel;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Service
@@ -84,6 +87,23 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     @Transactional
+    public <T, R> Page<R> getVisiblePageEntitiesForManager(Long managerId,
+                                                           Long enterpriseId,
+                                                           BiFunction<Long, Pageable, Page<T>> entitiesFetcher,
+                                                           Function<Page<T>, Page<R>> mapper,
+                                                           Pageable pageable) throws NoAccessException {
+        List<Long> visibleEnterpriseIds = getVisibleEnterpriseIdsForManager(managerId);
+
+        if (!visibleEnterpriseIds.contains(enterpriseId)) {
+            throw new NoAccessException(enterpriseId);
+        }
+
+        return mapper.apply(entitiesFetcher.apply(enterpriseId, pageable));
+    }
+
+
+    @Override
+    @Transactional
     public EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException {
         return enterpriseMapper.enterpriseModelFromEntity(
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
@@ -101,7 +121,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Override
     @Transactional
     public List<EnterpriseModel> getEnterprisesForManager(Long managerId) {
-        return enterpriseRepository.findAllByManagersId(managerId).stream()
+        return enterpriseRepository.findAllEnterprisesByManagersId(managerId).stream()
             .map(enterpriseMapper::enterpriseModelFromEntity)
             .toList();
     }

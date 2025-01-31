@@ -19,7 +19,11 @@ import com.theusick.fleet.service.mapper.EnterpriseMapper;
 import com.theusick.fleet.service.mapper.VehicleMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,11 +38,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Tag(name = "Enterprise")
-@RequestMapping("/api/enterprises")
+@RequestMapping("/api/v1/enterprises")
 @RequiredArgsConstructor
 public class EnterpriseApiController {
 
@@ -53,12 +56,13 @@ public class EnterpriseApiController {
 
     @GetMapping(value = "/{enterpriseId}/vehicles", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<VehicleBaseDTO> getEnterpriseVehicles(@AuthenticationPrincipal User manager,
-                                                      @PathVariable Long enterpriseId) {
+    public Page<VehicleBaseDTO> getEnterpriseVehicles(@AuthenticationPrincipal User manager,
+                                                      @NotNull @PathVariable Long enterpriseId,
+                                                      @NotNull Pageable pageable) {
         try {
-            return vehicleService.getEnterpriseVehiclesForManager(manager.getId(), enterpriseId).stream()
-                .map(vehicleMapper::vehicleBaseDTOFromModel)
-                .toList();
+            return vehicleMapper.vehicleDTOPageFromModels(
+                vehicleService.getEnterpriseVehiclesPageForManager(manager.getId(), enterpriseId, pageable)
+            );
         } catch (NoAccessException exception) {
             throw new ForbiddenApiException(exception.getMessage());
         }
@@ -131,12 +135,13 @@ public class EnterpriseApiController {
 
     @GetMapping(value = "/{enterpriseId}/drivers", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<DriverBaseDTO> getEnterpriseDrivers(@AuthenticationPrincipal User manager,
-                                                    @PathVariable Long enterpriseId) {
+    public Page<DriverBaseDTO> getEnterpriseDrivers(@AuthenticationPrincipal User manager,
+                                                    @PathVariable Long enterpriseId,
+                                                    @NotNull Pageable pageable) {
         try {
-            return driverService.getEnterpriseDriversForManager(manager.getId(), enterpriseId).stream()
-                .map(driverMapper::driverBaseDTOFromModel)
-                .toList();
+            return driverMapper.driverDTOPageFromModels(
+                driverService.getEnterpriseDriversPageForManager(manager.getId(), enterpriseId, pageable)
+            );
         } catch (NoAccessException exception) {
             throw new ForbiddenApiException(exception.getMessage());
         }
@@ -144,13 +149,17 @@ public class EnterpriseApiController {
 
     @GetMapping(value = "/{enterpriseId}/drivers/active", produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
-    public List<ActiveDriverDTO> getEnterpriseActiveDrivers(@AuthenticationPrincipal User manager,
-                                                            @PathVariable Long enterpriseId) {
+    public Page<ActiveDriverDTO> getEnterpriseActiveDrivers(@AuthenticationPrincipal User manager,
+                                                            @PathVariable Long enterpriseId,
+                                                            @NotNull @PageableDefault(size = 20)
+                                                            Pageable pageable) {
         try {
-            return driverService.getEnterpriseDriversForManager(manager.getId(), enterpriseId).stream()
-                .map(driverMapper::activeDriverDTOFromModel)
-                .filter(activeDriverDTO -> Objects.nonNull(activeDriverDTO.getVehicle()))
-                .toList();
+            return driverMapper.activeDiverDTOPageFromModels(
+                driverService.getEnterpriseActiveDriversPageForManager(
+                    manager.getId(),
+                    enterpriseId,
+                    pageable
+                ));
         } catch (NoAccessException exception) {
             throw new ForbiddenApiException(exception.getMessage());
         }

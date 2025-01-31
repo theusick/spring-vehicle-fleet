@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Driver")
-@RequestMapping("/api/drivers")
+@RequestMapping("/api/v1/drivers")
 @RequiredArgsConstructor
 public class DriverApiController {
 

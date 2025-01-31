@@ -2,10 +2,10 @@ package com.theusick.fleet.service.mapper;
 
 import com.theusick.fleet.controller.dto.enterprise.EnterpriseBaseDTO;
 import com.theusick.fleet.controller.dto.enterprise.EnterpriseInfoDTO;
+import com.theusick.fleet.repository.entity.DriverEntity;
 import com.theusick.fleet.repository.entity.EnterpriseEntity;
-import com.theusick.fleet.service.model.DriverModel;
+import com.theusick.fleet.repository.entity.VehicleEntity;
 import com.theusick.fleet.service.model.EnterpriseModel;
-import com.theusick.fleet.service.model.VehicleModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -23,15 +23,15 @@ import java.util.stream.Collectors;
 )
 public interface EnterpriseMapper {
 
-    @Mapping(target = "vehicles", source = "vehicles", qualifiedByName = "mapVehicleIdsToList")
-    @Mapping(target = "drivers", source = "drivers", qualifiedByName = "mapDriverIdsToList")
     EnterpriseBaseDTO enterpriseBaseDTOFromModel(EnterpriseModel enterpriseModel);
 
+    @Mapping(target = "vehicleIds", source = "vehicles", qualifiedByName = "mapVehicleIdsToList")
+    @Mapping(target = "driverIds", source = "drivers", qualifiedByName = "mapDriverIdsToList")
     EnterpriseModel enterpriseModelFromEntity(EnterpriseEntity enterpriseEntity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "vehicles", ignore = true)
-    @Mapping(target = "drivers", ignore = true)
+    @Mapping(target = "vehicleIds", ignore = true)
+    @Mapping(target = "driverIds", ignore = true)
     EnterpriseModel enterpriseModelFromInfoDTO(EnterpriseInfoDTO enterpriseDTO);
 
     @Mapping(target = "id", ignore = true)
@@ -42,22 +42,22 @@ public interface EnterpriseMapper {
                                          EnterpriseModel enterpriseModel);
 
     @Named("mapVehicleIdsToList")
-    default List<Long> mapVehicleIdsToList(List<VehicleModel> vehicles) {
+    default List<Long> mapVehicleIdsToList(List<VehicleEntity> vehicles) {
         if (vehicles == null) {
             return Collections.emptyList();
         }
         return vehicles.stream()
-            .map(VehicleModel::getId)
+            .map(VehicleEntity::getId)
             .collect(Collectors.toList());
     }
 
     @Named("mapDriverIdsToList")
-    default List<Long> mapDriverIdsToList(List<DriverModel> drivers) {
+    default List<Long> mapDriverIdsToList(List<DriverEntity> drivers) {
         if (drivers == null) {
             return Collections.emptyList();
         }
         return drivers.stream()
-            .map(DriverModel::getId)
+            .map(DriverEntity::getId)
             .collect(Collectors.toList());
     }
 

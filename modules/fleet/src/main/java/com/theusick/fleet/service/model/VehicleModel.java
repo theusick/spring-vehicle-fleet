@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @With
@@ -24,8 +24,8 @@ public class VehicleModel {
     private String licensePlate;
 
     private Long enterpriseId;
-    private VehicleBrandModel brand;
+    private Long brandId;
 
-    private List<VehicleDriverModel> vehicleDrivers;
+    private Set<Long> driverIds;
 
 }

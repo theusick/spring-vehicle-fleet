@@ -1,16 +1,15 @@
 package com.theusick.datagenerator.service.model;
 
 import com.theusick.fleet.service.model.DriverModel;
-import com.theusick.fleet.service.model.VehicleDriverModel;
-import com.theusick.fleet.service.model.VehicleModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @SuperBuilder
@@ -35,20 +34,17 @@ public class DriverGenerator extends AbstractModelGenerator<DriverModel> {
         "Марина", "Наталья", "Елена", "Дарья", "Екатерина", "Вячеслава", "Александра"
     );
 
-    private final Long enterpriseId;
-
-    private final List<VehicleModel> availableVehicles;
+    private final List<Long> availableVehicleIds;
 
     @Override
     public DriverModel generateFields() {
-        VehicleModel chosenActiveVehicle = generateActiveVehicle();
+        Long chosenActiveVehicleId = generateActiveVehicleId();
         return DriverModel.builder()
             .name(generateName())
             .age(generateAge())
             .salary(generateSalary())
-            .enterpriseId(enterpriseId)
-            .activeVehicle(chosenActiveVehicle)
-            .vehicleDrivers(generateVehicleDrivers(chosenActiveVehicle))
+            .activeVehicleId(chosenActiveVehicleId)
+            .vehicleIds(generateVehicleIds(chosenActiveVehicleId))
             .build();
     }
 
@@ -82,31 +78,27 @@ public class DriverGenerator extends AbstractModelGenerator<DriverModel> {
             .doubleValue();
     }
 
-    private VehicleModel generateActiveVehicle() {
-        if (availableVehicles.isEmpty() || (random.nextInt(10) != 0)) {
+    private Long generateActiveVehicleId() {
+        if (availableVehicleIds.isEmpty() || (random.nextInt(10) != 0)) {
             return null;
         }
-        return availableVehicles.remove(random.nextInt(availableVehicles.size()));
+        return availableVehicleIds.remove(random.nextInt(availableVehicleIds.size()));
     }
 
-    private List<VehicleDriverModel> generateVehicleDrivers(VehicleModel activeVehicle) {
-        List<VehicleDriverModel> vehicleDrivers = new ArrayList<>();
+    private Set<Long> generateVehicleIds(Long activeVehicleId) {
+        Set<Long> vehicleDrivers = new HashSet<>();
 
-        if (activeVehicle != null) {
-            vehicleDrivers.add(VehicleDriverModel.builder()
-                .vehicleId(activeVehicle.getId())
-                .build());
+        if (activeVehicleId != null) {
+            vehicleDrivers.add(activeVehicleId);
         }
 
-        if (availableVehicles.isEmpty()) {
+        if (availableVehicleIds.isEmpty()) {
             return vehicleDrivers;
         }
 
-        int randomVehicleCount = random.nextInt(0, Math.min(4, availableVehicles.size()));
+        int randomVehicleCount = random.nextInt(0, Math.min(2, availableVehicleIds.size()));
         for (int i = 0; i < randomVehicleCount; i++) {
-            vehicleDrivers.add(VehicleDriverModel.builder()
-                .vehicleId(availableVehicles.get(i).getId())
-                .build());
+            vehicleDrivers.add(availableVehicleIds.get(i));
         }
         return vehicleDrivers;
     }

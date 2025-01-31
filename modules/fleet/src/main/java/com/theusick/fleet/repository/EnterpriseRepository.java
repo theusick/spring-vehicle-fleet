@@ -1,6 +1,7 @@
 package com.theusick.fleet.repository;
 
 import com.theusick.fleet.repository.entity.EnterpriseEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,5 +12,11 @@ public interface EnterpriseRepository extends JpaRepository<EnterpriseEntity, Lo
     Optional<EnterpriseEntity> findByIdAndManagersId(Long enterpriseId, Long managerId);
 
     List<EnterpriseEntity> findAllByManagersId(Long managerId);
+
+    @EntityGraph(
+        type = EntityGraph.EntityGraphType.LOAD,
+        attributePaths = {"vehicles.vehicleDrivers"}
+    )
+    List<EnterpriseEntity> findAllEnterprisesByManagersId(Long managerId);
 
 }
