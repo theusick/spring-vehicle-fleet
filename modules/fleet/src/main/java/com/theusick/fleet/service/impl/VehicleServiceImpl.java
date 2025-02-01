@@ -16,6 +16,7 @@ import com.theusick.fleet.service.exception.NoSuchVehicleException;
 import com.theusick.fleet.service.mapper.VehicleMapper;
 import com.theusick.fleet.service.model.VehicleModel;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -105,8 +106,7 @@ public class VehicleServiceImpl implements VehicleService {
                                                 Long managerId,
                                                 VehicleModel vehicleModel) throws NoSuchException, NoAccessException {
         EnterpriseEntity enterpriseEntity =
-            enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoAccessException(enterpriseId));
+            enterpriseService.verifyManagerAccess(enterpriseId, managerId);
 
         return createVehicle(brandId, vehicleModel, enterpriseEntity);
     }
@@ -142,39 +142,27 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleEntity.setEnterprise(enterpriseEntity);
         }
 
-        updateVehicleWithBrand(vehicleModel, vehicleEntity);
+        vehicleMapper.updateVehicleEntityFromModel(vehicleEntity, vehicleModel);
+        vehicleRepository.save(vehicleEntity);
     }
 
     @Override
     @Transactional
-    public VehicleModel updateVehicleForManager(Long enterpriseId,
-                                                Long brandId,
+    public VehicleModel updateVehicleForManager(Long currentEnterpriseId,
+                                                Long newEnterpriseId,
                                                 Long managerId,
                                                 VehicleModel vehicleModel) throws NoSuchException, NoAccessException {
-        enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-            .orElseThrow(() -> new NoAccessException(enterpriseId));
+        enterpriseService.verifyManagerAccess(currentEnterpriseId, managerId);
 
-        VehicleEntity vehicleEntity = vehicleRepository.findById(vehicleModel.getId())
-            .orElseThrow(() -> new NoSuchVehicleException(vehicleModel.getId()));
-
-        return vehicleMapper.vehicleModelFromEntity(
-            updateVehicleWithBrand(vehicleModel, vehicleEntity)
-        );
-    }
-
-    private VehicleEntity updateVehicleWithBrand(VehicleModel vehicleModel,
-                                                 VehicleEntity vehicleEntity) throws NoSuchVehicleBrandException {
-        final Long newBrandId = vehicleModel.getBrandId();
-        if (!Objects.equals(newBrandId, vehicleEntity.getBrand().getId())) {
-            VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
-                .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));
-
-            vehicleEntity.setBrand(brandEntity);
-        }
+        VehicleEntity vehicleEntity =
+            findEnterpriseVehicleOrThrow(currentEnterpriseId, vehicleModel.getId());
+        updateEnterpriseIfChanged(vehicleEntity, managerId, newEnterpriseId);
+        updateBrandIfChanged(vehicleEntity, vehicleModel.getBrandId());
 
         vehicleMapper.updateVehicleEntityFromModel(vehicleEntity, vehicleModel);
         vehicleRepository.save(vehicleEntity);
-        return vehicleEntity;
+
+        return vehicleMapper.vehicleModelFromEntity(vehicleEntity);
     }
 
     @Override
@@ -187,14 +175,38 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     @Transactional
     public void deleteVehicleForManager(Long enterpriseId,
-                                        Long vehicleId,
-                                        Long managerId) throws NoSuchException, NoAccessException {
-        enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-            .orElseThrow(() -> new NoAccessException(enterpriseId));
+                                        Long managerId,
+                                        Long vehicleId) throws NoSuchException, NoAccessException {
+        enterpriseService.verifyManagerAccess(enterpriseId, managerId);
 
-        VehicleEntity vehicleEntity = vehicleRepository.findByIdAndEnterpriseId(vehicleId, enterpriseId)
-            .orElseThrow(() -> new NoSuchVehicleException(vehicleId));
+        VehicleEntity vehicleEntity = findEnterpriseVehicleOrThrow(enterpriseId, vehicleId);
         vehicleRepository.delete(vehicleEntity);
+    }
+
+    private VehicleEntity findEnterpriseVehicleOrThrow(Long enterpriseId,
+                                                       Long vehicleId) throws NoSuchVehicleException {
+        return vehicleRepository.findByIdAndEnterpriseId(vehicleId, enterpriseId)
+            .orElseThrow(() -> new NoSuchVehicleException(vehicleId));
+    }
+
+    private void updateEnterpriseIfChanged(@NotNull VehicleEntity vehicleEntity,
+                                           @NotNull Long managerId,
+                                           Long newEnterpriseId) throws NoSuchEnterpriseException {
+        if (!Objects.equals(vehicleEntity.getEnterprise().getId(), newEnterpriseId)) {
+            EnterpriseEntity enterpriseEntity =
+                enterpriseRepository.findByIdAndManagersId(newEnterpriseId, managerId)
+                    .orElseThrow(() -> new NoSuchEnterpriseException(newEnterpriseId));
+            vehicleEntity.setEnterprise(enterpriseEntity);
+        }
+    }
+
+    private void updateBrandIfChanged(@NotNull VehicleEntity vehicleEntity,
+                                      Long newBrandId) throws NoSuchVehicleBrandException {
+        if (!Objects.equals(vehicleEntity.getBrand().getId(), newBrandId)) {
+            VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
+                .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));
+            vehicleEntity.setBrand(brandEntity);
+        }
     }
 
 }

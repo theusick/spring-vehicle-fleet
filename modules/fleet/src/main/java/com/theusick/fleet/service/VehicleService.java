@@ -19,12 +19,12 @@ public interface VehicleService {
 
     List<VehicleModel> getEnterpriseVehicles(Long enterpriseId) throws NoSuchEnterpriseException;
 
+    List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId,
+                                                       Long enterpriseId) throws NoAccessException;
+
     Page<VehicleModel> getEnterpriseVehiclesPageForManager(Long managerId,
                                                            Long enterpriseId,
                                                            Pageable pageable) throws NoAccessException;
-
-    List<VehicleModel> getEnterpriseVehiclesForManager(Long managerId,
-                                                       Long enterpriseId) throws NoAccessException;
 
     VehicleModel createVehicle(Long enterpriseId,
                                Long brandId,
@@ -38,15 +38,14 @@ public interface VehicleService {
 
     void updateVehicle(VehicleModel vehicleModel) throws NoSuchException;
 
-    VehicleModel updateVehicleForManager(Long enterpriseId,
-                                         Long brandId,
+    VehicleModel updateVehicleForManager(Long currentEnterpriseId,
+                                         Long newEnterpriseId,
                                          Long managerId,
                                          VehicleModel vehicleModel) throws NoSuchException, NoAccessException;
 
     void deleteVehicle(Long vehicleId) throws NoSuchVehicleException;
 
     void deleteVehicleForManager(Long enterpriseId,
-                                 Long vehicleId,
-                                 Long managerId) throws NoSuchException, NoAccessException;
-
+                                 Long managerId,
+                                 Long vehicleId) throws NoSuchException, NoAccessException;
 }

@@ -75,6 +75,23 @@ public class ApiExceptionHandler {
         );
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ProblemDetail> handleOtherExceptions(Exception exception,
+                                                               WebRequest request) {
+        log.error(
+            "Exception occurred: {}, Request Details: {}",
+            exception.getMessage(),
+            request.getDescription(false),
+            exception
+        );
+        final HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return buildResponse(
+            new GeneralApiException(status, status.getReasonPhrase()),
+            status,
+            request
+        );
+    }
+
     private ResponseEntity<ProblemDetail> buildResponse(ApiException exception,
                                                         HttpStatus status,
                                                         WebRequest request) {

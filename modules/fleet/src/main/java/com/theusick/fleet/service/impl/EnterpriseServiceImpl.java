@@ -27,17 +27,17 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
     private final EnterpriseMapper enterpriseMapper;
+
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
     public EnterpriseModel getEnterprise(Long enterpriseId) throws NoSuchEnterpriseException {
-        return enterpriseMapper.enterpriseModelFromEntity(enterpriseRepository.findById(enterpriseId)
-            .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId)));
+        return enterpriseMapper.enterpriseModelFromEntity(
+            enterpriseRepository.findById(enterpriseId)
+                .orElseThrow(() -> new NoSuchEnterpriseException(enterpriseId)));
     }
 
     @Override
-    @Transactional
     public List<EnterpriseModel> getEnterprises() {
         return enterpriseRepository.findAll().stream()
             .map(enterpriseMapper::enterpriseModelFromEntity)
@@ -75,11 +75,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
                                                        Long enterpriseId,
                                                        Function<Long, List<T>> entitiesFetcher,
                                                        Function<T, R> mapper) throws NoAccessException {
-        List<Long> visibleEnterpriseIds = getVisibleEnterpriseIdsForManager(managerId);
-
-        if (!visibleEnterpriseIds.contains(enterpriseId)) {
-            throw new NoAccessException(enterpriseId);
-        }
+        verifyManagerAccess(enterpriseId, managerId);
         return entitiesFetcher.apply(enterpriseId).stream()
             .map(mapper)
             .toList();
@@ -92,18 +88,12 @@ public class EnterpriseServiceImpl implements EnterpriseService {
                                                            BiFunction<Long, Pageable, Page<T>> entitiesFetcher,
                                                            Function<Page<T>, Page<R>> mapper,
                                                            Pageable pageable) throws NoAccessException {
-        List<Long> visibleEnterpriseIds = getVisibleEnterpriseIdsForManager(managerId);
-
-        if (!visibleEnterpriseIds.contains(enterpriseId)) {
-            throw new NoAccessException(enterpriseId);
-        }
-
+        verifyManagerAccess(enterpriseId, managerId);
         return mapper.apply(entitiesFetcher.apply(enterpriseId, pageable));
     }
 
 
     @Override
-    @Transactional
     public EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException {
         return enterpriseMapper.enterpriseModelFromEntity(
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
@@ -111,7 +101,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
-    @Transactional
     public List<Long> getVisibleEnterpriseIdsForManager(Long managerId) {
         return enterpriseRepository.findAllByManagersId(managerId).stream()
             .map(EnterpriseEntity::getId)
@@ -119,7 +108,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
-    @Transactional
     public List<EnterpriseModel> getEnterprisesForManager(Long managerId) {
         return enterpriseRepository.findAllEnterprisesByManagersId(managerId).stream()
             .map(enterpriseMapper::enterpriseModelFromEntity)
@@ -142,7 +130,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         enterpriseEntity.getManagers().add(manager);
 
         enterpriseRepository.save(enterpriseEntity);
-
         return enterpriseMapper.enterpriseModelFromEntity(enterpriseEntity);
     }
 
@@ -152,6 +139,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         EnterpriseEntity enterpriseEntity =
             enterpriseRepository.findByIdAndManagersId(enterpriseModel.getId(), managerId)
                 .orElseThrow(() -> new NoAccessException(enterpriseModel.getId()));
+
         enterpriseMapper.updateEnterpriseEntityFromModel(enterpriseEntity, enterpriseModel);
         enterpriseRepository.save(enterpriseEntity);
         return enterpriseMapper.enterpriseModelFromEntity(enterpriseEntity);
@@ -159,10 +147,15 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     public void deleteEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException {
-        EnterpriseEntity enterpriseEntity =
+        enterpriseRepository.delete(
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
-                .orElseThrow(() -> new NoAccessException(enterpriseId));
-        enterpriseRepository.delete(enterpriseEntity);
+                .orElseThrow(() -> new NoAccessException(enterpriseId)));
+    }
+
+    @Override
+    public EnterpriseEntity verifyManagerAccess(Long enterpriseId, Long managerId) throws NoAccessException {
+        return enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
+            .orElseThrow(() -> new NoAccessException(enterpriseId));
     }
 
 }

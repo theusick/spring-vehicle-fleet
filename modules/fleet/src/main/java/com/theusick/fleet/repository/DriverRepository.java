@@ -24,4 +24,7 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Long> {
     )
     Page<DriverEntity> findByActiveVehicleIsNotNullAndEnterpriseId(Long enterpriseId,
                                                                    Pageable pageable);
+
+    List<DriverEntity> findByEnterpriseIdIn(List<Long> enterpriseIds);
+    
 }

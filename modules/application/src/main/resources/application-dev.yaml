@@ -36,3 +36,7 @@ logging:
     springframework:
       security: DEBUG
       web: DEBUG
+
+datagenerator:
+  shell:
+    enabled: true

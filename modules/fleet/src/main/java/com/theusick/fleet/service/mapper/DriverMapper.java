@@ -61,6 +61,7 @@ public interface DriverMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "enterprise", ignore = true)
+    @Mapping(target = "activeVehicle", ignore = true)
     @Mapping(
         target = "vehicleDrivers",
         expression = "java(appendVehicleDriversFromVehicleIds(driverModel.getVehicleIds(), driverEntity))"

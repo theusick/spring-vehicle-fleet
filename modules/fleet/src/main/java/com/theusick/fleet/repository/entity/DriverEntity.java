@@ -53,7 +53,7 @@ public class DriverEntity {
     )
     private Set<VehicleDriverEntity> vehicleDrivers;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "active_vehicle_id", unique = true)
     private VehicleEntity activeVehicle;
 

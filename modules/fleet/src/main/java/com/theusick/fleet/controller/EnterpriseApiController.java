@@ -107,7 +107,7 @@ public class EnterpriseApiController {
             return vehicleMapper.vehicleBaseDTOFromModel(
                 vehicleService.updateVehicleForManager(
                     enterpriseId,
-                    vehicleDTO.getBrand().getId(),
+                    null,
                     manager.getId(),
                     vehicleMapper.vehicleModelFromInfoDTO(vehicleDTO).withId(vehicleId))
             );
@@ -125,7 +125,7 @@ public class EnterpriseApiController {
                                         @PathVariable Long vehicleId,
                                         @AuthenticationPrincipal User manager) {
         try {
-            vehicleService.deleteVehicleForManager(enterpriseId, vehicleId, manager.getId());
+            vehicleService.deleteVehicleForManager(enterpriseId, manager.getId(), vehicleId);
         } catch (NoSuchException exception) {
             throw new NotFoundApiException(exception.getMessage());
         } catch (NoAccessException exception) {
@@ -160,18 +160,6 @@ public class EnterpriseApiController {
                     enterpriseId,
                     pageable
                 ));
-        } catch (NoAccessException exception) {
-            throw new ForbiddenApiException(exception.getMessage());
-        }
-    }
-
-    @PostMapping(value = "/{enterpriseId}", produces = {"application/json"})
-    @PreAuthorize("hasRole('MANAGER')")
-    public EnterpriseBaseDTO getEnterprise(@PathVariable Long enterpriseId,
-                                           @AuthenticationPrincipal User manager) {
-        try {
-            return enterpriseMapper.enterpriseBaseDTOFromModel(
-                enterpriseService.getEnterpriseForManager(enterpriseId, manager.getId()));
         } catch (NoAccessException exception) {
             throw new ForbiddenApiException(exception.getMessage());
         }

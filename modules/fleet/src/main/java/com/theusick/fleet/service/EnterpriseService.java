@@ -1,6 +1,7 @@
 package com.theusick.fleet.service;
 
 import com.theusick.core.service.exception.NoAccessException;
+import com.theusick.fleet.repository.entity.EnterpriseEntity;
 import com.theusick.fleet.service.exception.NoSuchEnterpriseException;
 import com.theusick.fleet.service.exception.NoSuchUserException;
 import com.theusick.fleet.service.model.EnterpriseModel;
@@ -45,5 +46,7 @@ public interface EnterpriseService {
                                                Long managerId) throws NoAccessException;
 
     void deleteEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException;
+
+    EnterpriseEntity verifyManagerAccess(Long enterpriseId, Long managerId) throws NoAccessException;
 
 }

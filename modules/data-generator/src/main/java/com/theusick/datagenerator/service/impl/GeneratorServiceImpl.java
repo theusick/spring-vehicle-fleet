@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
-    
+
     private final VehicleService vehicleService;
     private final VehicleBrandService vehicleBrandService;
     private final DriverService driverService;
@@ -60,7 +60,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                                              List<Long> availableVehicleIds)
         throws NoSuchEnterpriseException, NoSuchVehicleException, NoSuchDriverException {
         DriverGenerator generator = DriverGenerator.builder()
-            .availableVehicleIds(availableVehicleIds)
+            .availableVehicleIds(new ArrayList<>(availableVehicleIds))
             .build();
 
         List<Long> createdDriverIds = new ArrayList<>();

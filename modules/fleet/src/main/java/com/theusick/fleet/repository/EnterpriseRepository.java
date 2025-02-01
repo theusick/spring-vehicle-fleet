@@ -15,7 +15,7 @@ public interface EnterpriseRepository extends JpaRepository<EnterpriseEntity, Lo
 
     @EntityGraph(
         type = EntityGraph.EntityGraphType.LOAD,
-        attributePaths = {"vehicles.vehicleDrivers"}
+        attributePaths = {"drivers"}
     )
     List<EnterpriseEntity> findAllEnterprisesByManagersId(Long managerId);
 

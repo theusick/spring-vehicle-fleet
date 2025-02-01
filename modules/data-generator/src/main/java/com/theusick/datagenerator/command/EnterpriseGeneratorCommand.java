@@ -7,21 +7,23 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.command.CommandHandlingResult;
+import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.ExceptionResolver;
 import org.springframework.shell.command.annotation.ExitCode;
 import org.springframework.shell.command.annotation.Option;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
 
 import java.util.List;
 
-@ShellComponent
+@Command(group = "Data Generation")
 @RequiredArgsConstructor
 public class EnterpriseGeneratorCommand {
 
     private final GeneratorService generatorService;
 
-    @ShellMethod("Generate number of VehicleEntity and DriverEntity for existing enterprise")
+    @Command(
+        command = "generate",
+        description = "Generate number of VehicleEntity and DriverEntity for existing enterprise"
+    )
     public String generate(
         @Option(shortNames = 'e', required = true) @PositiveOrZero Long enterpriseId,
         @Option(shortNames = 'v', required = true) @Min(1) @Max(10000) int vehiclesCount,

@@ -23,4 +23,6 @@ public interface VehicleRepository extends JpaRepository<VehicleEntity, Long> {
 
     Optional<VehicleEntity> findByIdAndEnterpriseId(Long id, Long enterpriseId);
 
+    List<VehicleEntity> findByEnterpriseIdIn(List<Long> enterpriseIds);
+
 }
