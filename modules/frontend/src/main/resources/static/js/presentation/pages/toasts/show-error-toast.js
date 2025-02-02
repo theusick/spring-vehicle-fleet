@@ -1,4 +1,4 @@
-function showErrorToast(message) {
+export function showErrorToast(message) {
     const toastContainer = document.getElementById('errorToastContainer');
     const toastMessage = $('#errorToastMessage');
 

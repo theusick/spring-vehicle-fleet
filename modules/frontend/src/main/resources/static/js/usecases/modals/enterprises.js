@@ -1,8 +1,10 @@
+import {showErrorToast} from "../../presentation/pages/toasts/show-error-toast";
+
 $(document).ready(function () {
     $('#addButton').on('click', function (event) {
         event.preventDefault();
 
-        openAndFillModal('#addVehicleModal', '#addForm', {}, {});
+        openAndFillModal('#addEnterpriseModal', '#addForm', {}, {});
     });
 
     $('table #editButton').on('click', function (event) {
@@ -11,20 +13,15 @@ $(document).ready(function () {
         const href = $(this).attr('href');
 
         const fieldsMapping = {
-            'id': '#vehicleId',
-            'year': '#vehicleYear',
-            'mileage': '#vehicleMileage',
-            'color': '#vehicleColor',
-            'price': '#vehiclePrice',
-            'licensePlate': '#vehicleLicensePlate',
-            'enterpriseId': '#vehicleEnterpriseId',
-            'brandId': '#vehicleBrandId'
+            'id': '#enterpriseId',
+            'name': '#enterpriseName',
+            'city': '#enterpriseCity',
         };
 
-        $.get(href, function (vehicle) {
-            openAndFillModal('#editVehicleModal', '#editForm', vehicle, fieldsMapping);
+        $.get(href, function (enterprise) {
+            openAndFillModal('#editEnterpriseModal', '#editForm', enterprise, fieldsMapping);
         }).fail(function (jqXHR) {
-            showErrorToast(jqXHR.responseText || 'Failed to load vehicle data.');
+            showErrorToast(jqXHR.responseText || 'Failed to load enterprise data.');
         });
     });
 

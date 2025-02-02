@@ -4,6 +4,7 @@ import com.theusick.core.security.service.DBUserDetailsService;
 import com.theusick.core.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -33,14 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
         throws ServletException, IOException {
-        final String bearerToken = request.getHeader("Authorization");
+        String jwt = extractJwtFromCookies(request);
 
-        if (NotValidAuthorizationHeader(bearerToken)) {
-            filterChain.doFilter(request, response);
-            return;
+        if (!StringUtils.hasText(jwt)) {
+            final String bearerToken = request.getHeader("Authorization");
+
+            if (validAuthorizationHeader(bearerToken)) {
+                jwt = extractJwtFromHeader(bearerToken);
+            }
         }
-
-        String jwt = extractJwtFromHeader(bearerToken);
 
         if (StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
             String username = extractUsernameFromJwt(jwt);
@@ -55,8 +57,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private boolean NotValidAuthorizationHeader(String bearerToken) {
-        return !StringUtils.hasText(bearerToken) || !bearerToken.startsWith("Bearer ");
+    private boolean validAuthorizationHeader(String bearerToken) {
+        return StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ");
+    }
+
+    private String extractJwtFromCookies(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+        for (Cookie cookie : request.getCookies()) {
+            if (JwtService.JWT_COOKIE_NAME.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     private String extractJwtFromHeader(String bearerToken) {

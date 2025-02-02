@@ -27,6 +27,8 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
+    public static final String JWT_COOKIE_NAME = "token";
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser()

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <aside th:fragment="sidebar(activeLink)" id="sidebar" class="sidebar collapsed"
-       aria-label="Sidebar" th:attr="active-link=${activeLink}" >
+       aria-label="Sidebar" th:attr="active-link=${activeLink}">
   <ul class="sidebar-nav">
     <!-- Default item -->
     <li class="sidebar-item">
@@ -23,6 +23,9 @@
       </a>
       <ul id="table" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
         <li class="sidebar-item">
+          <a href="/enterprises" class="sidebar-link">Enterprises</a>
+        </li>
+        <li class="sidebar-item">
           <a href="/vehicles" class="sidebar-link">Vehicles</a>
         </li>
         <li class="sidebar-item">
@@ -31,4 +34,14 @@
       </ul>
     </li>
   </ul>
+
+  <!-- Logout Button -->
+  <div class="sidebar-footer">
+    <a href="/logout" class="sidebar-link">
+      <span class="icon">
+        <i class="bi bi-box-arrow-right"></i>
+      </span>
+      <span class="description">Logout</span>
+    </a>
+  </div>
 </aside>

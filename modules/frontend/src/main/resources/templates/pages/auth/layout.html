@@ -21,11 +21,9 @@
   <th:block th:replace="${scripts}"/>
 </head>
 <!--/* Body with arguments */-->
-<body class="bg-light" th:fragment="body(activeSidebarLink, content, pageScripts)">
+<body class="bg-light" th:fragment="body(content, pageScripts)">
 <!--/* Header fragment */-->
-<header th:replace="~{views/fragments/_header :: header(showSidebarToggle='true')}"></header>
-<!--/* Sidebar fragment */-->
-<aside th:replace="~{views/fragments/_sidebar :: sidebar(${activeSidebarLink})}"></aside>
+<header th:replace="~{views/fragments/_header :: header(false)}"></header>
 <!--/* Content value passed from calling template will be inserted in this element */-->
 <div class="main-content">
   <main>
@@ -40,8 +38,6 @@
 <footer th:replace="~{views/fragments/_footer :: footer}"></footer>
 <!--/* Default scripts; can be replaced by the calling templates */-->
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/js/presentation/sidebar/toggle-sidebar.js}"></script>
-<script th:src="@{/js/presentation/sidebar/activate-sidebar-link.js}"></script>
 <script th:src="@{/js/presentation/pages/toasts/show-error-toast.js}" type="module"></script>
 <!--/* Scripts value passed from calling template will be inserted in this element */-->
 <th:block th:replace="${pageScripts}"/>

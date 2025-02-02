@@ -1,3 +1,5 @@
+import {showErrorToast} from "../../presentation/pages/toasts/show-error-toast";
+
 $(document).ready(function () {
     $('#addButton').on('click', function (event) {
         event.preventDefault();

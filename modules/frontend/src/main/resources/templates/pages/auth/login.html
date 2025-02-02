@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head
+  th:replace="~{pages/auth/layout:: head(title=~{this :: title}, links=~{}, scripts=~{})}">
+  <title>Login page</title>
+</head>
+<body
+  th:replace="~{pages/auth/layout :: body(
+  content=~{:: #content},
+  pageScripts=~{:: #loginScripts})}">
+<th:block id="content">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <h1 class="mb-4 text-center">Login</h1>
+      <form method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input id="username" name="username" type="text" class="form-control"
+                 placeholder="Enter username" required>
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <input id="password" name="password" type="password" class="form-control"
+                   placeholder="Enter password" required>
+            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+              <i class="bi bi-eye-slash" id="passwordIcon"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+      </form>
+    </div>
+  </div>
+</th:block>
+
+<th:block id="loginScripts">
+  <script th:inline="javascript" type="module"
+          th:src="@{/js/presentation/pages/auth/toggle-password-field.js}"></script>
+  <script th:inline="javascript" type="module"
+          th:src="@{/js/usecases/auth/user-login.js}"></script>
+</th:block>
+</body>
+</html>

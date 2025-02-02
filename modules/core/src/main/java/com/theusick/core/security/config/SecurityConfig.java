@@ -1,6 +1,7 @@
 package com.theusick.core.security.config;
 
 import com.theusick.core.security.service.DBUserDetailsService;
+import com.theusick.core.security.service.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,35 @@ public class SecurityConfig {
     private final DBUserDetailsService userDetailsService;
 
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+    @Bean
+    public SecurityFilterChain webHttpSecurity(HttpSecurity http,
+                                               JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+        return http
+            .securityMatcher("/**")
+            .csrf(CsrfConfigurer::disable)
+            .cors(Customizer.withDefaults())
+            .sessionManagement(configurer -> configurer
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(request -> request
+                .requestMatchers(
+                    "/",
+                    "/login",
+                    "/js/**",
+                    "/webjars/**",
+                    "/css/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated())
+            .formLogin(AbstractHttpConfigurer::disable)
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendRedirect("/login"))
+                .accessDeniedHandler((request, response, accessDeniedException) ->
+                    response.sendRedirect("/me")))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .logout(logout -> logout.deleteCookies(JwtService.JWT_COOKIE_NAME))
+            .build();
+    }
 
     @Bean
     public SecurityFilterChain apiHttpSecurity(HttpSecurity http,
