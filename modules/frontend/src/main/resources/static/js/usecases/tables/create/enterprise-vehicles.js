@@ -155,7 +155,7 @@ $(document).ready(function () {
     function getVehicleData(modal, brandFormName) {
         return {
             year: parseInt(modal.find('#vehicleYear').val()),
-            mileage: parseFloat(modal.find('#vehicleMileage').val()),
+            mileage: parseInt(modal.find('#vehicleMileage').val()),
             color: modal.find('#vehicleColor').val(),
             price: parseFloat(modal.find('#vehiclePrice').val()),
             licensePlate: modal.find('#vehicleLicensePlate').val(),

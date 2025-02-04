@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{pages/layout:: head(title=~{:: title}, links=~{}, scripts=~{})}">
+  <title>Error page</title>
+</head>
+<body
+  th:replace="~{pages/layout :: body(
+  content=~{::content},
+  pageScripts=~{})}">
+<!--/* Error fragment */-->
+<div th:fragment="content">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h2>Error Page</h2>
+          </div>
+          <div class="card-body">
+            <!--/*@thymesVar id="errorMessage" type="String"*/-->
+            <p class="card-text" th:text="${errorMessage}">Unexpected error occurred.</p>
+            <button type="button" class="btn btn-primary" onclick="history.back();">
+              Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

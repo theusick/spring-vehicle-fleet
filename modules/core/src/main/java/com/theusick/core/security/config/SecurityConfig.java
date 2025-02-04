@@ -52,8 +52,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
             .formLogin(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
-                .accessDeniedHandler((request, response, accessDeniedException) ->
-                    response.sendRedirect("/me")))
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendRedirect("/login")))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .logout(logout -> logout.deleteCookies(JwtService.JWT_COOKIE_NAME))
             .build();
