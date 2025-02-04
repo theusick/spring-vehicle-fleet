@@ -135,7 +135,8 @@ public class VehicleServiceImpl implements VehicleService {
             .orElseThrow(() -> new NoSuchVehicleException(vehicleModel.getId()));
 
         final Long newEnterpriseId = vehicleModel.getEnterpriseId();
-        if (!Objects.equals(newEnterpriseId, vehicleEntity.getEnterprise().getId())) {
+        if (Objects.nonNull(newEnterpriseId) &&
+            !Objects.equals(newEnterpriseId, vehicleEntity.getEnterprise().getId())) {
             EnterpriseEntity enterpriseEntity = enterpriseRepository.findById(newEnterpriseId)
                 .orElseThrow(() -> new NoSuchEnterpriseException(newEnterpriseId));
 
@@ -192,7 +193,8 @@ public class VehicleServiceImpl implements VehicleService {
     private void updateEnterpriseIfChanged(@NotNull VehicleEntity vehicleEntity,
                                            @NotNull Long managerId,
                                            Long newEnterpriseId) throws NoSuchEnterpriseException {
-        if (!Objects.equals(vehicleEntity.getEnterprise().getId(), newEnterpriseId)) {
+        if (Objects.nonNull(newEnterpriseId) &&
+            !Objects.equals(vehicleEntity.getEnterprise().getId(), newEnterpriseId)) {
             EnterpriseEntity enterpriseEntity =
                 enterpriseRepository.findByIdAndManagersId(newEnterpriseId, managerId)
                     .orElseThrow(() -> new NoSuchEnterpriseException(newEnterpriseId));
@@ -202,7 +204,8 @@ public class VehicleServiceImpl implements VehicleService {
 
     private void updateBrandIfChanged(@NotNull VehicleEntity vehicleEntity,
                                       Long newBrandId) throws NoSuchVehicleBrandException {
-        if (!Objects.equals(vehicleEntity.getBrand().getId(), newBrandId)) {
+        if (Objects.nonNull(newBrandId) &&
+            !Objects.equals(vehicleEntity.getBrand().getId(), newBrandId)) {
             VehicleBrandEntity brandEntity = brandRepository.findById(newBrandId)
                 .orElseThrow(() -> new NoSuchVehicleBrandException(newBrandId));
             vehicleEntity.setBrand(brandEntity);

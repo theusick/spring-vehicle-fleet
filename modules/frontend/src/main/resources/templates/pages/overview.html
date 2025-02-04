@@ -27,6 +27,8 @@
         <h2>Enterprises (seen only by manager)</h2>
       </div>
     </section>
+    <!--/* Success toast */-->
+    <div th:replace="~{views/fragments/toasts/_success_toast :: successToast}"></div>
     <!--/* Error toast */-->
     <div th:replace="~{views/fragments/toasts/_error-toast :: errorToast}"></div>
   </main>
@@ -37,5 +39,4 @@
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/presentation/sidebar/toggle-sidebar.js}"></script>
 <script th:src="@{/js/presentation/sidebar/activate-sidebar-link.js}"></script>
-<script th:src="@{/js/presentation/pages/toasts/show-error-toast.js}" type="module"></script>
 </body>

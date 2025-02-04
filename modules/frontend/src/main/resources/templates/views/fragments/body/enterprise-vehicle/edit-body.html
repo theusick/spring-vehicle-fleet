@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="vehicleEditBody" class="row g-3">
+  <div data-mdb-input-init class="form-outline col-md-4">
+    <label for="vehicleId" class="form-label">ID</label>
+    <input type="text" id="vehicleId" class="form-control" name="id" readonly/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-4">
+    <label for="vehicleYear" class="form-label">Year</label>
+    <input type="number" id="vehicleYear" name="year" class="form-control" required/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-4">
+    <label for="vehicleMileage" class="form-label">Mileage</label>
+    <input type="number" id="vehicleMileage" name="mileage" class="form-control" required/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-4">
+    <label for="vehicleColor" class="form-label">Color</label>
+    <input type="text" id="vehicleColor" name="color" class="form-control" required/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-4">
+    <label for="vehiclePrice" class="form-label">Price</label>
+    <input type="number" id="vehiclePrice" name="price" class="form-control" required/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-4">
+    <label for="vehicleLicensePlate" class="form-label">Plate Number</label>
+    <input type="text" id="vehicleLicensePlate" name="licensePlate" class="form-control" required/>
+  </div>
+
+  <div data-mdb-input-init class="form-outline col-md-12">
+    <label for="vehicleBrandId" class="form-label">Brand</label>
+    <select id="vehicleBrandId" name="brandId" class="form-select" required>
+      <option value="" disabled>Select brand</option>
+    </select>
+  </div>
+</div>

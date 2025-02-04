@@ -30,15 +30,14 @@
     <section class="main-content-container p-3">
       <th:block th:replace="${content}"/>
     </section>
+    <!--/* Success toast */-->
+    <div th:replace="~{views/fragments/toasts/_success_toast :: successToast}"></div>
     <!--/* Error toast */-->
     <div th:replace="~{views/fragments/toasts/_error-toast :: errorToast}"></div>
   </main>
 </div>
-<!--/* Footer fragment */-->
-<footer th:replace="~{views/fragments/_footer :: footer}"></footer>
 <!--/* Default scripts; can be replaced by the calling templates */-->
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/js/presentation/pages/toasts/show-error-toast.js}" type="module"></script>
 <!--/* Scripts value passed from calling template will be inserted in this element */-->
 <th:block th:replace="${pageScripts}"/>
 </body>

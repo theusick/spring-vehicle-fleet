@@ -1,4 +1,4 @@
-import {showErrorToast} from '../../presentation/pages/toasts/show-error-toast.js';
+import {showErrorToast} from '../../presentation/toasts.js';
 import {userApiAdapter} from '../../adapters/user-api-adapter.js';
 import {ApiError} from '../../error/api-error.js';
 

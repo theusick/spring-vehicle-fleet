@@ -2,25 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <!--/* Title of this template will be passed to the head fragment */-->
 <head th:replace="~{views/tables/layout :: head(title=~{this :: title}, links=~{}, scripts=~{})}">
-  <title>Enterprises List</title>
+  <title>Enterprise vehicles List</title>
 </head>
 <body
   th:replace="~{views/tables/layout :: body(
-  activeSidebarLink='enterprises',
+  activeSidebarLink='enterpriseVehicles',
   content=~{:: #content},
   pageScripts=~{:: #tableScripts})}">
 <th:block id="content">
-  <h1>Enterprises List</h1>
-  <div th:replace="~{views/tables/components/enterprises-table :: table}"></div>
+  <!--/*@thymesVar id="enterpriseName" type="String"*/-->
+  <h1
+    th:text="${enterpriseName != null ? 'Enterprise &quot;' + enterpriseName + '&quot; vehicles' :
+  'Enterprise vehicles List'}">
+    Enterprise vehicles List</h1>
+
+  <div th:replace="~{views/tables/components/enterprise-vehicles-table :: table}"></div>
 </th:block>
 
 <th:block id="tableScripts">
   <script th:inline="javascript" type="module"
-          th:src="@{/js/usecases/tables/create/enterprises.js}"></script>
+          th:src="@{/js/usecases/tables/create/enterprise-vehicles.js}"></script>
   <script th:inline="javascript" type="module"
           th:src="@{/js/usecases/modals/common.js}"></script>
   <script th:inline="javascript" type="module"
-          th:src="@{/js/usecases/modals/enterprises.js}"></script>
+          th:src="@{/js/usecases/modals/vehicles.js}"></script>
 </th:block>
 </body>
 </html>

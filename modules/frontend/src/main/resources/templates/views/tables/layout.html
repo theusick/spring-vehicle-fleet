@@ -32,6 +32,8 @@
     <section class="main-content-container p-3">
       <th:block th:replace="${content}"/>
     </section>
+    <!--/* Success toast */-->
+    <div th:replace="~{views/fragments/toasts/_success_toast :: successToast}"></div>
     <!--/* Error toast */-->
     <div th:replace="~{views/fragments/toasts/_error-toast :: errorToast}"></div>
   </main>
@@ -42,7 +44,6 @@
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/presentation/sidebar/toggle-sidebar.js}"></script>
 <script th:src="@{/js/presentation/sidebar/activate-sidebar-link.js}"></script>
-<script th:src="@{/js/presentation/pages/toasts/show-error-toast.js}" type="module"></script>
 <!--/* Scripts value passed from calling template will be inserted in this element */-->
 <th:block th:replace="${pageScripts}"/>
 </body>

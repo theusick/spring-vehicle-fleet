@@ -41,16 +41,17 @@ public class SecurityConfig {
             .authorizeHttpRequests(request -> request
                 .requestMatchers(
                     "/",
+                    "/error",
                     "/login",
+                    "/favicon.ico",
                     "/js/**",
+                    "/css/**",
                     "/webjars/**",
-                    "/css/**").permitAll()
+                    "/images/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated())
             .formLogin(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) ->
-                    response.sendRedirect("/login"))
                 .accessDeniedHandler((request, response, accessDeniedException) ->
                     response.sendRedirect("/me")))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

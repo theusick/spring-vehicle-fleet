@@ -1,4 +1,4 @@
-import {showErrorToast} from "../../presentation/pages/toasts/show-error-toast";
+import {showErrorToast} from "../../presentation/toasts.js";
 
 $(document).ready(function () {
     $('#addButton').on('click', function (event) {
