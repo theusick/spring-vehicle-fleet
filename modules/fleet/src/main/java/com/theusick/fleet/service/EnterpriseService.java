@@ -33,7 +33,7 @@ public interface EnterpriseService {
                                                     Function<Page<T>, Page<R>> mapper,
                                                     Pageable pageable) throws NoAccessException;
 
-    EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException;
+    EnterpriseModel getEnterpriseForManager(Long managerId, Long enterpriseId) throws NoAccessException;
 
     List<Long> getVisibleEnterpriseIdsForManager(Long managerId);
 

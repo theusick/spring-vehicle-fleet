@@ -165,6 +165,18 @@ public class EnterpriseApiController {
         }
     }
 
+    @GetMapping(value = "/{enterpriseId}", produces = {"application/json"})
+    @PreAuthorize("hasRole('MANAGER')")
+    public EnterpriseInfoDTO getEnterprise(@AuthenticationPrincipal User manager,
+                                           @PathVariable Long enterpriseId) {
+        try {
+            return enterpriseMapper.enterpriseInfoDTOFromModel(
+                enterpriseService.getEnterpriseForManager(manager.getId(), enterpriseId));
+        } catch (NoAccessException exception) {
+            throw new ForbiddenApiException(exception.getMessage());
+        }
+    }
+
     @GetMapping(produces = {"application/json"})
     @PreAuthorize("hasRole('MANAGER')")
     public List<EnterpriseBaseDTO> getEnterprises(@AuthenticationPrincipal User manager) {

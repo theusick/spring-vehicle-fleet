@@ -94,7 +94,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
 
     @Override
-    public EnterpriseModel getEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException {
+    public EnterpriseModel getEnterpriseForManager(Long managerId, Long enterpriseId) throws NoAccessException {
         return enterpriseMapper.enterpriseModelFromEntity(
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
                 .orElseThrow(() -> new NoAccessException(enterpriseId)));

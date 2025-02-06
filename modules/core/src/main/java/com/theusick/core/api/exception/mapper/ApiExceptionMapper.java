@@ -28,7 +28,14 @@ public interface ApiExceptionMapper {
     @Mapping(target = "detail", source = "exception.message")
     @Mapping(target = "instance", expression = "java(URI.create(getServerBasePath(request)))")
     @Mapping(target = "properties", ignore = true)
-    ProblemDetail toProblemDetail(ApiException exception, WebRequest request);
+    ProblemDetail toProblemDetail(ApiException exception, HttpServletRequest request);
+
+    default ProblemDetail toProblemDetail(ApiException exception, WebRequest webRequest) {
+        if (webRequest instanceof ServletWebRequest servletWebRequest) {
+            return toProblemDetail(exception, servletWebRequest.getRequest());
+        }
+        throw new IllegalArgumentException("Unprocessable type of WebRequest");
+    }
 
     @ObjectFactory
     default ProblemDetail createProblemDetail(ApiException exception) {
@@ -36,26 +43,18 @@ public interface ApiExceptionMapper {
     }
 
     @Named("getRequestURI")
-    default String getRequestURI(WebRequest request) {
-        if (request instanceof ServletWebRequest servletWebRequest) {
-            return servletWebRequest.getRequest().getRequestURI();
-        }
-        return "";
+    default String getRequestURI(HttpServletRequest request) {
+        return request.getRequestURI();
     }
 
     @Named("getServerBasePath")
-    default String getServerBasePath(WebRequest request) {
-        if (request instanceof ServletWebRequest servletWebRequest) {
-            HttpServletRequest servletRequest = servletWebRequest.getRequest();
-
-            return servletRequest.getScheme() +
-                "://" +
-                servletRequest.getServerName() +
-                ":" +
-                servletRequest.getServerPort() +
-                servletRequest.getContextPath();
-        }
-        return "";
+    default String getServerBasePath(HttpServletRequest request) {
+        return request.getScheme() +
+            "://" +
+            request.getServerName() +
+            ":" +
+            request.getServerPort() +
+            request.getContextPath();
     }
 
     @AfterMapping

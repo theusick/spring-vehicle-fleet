@@ -11,10 +11,7 @@
   pageScripts=~{:: #tableScripts})}">
 <th:block id="content">
   <!--/*@thymesVar id="enterpriseName" type="String"*/-->
-  <h1
-    th:text="${enterpriseName != null ? 'Enterprise &quot;' + enterpriseName + '&quot; vehicles' :
-  'Enterprise vehicles List'}">
-    Enterprise vehicles List</h1>
+  <h1 id="page-title">Enterprise vehicles List</h1>
 
   <div th:replace="~{views/tables/components/enterprise-vehicles-table :: table}"></div>
 </th:block>

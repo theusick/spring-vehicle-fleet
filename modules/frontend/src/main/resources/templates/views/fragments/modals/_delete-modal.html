@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <div th:fragment="deleteModal(modalAction, objectTypeName, additionalText)" class="modal fade"
      id="deleteModal" tabindex="-1"
      aria-labelledby="deleteModalLabel"
@@ -12,6 +12,7 @@
       </div>
       <form id="deleteForm" method="POST">
         <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" id="deleteObjectId" name="objectId" value="">
         <div class="modal-body">
           <p>
             Are you sure you want to delete this

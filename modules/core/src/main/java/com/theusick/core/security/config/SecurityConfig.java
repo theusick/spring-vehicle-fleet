@@ -2,7 +2,9 @@ package com.theusick.core.security.config;
 
 import com.theusick.core.security.service.DBUserDetailsService;
 import com.theusick.core.security.service.JwtService;
+import jakarta.servlet.DispatcherType;
 import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.Order;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +32,28 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
+    @Order(1)
+    public SecurityFilterChain apiHttpSecurity(HttpSecurity http,
+                                               JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+        return http
+            .securityMatcher("/api/**")
+            .csrf(CsrfConfigurer::disable)
+            .cors(Customizer.withDefaults())
+            .sessionManagement((configurer) -> configurer
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .formLogin(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((request) -> request
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/**").authenticated()
+                .anyRequest().permitAll())
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint(authenticationEntryPoint))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain webHttpSecurity(HttpSecurity http,
                                                JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http
@@ -41,7 +65,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(request -> request
                 .requestMatchers(
                     "/",
-                    "/error",
                     "/login",
                     "/favicon.ico",
                     "/js/**",
@@ -49,34 +72,17 @@ public class SecurityConfig {
                     "/webjars/**",
                     "/images/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .anyRequest().authenticated())
             .formLogin(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) ->
+                .authenticationEntryPoint((_, response, _) ->
                     response.sendRedirect("/login")))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .logout(logout -> logout.deleteCookies(JwtService.JWT_COOKIE_NAME))
             .build();
     }
 
-    @Bean
-    public SecurityFilterChain apiHttpSecurity(HttpSecurity http,
-                                               JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-        return http
-            .securityMatcher("/api/**")
-            .csrf(CsrfConfigurer::disable)
-            .cors(Customizer.withDefaults())
-            .sessionManagement((configurer) -> configurer
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests((request) -> request
-                .requestMatchers("/api/**").authenticated()
-                .anyRequest().permitAll())
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint(authenticationEntryPoint))
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,

@@ -1,25 +1,52 @@
 import {showErrorToast, showSuccessToast} from '../../../presentation/toasts.js';
+import {vehicleApi} from '../../../api/vehicle-api.js';
+import {enterpriseApi} from "../../../api/enterprise-api.js";
 
-$(document).ready(function () {
-    const enterpriseId = window.location.pathname.split('/')[2];
+let enterpriseId;
+let brandList = [];
 
-    let brandList = [];
+$(document).ready(async function () {
+    enterpriseId = window.location.pathname.split('/')[2];
 
-    $.ajax({
-        url: '/api/v1/vehicles/brands',
-        type: 'GET',
-        success: function (brands) {
-            brandList = brands;
-        },
-        error: function () {
-            showErrorToast('Failed to load brands list');
+    await loadEnterpriseName(enterpriseId);
+
+    brandList = await loadBrands();
+
+    initEnterpriseVehiclesTable(enterpriseId, brandList);
+
+    setupEventHandlers();
+});
+
+async function loadEnterpriseName(enterpriseId) {
+    try {
+        const enterprise = await enterpriseApi.getEnterprise(enterpriseId);
+        $('#page-title').text(`Enterprise "${enterprise.name}" vehicles`);
+    } catch (error) {
+        if (error.status === 403) {
+            showErrorToast('Access denied.');
+            $('#enterpriseVehiclesTable').hide();
+        } else {
+            showErrorToast(error.message);
         }
-    });
+    }
+}
 
-    const table = $('#enterpriseVehiclesTable').DataTable({
+async function loadBrands() {
+    try {
+        return await vehicleApi.getVehicleBrands();
+    } catch {
+        showErrorToast('Failed to load brands list');
+        return [];
+    }
+}
+
+function initEnterpriseVehiclesTable(enterpriseId, brandList) {
+    $('#enterpriseVehiclesTable').DataTable({
         ajax: {
-            url: '/api/v1/enterprises/' + enterpriseId + '/vehicles',
+            url: `/api/v1/enterprises/${enterpriseId}/vehicles`,
             type: 'GET',
+            dataSrc: parseResponseData,
+            error: handleTableError,
             /* Request parameters */
             data: function (data) {
                 const pageNumber = data.start / data.length;
@@ -28,52 +55,9 @@ $(document).ready(function () {
                     size: data.length
                 };
             },
-            dataSrc: function (response) {
-                if (response.page) {
-                    response.recordsTotal = response.page.totalElements;
-                    response.recordsFiltered = response.page.totalElements;
-                } else {
-                    response.recordsTotal = 0;
-                    response.recordsFiltered = 0;
-                }
-                return response.content;
-            },
-            error: function () {
-                showErrorToast('Failed to load vehicles data.');
-            }
         },
-        columns: [
-            {data: 'id'},
-            {data: 'year'},
-            {data: 'mileage'},
-            {data: 'color'},
-            {data: 'price'},
-            {data: 'licensePlate'},
-            {
-                data: 'brand',
-                render: function (brandId) {
-                    const brand = brandList.find(b => b.id === brandId);
-                    return brand ? brand.name : 'Unknown';
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    return `
-                        <button class="btn btn-primary btn-sm edit-btn" data-id="${row.id}">
-                            <i class="bi bi-pencil-square"></i> Edit
-                        </button>
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">
-                            <i class="bi bi-trash"></i> Delete
-                        </button>`;
-                },
-                orderable: false,
-                searchable: false
-            }
-        ],
-        rowId: function (data) {
-            return data.id;
-        },
+        columns: getTableColumns(brandList),
+        rowId: 'id',
         paging: true,
         ordering: true,
         scrollX: true,
@@ -100,128 +84,183 @@ $(document).ready(function () {
             }
         ]
     });
+}
 
-    function openAddVehicleModal() {
-        const addForm = $('#addForm');
-        addForm.trigger('reset');
-
-        fillBrandModalField(null, $('#vehicleBrand'));
-
-        addForm.attr('action', `/api/v1/enterprises/${enterpriseId}/vehicles`);
-        $('#addVehicleModal').modal('show');
+function parseResponseData(response) {
+    if (response.page) {
+        response.recordsTotal = response.page.totalElements;
+        response.recordsFiltered = response.page.totalElements;
+    } else {
+        response.recordsTotal = 0;
+        response.recordsFiltered = 0;
     }
+    return response.content;
+}
 
-    function openEditVehicleModal(rowData) {
-        const editForm = $('#editForm');
-        editForm[0].reset();
-
-        $('#vehicleId').val(rowData.id);
-        $('#vehicleYear').val(rowData.year);
-        $('#vehicleMileage').val(rowData.mileage);
-        $('#vehicleColor').val(rowData.color);
-        $('#vehiclePrice').val(rowData.price);
-        $('#vehicleLicensePlate').val(rowData.licensePlate);
-
-        fillBrandModalField(rowData.brandId, $('#vehicleBrandId'));
-
-        editForm.attr('action', `/api/v1/enterprises/${enterpriseId}/vehicles/${rowData.id}`);
-        $('#editVehicleModal').modal('show');
+function handleTableError(xhr) {
+    if (xhr.status === 403) {
+        showErrorToast('Access denied: failed to load vehicle data.');
+        $('#enterpriseVehiclesTable').hide();
+    } else {
+        showErrorToast('Failed to load vehicles data.');
     }
+}
 
-    function fillBrandModalField(brandId, brandForm) {
-        brandForm.empty();
-        brandForm.append('<option disabled>Select brand</option>');
-        brandList.forEach(brand => {
-            const selected = brand.id === brandId ? 'selected' : '';
-            brandForm.append(
-                `<option value="${brand.id}" ${selected}>[${brand.id}] ${brand.name}</option>`
-            );
-        });
-    }
-
-    function openDeleteVehicleModal(vehicleId) {
-        $('#deleteForm').attr('action', `/api/v1/enterprises/${enterpriseId}/vehicles/${vehicleId}`);
-        $('#deleteModal').modal('show');
-    }
-
-    $('#enterpriseVehiclesTable tbody').on('click', '.edit-btn', function () {
-        const rowData = table.row($(this).parents('tr')).data();
-        openEditVehicleModal(rowData);
-    }).on('click', '.delete-btn', function () {
-        const vehicleId = $(this).data('id');
-        openDeleteVehicleModal(vehicleId);
-    });
-
-    function getVehicleData(modal, brandFormName) {
-        return {
-            year: parseInt(modal.find('#vehicleYear').val()),
-            mileage: parseInt(modal.find('#vehicleMileage').val()),
-            color: modal.find('#vehicleColor').val(),
-            price: parseFloat(modal.find('#vehiclePrice').val()),
-            licensePlate: modal.find('#vehicleLicensePlate').val(),
-            brand: {
-                id: parseInt(modal.find(brandFormName).val())
+function getTableColumns(brandList) {
+    return [
+        {data: 'id'},
+        {data: 'year'},
+        {data: 'mileage'},
+        {data: 'color'},
+        {data: 'price'},
+        {data: 'licensePlate'},
+        {
+            data: 'brand',
+            render: brandId => {
+                const brand = brandList.find(b => b.id === brandId);
+                return brand ? brand.name : 'Unknown';
             }
-        };
+        },
+        {
+            data: null,
+            render: renderActionsColumn,
+            orderable: false,
+            searchable: false
+        }
+    ];
+}
+
+function renderActionsColumn(data, type, row) {
+    return `
+        <button class="btn btn-primary btn-sm edit-btn" data-id="${row.id}">
+            <i class="bi bi-pencil-square"></i> Edit
+        </button>
+        <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">
+            <i class="bi bi-trash"></i> Delete
+        </button>`;
+}
+
+function setupEventHandlers() {
+    $('#enterpriseVehiclesTable tbody')
+        .on('click', '.edit-btn', handleEditClick)
+        .on('click', '.delete-btn', handleDeleteClick);
+
+    $('#addForm').on('submit', handleAddSubmit);
+    $('#editForm').on('submit', handleEditSubmit);
+    $('#deleteForm').on('submit', handleDeleteSubmit);
+}
+
+function handleEditClick() {
+    const table = $('#enterpriseVehiclesTable').DataTable();
+    const rowData = table.row($(this).closest('tr')).data();
+    openEditVehicleModal(rowData);
+}
+
+function handleDeleteClick() {
+    const vehicleId = $(this).data('id');
+    openDeleteVehicleModal(vehicleId);
+}
+
+async function handleAddSubmit(event) {
+    event.preventDefault();
+
+    const modal = $('#addVehicleModal');
+    const vehicleData = getVehicleData(modal, '#vehicleBrand');
+
+    try {
+        const response = await enterpriseApi.createEnterpriseVehicle(enterpriseId, vehicleData);
+        modal.modal('hide');
+        $('#enterpriseVehiclesTable').DataTable().ajax.reload();
+        showSuccessToast(`Vehicle [${response.id}] added successfully!`);
+    } catch (error) {
+        showErrorToast('Failed to add vehicle', error.message);
     }
+}
 
-    $('#addForm').on('submit', function (event) {
-        event.preventDefault();
+async function handleEditSubmit(event) {
+    event.preventDefault();
 
-        let modal = $('#addVehicleModal');
-        let vehicleData = getVehicleData(modal, '#vehicleBrand');
+    const modal = $('#editVehicleModal');
+    const vehicleData = getVehicleData(modal, '#vehicleBrandId');
+    const vehicleId = $('#updateObjectId').val();
 
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(vehicleData),
-            success: function (response) {
-                modal.modal('hide');
-                table.ajax.reload();
-                showSuccessToast(`Vehicle [${response.id}] added successfully!'`);
-            },
-            error: function (response) {
-                showErrorToast('Failed to add vehicle', response.message);
-            }
-        });
+    try {
+        const response = await enterpriseApi.updateEnterpriseVehicle(enterpriseId, vehicleId, vehicleData);
+        modal.modal('hide');
+        $('#enterpriseVehiclesTable').DataTable().ajax.reload();
+        showSuccessToast(`Vehicle [${response.id}] updated successfully!`);
+    } catch (error) {
+        showErrorToast(`Failed to update vehicle [${vehicleId}]`, error.message);
+    }
+}
+
+async function handleDeleteSubmit(event) {
+    event.preventDefault();
+
+    const vehicleId = $('#deleteObjectId').val();
+
+    try {
+        await enterpriseApi.deleteEnterpriseVehicle(enterpriseId, vehicleId);
+        $('#deleteModal').modal('hide');
+        $('#enterpriseVehiclesTable').DataTable().ajax.reload();
+        showSuccessToast(`Vehicle [${vehicleId}] deleted successfully!`);
+    } catch (error) {
+        showErrorToast(`Failed to delete vehicle [${vehicleId}]`, error.message);
+    }
+}
+
+function openAddVehicleModal() {
+    const addForm = $('#addForm');
+    addForm.trigger('reset');
+
+    fillBrandModalField(null, $('#vehicleBrand'));
+
+    $('#addVehicleModal').modal('show');
+}
+
+function openEditVehicleModal(rowData) {
+    const editForm = $('#editForm');
+    editForm[0].reset();
+
+    $('#vehicleId').val(rowData.id);
+    $('#vehicleYear').val(rowData.year);
+    $('#vehicleMileage').val(rowData.mileage);
+    $('#vehicleColor').val(rowData.color);
+    $('#vehiclePrice').val(rowData.price);
+    $('#vehicleLicensePlate').val(rowData.licensePlate);
+
+    fillBrandModalField(rowData.brandId, $('#vehicleBrandId'));
+
+    $('#updateObjectId').val(rowData.id);
+    $('#editVehicleModal').modal('show');
+}
+
+function openDeleteVehicleModal(vehicleId) {
+    $('#deleteObjectId').val(vehicleId);
+    $('#deleteModal').modal('show');
+}
+
+function getVehicleData(modal, brandFormSelector) {
+    return {
+        year: parseInt(modal.find('#vehicleYear').val()),
+        mileage: parseInt(modal.find('#vehicleMileage').val()),
+        color: modal.find('#vehicleColor').val(),
+        price: parseFloat(modal.find('#vehiclePrice').val()),
+        licensePlate: modal.find('#vehicleLicensePlate').val(),
+        brand: {
+            id: parseInt(modal.find(brandFormSelector).val())
+        }
+    };
+}
+
+function fillBrandModalField(brandId, brandForm) {
+    brandForm.empty();
+    brandForm.append('<option disabled>Select brand</option>');
+
+    brandList.forEach(brand => {
+        const selected = brand.id === brandId ? 'selected' : '';
+        brandForm.append(
+            `<option value="${brand.id}" ${selected}>[${brand.id}] ${brand.name}</option>`
+        );
     });
-
-    $('#editForm').on('submit', function (event) {
-        event.preventDefault();
-
-        let modal = $('#editVehicleModal');
-        let vehicleData = getVehicleData(modal, '#vehicleBrandId');
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(vehicleData),
-            success: function (response) {
-                modal.modal('hide');
-                table.ajax.reload();
-                showSuccessToast(`Vehicle [${response.id}] updated successfully!`);
-            },
-            error: function (response) {
-                showErrorToast('Failed to update vehicle', response.message);
-            }
-        });
-    });
-
-    $('#deleteForm').on('submit', function (event) {
-        event.preventDefault();
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'DELETE',
-            success: function () {
-                $('#deleteModal').modal('hide');
-                table.ajax.reload();
-                showSuccessToast('Vehicle deleted successfully!');
-            },
-            error: function (response) {
-                showErrorToast('Failed to delete vehicle', response.message);
-            }
-        });
-    });
-});
+}

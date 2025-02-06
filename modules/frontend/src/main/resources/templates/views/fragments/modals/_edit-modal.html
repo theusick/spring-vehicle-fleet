@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <div th:fragment="editModal(modalId, modalTitle, modalBody, modalActionLabel, modalAction)"
      class="modal fade" th:id="${modalId}" tabindex="-1" aria-labelledby="modalTitle"
      aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <form id="editForm" method="POST" class="modal-content" th:action="${modalAction}">
       <input type="hidden" name="_method" value="PUT">
+      <input type="hidden" id="updateObjectId" name="objectId" value="">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="modalTitle" th:text="${modalTitle}">Modal Title</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

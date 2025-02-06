@@ -25,6 +25,9 @@ public interface EnterpriseMapper {
 
     EnterpriseBaseDTO enterpriseBaseDTOFromModel(EnterpriseModel enterpriseModel);
 
+    EnterpriseInfoDTO enterpriseInfoDTOFromModel(EnterpriseModel enterpriseModel);
+
+
     @Mapping(target = "vehicleIds", source = "vehicles", qualifiedByName = "mapVehicleIdsToList")
     @Mapping(target = "driverIds", source = "drivers", qualifiedByName = "mapDriverIdsToList")
     EnterpriseModel enterpriseModelFromEntity(EnterpriseEntity enterpriseEntity);
