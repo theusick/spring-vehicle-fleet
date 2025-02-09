@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.OffsetDateTime;
+
 @Data
 @Hidden
 @Builder
@@ -18,6 +20,7 @@ public class VehicleViewDTO {
     private String color;
     private double price;
     private String licensePlate;
+    private OffsetDateTime purchaseDate;
 
     private Long brandId;
     private Long enterpriseId;

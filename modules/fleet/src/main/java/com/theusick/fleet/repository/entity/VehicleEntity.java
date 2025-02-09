@@ -1,6 +1,7 @@
 package com.theusick.fleet.repository.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -49,6 +51,10 @@ public class VehicleEntity {
     @NotNull
     @NotBlank
     private String licensePlate;
+
+    @NotNull
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Instant purchaseDate;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

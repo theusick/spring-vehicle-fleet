@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZoneId;
+
 @Value
 @Builder
 @Jacksonized
@@ -16,5 +18,7 @@ public class EnterpriseInfoDTO {
     String name;
     @NotBlank
     String city;
+
+    ZoneId timezone;
 
 }

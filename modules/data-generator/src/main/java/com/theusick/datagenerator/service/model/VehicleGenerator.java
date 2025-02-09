@@ -8,6 +8,11 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -31,6 +36,7 @@ public class VehicleGenerator extends AbstractModelGenerator<VehicleModel> {
             .color(generateColor())
             .price(generatePrice())
             .licensePlate(generateLicensePlate())
+            .purchaseDate(generatePurchasedAt())
             .build();
     }
 
@@ -64,6 +70,22 @@ public class VehicleGenerator extends AbstractModelGenerator<VehicleModel> {
         String thirdLetter = LICENSE_PLATE_LETTERS.get(random.nextInt(LICENSE_PLATE_LETTERS.size()));
         String region = REGIONS.get(random.nextInt(REGIONS.size()));
         return String.format("%s%d%s%s%s", firstLetter, digits, secondLetter, thirdLetter, region);
+    }
+
+    private OffsetDateTime generatePurchasedAt() {
+        LocalDate startDate = LocalDate.of(2001, Month.JANUARY, 1);
+
+        long startSeconds = startDate.atStartOfDay()
+            .toInstant(ZoneOffset.UTC)
+            .getEpochSecond();
+        long endSeconds = LocalDate.now()
+            .atStartOfDay()
+            .toInstant(ZoneOffset.UTC)
+            .getEpochSecond();
+
+        Instant generatedInstant = Instant.ofEpochSecond(random.nextLong(startSeconds, endSeconds));
+
+        return OffsetDateTime.ofInstant(generatedInstant, ZoneOffset.UTC);
     }
 
 }

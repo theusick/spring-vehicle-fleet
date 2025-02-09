@@ -146,14 +146,16 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
-    public void deleteEnterpriseForManager(Long enterpriseId, Long managerId) throws NoAccessException {
+    public void deleteEnterpriseForManager(Long enterpriseId,
+                                           Long managerId) throws NoAccessException {
         enterpriseRepository.delete(
             enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
                 .orElseThrow(() -> new NoAccessException(enterpriseId)));
     }
 
     @Override
-    public EnterpriseEntity verifyManagerAccess(Long enterpriseId, Long managerId) throws NoAccessException {
+    public EnterpriseEntity verifyManagerAccess(Long enterpriseId,
+                                                Long managerId) throws NoAccessException {
         return enterpriseRepository.findByIdAndManagersId(enterpriseId, managerId)
             .orElseThrow(() -> new NoAccessException(enterpriseId));
     }

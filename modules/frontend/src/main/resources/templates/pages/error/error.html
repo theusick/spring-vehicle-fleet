@@ -6,7 +6,8 @@
 <body
   th:replace="~{pages/layout :: body(
   content=~{::content},
-  pageScripts=~{})}">
+  pageScripts=~{},
+  withoutSidebar=true)}">
 <!--/* Error fragment */-->
 <div th:fragment="content">
   <div class="container mt-5">
@@ -14,7 +15,7 @@
       <div class="col-md-8">
         <div class="card">
           <div class="card-header">
-            <h2>Error Page</h2>
+            <h2>An Error Occurred</h2>
           </div>
           <div class="card-body">
             <!--/*@thymesVar id="errorMessage" type="String"*/-->

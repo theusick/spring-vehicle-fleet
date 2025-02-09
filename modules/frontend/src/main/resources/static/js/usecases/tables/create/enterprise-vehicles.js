@@ -115,6 +115,14 @@ function getTableColumns(brandList) {
         {data: 'price'},
         {data: 'licensePlate'},
         {
+            data: 'purchaseDate',
+            render: data => {
+                if (!data) return '';
+                const utcDate = new Date(data);
+                return utcDate.toLocaleString();
+            }
+        },
+        {
             data: 'brand',
             render: brandId => {
                 const brand = brandList.find(b => b.id === brandId);
@@ -165,6 +173,7 @@ async function handleAddSubmit(event) {
     event.preventDefault();
 
     const modal = $('#addVehicleModal');
+    console.log(new Date(modal.find('#vehiclePurchaseDate').val()).toISOString());
     const vehicleData = getVehicleData(modal, '#vehicleBrand');
 
     try {
@@ -228,6 +237,7 @@ function openEditVehicleModal(rowData) {
     $('#vehicleColor').val(rowData.color);
     $('#vehiclePrice').val(rowData.price);
     $('#vehicleLicensePlate').val(rowData.licensePlate);
+    $('#vehiclePurchaseDate').val(rowData.purchaseDate);
 
     fillBrandModalField(rowData.brandId, $('#vehicleBrandId'));
 
@@ -247,6 +257,7 @@ function getVehicleData(modal, brandFormSelector) {
         color: modal.find('#vehicleColor').val(),
         price: parseFloat(modal.find('#vehiclePrice').val()),
         licensePlate: modal.find('#vehicleLicensePlate').val(),
+        purchaseDate: new Date(modal.find('#vehiclePurchaseDate').val()).toISOString(),
         brand: {
             id: parseInt(modal.find(brandFormSelector).val())
         }

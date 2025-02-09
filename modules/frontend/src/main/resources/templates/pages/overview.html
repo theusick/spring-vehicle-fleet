@@ -17,7 +17,7 @@
 <!--/* Header fragment */-->
 <header th:replace="~{views/fragments/_header :: header(showSidebarToggle='true')}"></header>
 <!--/* Sidebar fragment */-->
-<aside th:replace="~{views/fragments/_sidebar :: sidebar(${activeSidebarLink})}"></aside>
+<aside th:replace="~{views/fragments/_sidebar :: sidebar(activeLink='overview')}"></aside>
 
 <div class="main-content">
   <main>

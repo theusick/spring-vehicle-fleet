@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Data
@@ -22,6 +23,7 @@ public class VehicleModel {
     private String color;
     private double price;
     private String licensePlate;
+    private OffsetDateTime purchaseDate;
 
     private Long enterpriseId;
     private Long brandId;

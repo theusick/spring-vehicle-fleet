@@ -7,7 +7,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.security.SignatureException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -89,8 +89,10 @@ public class ApiExceptionHandler {
             .stream()
             .collect(Collectors.toMap(
                 FieldError::getField,
-                DefaultMessageSourceResolvable::getDefaultMessage,
-                (existing, _) -> existing
+                fieldError ->
+                    Objects.requireNonNullElse(fieldError.getDefaultMessage(),
+                        "No error message available"),
+                (existing, replacement) -> existing
             ));
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, "Validation failed");

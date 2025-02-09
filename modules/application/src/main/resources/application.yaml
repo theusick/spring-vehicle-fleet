@@ -72,6 +72,12 @@ spring:
     hiddenmethod.filter:
       enabled: true
 
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: 'UTC'
+
 security:
   jwt:
     secret-key: ${BACKEND_JWT_SECRET}

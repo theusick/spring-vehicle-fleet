@@ -7,18 +7,29 @@
     --main-sidebar-expand-max-width: calc(100% - var(--sidebar-expand-width));
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 .main-content {
     padding-top: var(--header-hight);
     margin-left: var(--sidebar-not-expand-width);
-    display: flex;
-    flex-direction: column;
+    flex: 1;
     box-sizing: border-box;
-    min-height: 92.5vh;
-    overflow: hidden;
+    overflow-y: auto;
     transition: all 0.35s ease-in-out;
     width: 100%;
     min-width: 0;
     max-width: var(--main-sidebar-not-expand-max-width);
+}
+
+.main-content.without-sidebar {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    height: 100vh;
+    padding-top: 0 !important;
 }
 
 .table {
@@ -26,7 +37,7 @@
     padding: 4px;
     overflow-x: hidden;
     background-color: inherit;
-    width:100%;
+    width: 100%;
 }
 
 /* Sidebar */
@@ -179,4 +190,19 @@ a.sidebar-link.active:hover {
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
     transform: rotate(45deg);
     transition: all .2s ease-out;
+}
+
+/* Footer */
+footer {
+    margin-left: var(--sidebar-not-expand-width);
+}
+
+/* Login form */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: calc(100vh - var(--header-hight));
+    box-sizing: border-box;
 }

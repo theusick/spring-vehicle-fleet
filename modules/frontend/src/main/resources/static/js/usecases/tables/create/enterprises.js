@@ -1,4 +1,5 @@
 import {showErrorToast, showSuccessToast} from '../../../presentation/toasts.js';
+import {getUTCOffset} from '../../../utils/time-utils.js'
 
 $(document).ready(function () {
     const table = initEnterprisesTable();
@@ -35,6 +36,14 @@ function getTableColumns() {
         {data: 'id'},
         {data: 'name'},
         {data: 'city'},
+        {
+            data: 'timezone',
+            render: data => {
+                if (!data) return '';
+                const utcOffset = getUTCOffset(data);
+                return data + ` (${utcOffset})`;
+            }
+        },
         {
             data: null,
             render: renderActionsColumn,

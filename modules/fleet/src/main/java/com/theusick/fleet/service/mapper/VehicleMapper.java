@@ -11,6 +11,11 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,7 +23,9 @@ import java.util.stream.Collectors;
 @Mapper(
     componentModel = "spring",
     uses = {
-        VehicleBrandMapper.class, VehicleDriverMapper.class
+        VehicleBrandMapper.class,
+        VehicleDriverMapper.class,
+        ZoneOffset.class
     }
 )
 public interface VehicleMapper {
@@ -36,6 +43,11 @@ public interface VehicleMapper {
         target = "driverIds",
         source = "vehicleDrivers",
         qualifiedByName = "mapDriverIdsFromVehicleDrivers"
+    )
+    @Mapping(
+        target = "purchaseDate",
+        expression = "java(convertPurchaseDate(vehicleEntity.getPurchaseDate(), " +
+            "vehicleEntity.getEnterprise().getTimezone()))"
     )
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
 
@@ -63,7 +75,20 @@ public interface VehicleMapper {
     @Mapping(target = "enterprise", ignore = true)
     @Mapping(target = "vehicleDrivers", ignore = true)
     @Mapping(target = "brand", ignore = true)
+    @Mapping(
+        target = "purchaseDate",
+        expression = "java(vehicleModel.getPurchaseDate().toInstant())"
+    )
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
+
+    default OffsetDateTime convertPurchaseDate(Instant purchaseDate,
+                                               ZoneId enterpriseZone) {
+        if (purchaseDate == null) {
+            return null;
+        }
+        ZonedDateTime enterpriseDateTime = purchaseDate.atZone(enterpriseZone);
+        return enterpriseDateTime.toOffsetDateTime();
+    }
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @Data
@@ -19,6 +20,8 @@ public class EnterpriseModel {
 
     private String name;
     private String city;
+
+    private ZoneId timezone;
 
     List<Long> vehicleIds;
     List<Long> driverIds;

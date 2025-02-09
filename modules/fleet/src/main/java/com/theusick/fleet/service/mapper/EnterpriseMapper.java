@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
     componentModel = "spring",
     uses = {
         VehicleMapper.class, DriverMapper.class
-    }
+    },
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface EnterpriseMapper {
 
@@ -35,6 +37,7 @@ public interface EnterpriseMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "vehicleIds", ignore = true)
     @Mapping(target = "driverIds", ignore = true)
+    @Mapping(target = "timezone", ignore = true)
     EnterpriseModel enterpriseModelFromInfoDTO(EnterpriseInfoDTO enterpriseDTO);
 
     @Mapping(target = "id", ignore = true)

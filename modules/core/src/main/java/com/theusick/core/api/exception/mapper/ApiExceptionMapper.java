@@ -25,7 +25,7 @@ public interface ApiExceptionMapper {
     @Mapping(target = "type", expression = "java(URI.create(getRequestURI(request)))")
     @Mapping(target = "title", expression = "java(exception.getStatus().getReasonPhrase())")
     @Mapping(target = "status", expression = "java(exception.getStatus().value())")
-    @Mapping(target = "detail", source = "exception.message")
+    @Mapping(target = "detail", expression = "java(exception.getMessage())")
     @Mapping(target = "instance", expression = "java(URI.create(getServerBasePath(request)))")
     @Mapping(target = "properties", ignore = true)
     ProblemDetail toProblemDetail(ApiException exception, HttpServletRequest request);

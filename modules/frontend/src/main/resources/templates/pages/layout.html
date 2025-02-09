@@ -21,11 +21,11 @@
   <th:block th:replace="${scripts}"/>
 </head>
 <!--/* Body with arguments */-->
-<body class="bg-light" th:fragment="body(content, pageScripts)">
+<body class="bg-light" th:fragment="body(content, pageScripts, withoutSidebar)">
 <!--/* Header fragment */-->
 <header th:replace="~{views/fragments/_header :: header(false)}"></header>
 <!--/* Content value passed from calling template will be inserted in this element */-->
-<div class="main-content">
+<div class="main-content" th:classappend="${withoutSidebar} ? 'without-sidebar' : ''">
   <main>
     <section class="main-content-container p-3">
       <th:block th:replace="${content}"/>

@@ -1,7 +1,7 @@
 package com.theusick.frontend.controller.mapper;
 
-import com.theusick.frontend.controller.dto.VehicleViewDTO;
 import com.theusick.fleet.service.model.VehicleModel;
+import com.theusick.frontend.controller.dto.VehicleViewDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

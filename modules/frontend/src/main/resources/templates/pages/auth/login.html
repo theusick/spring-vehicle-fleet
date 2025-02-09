@@ -7,29 +7,32 @@
 <body
   th:replace="~{pages/layout :: body(
   content=~{:: #content},
-  pageScripts=~{:: #loginScripts})}">
+  pageScripts=~{:: #loginScripts},
+  withoutSidebar=true)}">
 <th:block id="content">
-  <div class="row justify-content-center">
-    <div class="col-md-4">
-      <h1 class="mb-4 text-center">Login</h1>
-      <form method="post">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input id="username" name="username" type="text" class="form-control"
-                 placeholder="Enter username" required>
-        </div>
-        <div class="mb-3 position-relative">
-          <label for="password" class="form-label">Password</label>
-          <div class="input-group">
-            <input id="password" name="password" type="password" class="form-control"
-                   placeholder="Enter password" required>
-            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-              <i class="bi bi-eye-slash" id="passwordIcon"></i>
-            </button>
+  <div class="login-container vh-100 d-flex align-items-center">
+    <div class="row justify-content-center w-100">
+      <div class="col-md-4">
+        <h1 class="mb-4 text-center">Login</h1>
+        <form method="post">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input id="username" name="username" type="text" class="form-control"
+                   placeholder="Enter username" required>
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
-      </form>
+          <div class="mb-3 position-relative">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input id="password" name="password" type="password" class="form-control"
+                     placeholder="Enter password" required>
+              <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                <i class="bi bi-eye-slash" id="passwordIcon"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+      </div>
     </div>
   </div>
 </th:block>

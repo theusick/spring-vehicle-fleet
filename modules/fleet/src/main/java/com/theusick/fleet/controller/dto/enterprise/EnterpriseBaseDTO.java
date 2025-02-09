@@ -9,6 +9,7 @@ import lombok.Value;
 import lombok.With;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @With
@@ -24,6 +25,8 @@ public class EnterpriseBaseDTO {
     String name;
     @NotBlank
     String city;
+    @NotNull
+    ZoneId timezone;
 
     @NotNull
     @JsonProperty("vehicles")

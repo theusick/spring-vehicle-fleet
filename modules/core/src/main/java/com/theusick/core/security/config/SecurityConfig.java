@@ -83,7 +83,6 @@ public class SecurityConfig {
             .build();
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
                                                        PasswordEncoder passwordEncoder) throws Exception {
