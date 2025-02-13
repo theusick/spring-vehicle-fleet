@@ -4,6 +4,7 @@ import com.theusick.fleet.controller.dto.vehicle.VehicleBaseDTO;
 import com.theusick.fleet.controller.dto.vehicle.VehicleInfoDTO;
 import com.theusick.fleet.repository.entity.VehicleDriverEntity;
 import com.theusick.fleet.repository.entity.VehicleEntity;
+import com.theusick.fleet.service.mapper.util.MappingTimeUtil;
 import com.theusick.fleet.service.model.VehicleModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,11 +12,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,8 +20,10 @@ import java.util.stream.Collectors;
     componentModel = "spring",
     uses = {
         VehicleBrandMapper.class,
-        VehicleDriverMapper.class,
-        ZoneOffset.class
+        VehicleDriverMapper.class
+    },
+    imports = {
+        MappingTimeUtil.class
     }
 )
 public interface VehicleMapper {
@@ -46,7 +44,7 @@ public interface VehicleMapper {
     )
     @Mapping(
         target = "purchaseDate",
-        expression = "java(convertPurchaseDate(vehicleEntity.getPurchaseDate(), " +
+        expression = "java(MappingTimeUtil.convertInstantToTimezone(vehicleEntity.getPurchaseDate(), " +
             "vehicleEntity.getEnterprise().getTimezone()))"
     )
     VehicleModel vehicleModelFromEntity(VehicleEntity vehicleEntity);
@@ -81,14 +79,5 @@ public interface VehicleMapper {
     )
     void updateVehicleEntityFromModel(@MappingTarget VehicleEntity vehicleEntity,
                                       VehicleModel vehicleModel);
-
-    default OffsetDateTime convertPurchaseDate(Instant purchaseDate,
-                                               ZoneId enterpriseZone) {
-        if (purchaseDate == null) {
-            return null;
-        }
-        ZonedDateTime enterpriseDateTime = purchaseDate.atZone(enterpriseZone);
-        return enterpriseDateTime.toOffsetDateTime();
-    }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Value
 @Builder
 @Jacksonized
-@Schema(description = "Vehicle")
+@Schema(name = "Vehicle")
 public class VehicleBaseDTO {
 
     @NotNull

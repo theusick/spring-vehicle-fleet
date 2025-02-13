@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-@Schema(description = "VehicleBrand")
+@Schema(name = "VehicleBrand")
 public class VehicleBrandBaseDTO {
 
     @NotNull

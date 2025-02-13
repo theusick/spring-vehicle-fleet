@@ -1,4 +1,5 @@
 import {showErrorToast} from "../../presentation/toasts.js";
+import {openAndFillModal} from "./common.js";
 
 $(document).ready(function () {
     $('#addButton').on('click', function (event) {

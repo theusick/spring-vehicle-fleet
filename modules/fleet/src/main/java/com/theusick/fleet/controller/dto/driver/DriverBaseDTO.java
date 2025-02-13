@@ -13,7 +13,7 @@ import java.util.List;
 @Value
 @Builder
 @Jacksonized
-@Schema(description = "Driver")
+@Schema(name = "Driver")
 public class DriverBaseDTO {
 
     @NotNull

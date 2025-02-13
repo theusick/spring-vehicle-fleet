@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-@Schema(description = "Driver")
+@Schema(name = "ActiveDriver")
 public class ActiveDriverDTO {
 
     @NotNull

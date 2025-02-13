@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +32,8 @@ public class AuthenticationController {
 
     @PostMapping(
         value = "/login",
-        produces = {"application/json"},
-        consumes = {"application/json"}
+        produces = {MediaType.APPLICATION_JSON_VALUE},
+        consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
     public LoginResponse authenticate(@RequestBody @Valid LoginUserDTO loginUserDTO,
                                       HttpServletResponse response) {

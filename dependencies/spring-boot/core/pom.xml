@@ -171,6 +171,11 @@
                             <version>${lombok.version}</version>
                         </path>
                         <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                        <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
@@ -211,7 +216,7 @@
                     <includes>
                         <include>%regex[.*]</include>
                     </includes>
-                    <argLine>${surefire.agentArg} @{argLine} ${customSurefireArgs}</argLine>
+                    <argLine>${surefire.agentArg} ${customSurefireArgs}</argLine>
                 </configuration>
             </plugin>
         </plugins>

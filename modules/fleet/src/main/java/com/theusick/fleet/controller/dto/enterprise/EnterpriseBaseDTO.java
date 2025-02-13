@@ -16,7 +16,7 @@ import java.util.List;
 @Value
 @Builder
 @Jacksonized
-@Schema(name = "EnterpriseResponse")
+@Schema(name = "Enterprise")
 public class EnterpriseBaseDTO {
 
     @NotNull

@@ -15,7 +15,7 @@ import java.util.List;
 @Tag(name = "Driver")
 @RequestMapping("/api/v1/drivers")
 @RequiredArgsConstructor
-public class DriverApiController {
+public class DriverController {
 
     private final DriverService driverService;
     private final DriverMapper driverMapper;

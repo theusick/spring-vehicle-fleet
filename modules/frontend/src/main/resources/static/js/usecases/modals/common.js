@@ -1,4 +1,4 @@
-function openAndFillModal(modalId, formId, data, fieldsMapping) {
+export function openAndFillModal(modalId, formId, data, fieldsMapping) {
     const form = $(formId);
 
     for (let field in fieldsMapping) {
