@@ -4,13 +4,16 @@ package com.theusick.fleet.controller;
 import com.theusick.core.security.repository.entity.User;
 import com.theusick.fleet.controller.dto.brand.VehicleBrandBaseDTO;
 import com.theusick.fleet.controller.dto.vehicle.VehicleBaseDTO;
-import com.theusick.fleet.controller.dto.vehicletelemetry.VehicleTelemetryFeatureCollection;
+import com.theusick.fleet.controller.dto.vehicletelemetry.VehicleTelemetryFC;
+import com.theusick.fleet.controller.dto.vehicletelemetry.route.VehicleTelemetryRouteFC;
+import com.theusick.fleet.controller.dto.vehicletelemetry.route.VehicleTelemetryRouteFeature;
 import com.theusick.fleet.service.VehicleBrandService;
 import com.theusick.fleet.service.VehicleService;
 import com.theusick.fleet.service.VehicleTelemetryService;
 import com.theusick.fleet.service.mapper.VehicleBrandMapper;
 import com.theusick.fleet.service.mapper.VehicleMapper;
 import com.theusick.fleet.service.mapper.VehicleTelemetryMapper;
+import com.theusick.fleet.service.mapper.VehicleTelemetryRouteMapper;
 import com.theusick.fleet.service.model.VehicleTelemetryModel;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,8 @@ public class VehicleController {
 
     private final VehicleTelemetryService vehicleTelemetryService;
     private final VehicleTelemetryMapper vehicleTelemetryMapper;
+
+    private final VehicleTelemetryRouteMapper vehicleTelemetryRouteMapper;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<VehicleBaseDTO> getVehicles() {
@@ -71,7 +76,7 @@ public class VehicleController {
             vehicleTelemetryService.getVehicleTelemetry(vehicleId, start, end);
 
         if ("geojson".equalsIgnoreCase(format)) {
-            return VehicleTelemetryFeatureCollection.builder()
+            return VehicleTelemetryFC.builder()
                 .features(vehicleTelemetry.stream()
                     .map(vehicleTelemetryMapper::telemetryModelToFeature)
                     .toList())
@@ -81,6 +86,22 @@ public class VehicleController {
         return vehicleTelemetry.stream()
             .map(vehicleTelemetryMapper::telemetryBaseDTOFromModel)
             .toList();
+    }
+
+    @GetMapping(
+        value = "/{vehicleId}/route",
+        produces = {"application/geo+json"}
+    )
+    @PreAuthorize("hasRole('MANAGER')")
+    public VehicleTelemetryRouteFC getVehicleTelemetryRoute(@PathVariable Long vehicleId,
+                                                            @RequestParam OffsetDateTime start,
+                                                            @RequestParam OffsetDateTime end) {
+        VehicleTelemetryRouteFeature feature = vehicleTelemetryRouteMapper.routeModelToFeature(
+            vehicleTelemetryService.getVehicleTelemetryRoute(vehicleId, start, end));
+
+        return VehicleTelemetryRouteFC.builder()
+            .features(List.of(feature))
+            .build();
     }
 
 }

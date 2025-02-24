@@ -1,6 +1,6 @@
 package com.theusick.fleet.controller.dto.vehicletelemetry;
 
-import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Geometry;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ public interface Feature {
 
     String TYPE = "Feature";
 
-    Point getGeometry();
+    Geometry getGeometry();
 
     Long getId();
 

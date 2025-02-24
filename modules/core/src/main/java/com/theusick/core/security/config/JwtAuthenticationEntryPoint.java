@@ -18,7 +18,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper jacksonObjectMapper;
     private final ApiExceptionMapper apiExceptionMapper;
 
     @Override
@@ -34,7 +34,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         ProblemDetail problemDetail = apiExceptionMapper.toProblemDetail(
             new GeneralApiException(status, status.getReasonPhrase()), request);
 
-        response.getWriter().write(objectMapper.writeValueAsString(problemDetail));
+        response.getWriter().write(jacksonObjectMapper.writeValueAsString(problemDetail));
         response.getWriter().flush();
     }
 

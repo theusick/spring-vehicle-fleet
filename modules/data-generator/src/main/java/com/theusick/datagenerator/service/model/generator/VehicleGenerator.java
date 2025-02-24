@@ -1,4 +1,4 @@
-package com.theusick.datagenerator.service.model;
+package com.theusick.datagenerator.service.model.generator;
 
 import com.theusick.fleet.service.model.VehicleBrandModel;
 import com.theusick.fleet.service.model.VehicleModel;
@@ -28,6 +28,10 @@ public class VehicleGenerator extends AbstractModelGenerator<VehicleModel> {
     private static final List<String> REGIONS =
         List.of("01", "02", "05", "21", "47", "69", "77", "78", "97");
 
+    public static VehicleBrandModel getRandomBrand(List<VehicleBrandModel> brands) {
+        return brands.get(ThreadLocalRandom.current().nextInt(brands.size()));
+    }
+
     @Override
     public VehicleModel generateFields() {
         return VehicleModel.builder()
@@ -38,10 +42,6 @@ public class VehicleGenerator extends AbstractModelGenerator<VehicleModel> {
             .licensePlate(generateLicensePlate())
             .purchaseDate(generatePurchasedAt())
             .build();
-    }
-
-    public static VehicleBrandModel getRandomBrand(List<VehicleBrandModel> brands) {
-        return brands.get(ThreadLocalRandom.current().nextInt(brands.size()));
     }
 
     private int generateYear() {

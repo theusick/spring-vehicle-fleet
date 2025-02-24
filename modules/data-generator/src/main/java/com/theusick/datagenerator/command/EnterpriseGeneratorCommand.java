@@ -14,7 +14,7 @@ import org.springframework.shell.command.annotation.Option;
 
 import java.util.List;
 
-@Command(group = "Data Generation")
+@Command(group = "Enterprise Data Generation")
 @RequiredArgsConstructor
 public class EnterpriseGeneratorCommand {
 
@@ -22,6 +22,7 @@ public class EnterpriseGeneratorCommand {
 
     @Command(
         command = "generate",
+        alias = {"gen"},
         description = "Generate number of VehicleEntity and DriverEntity for existing enterprise"
     )
     public String generate(

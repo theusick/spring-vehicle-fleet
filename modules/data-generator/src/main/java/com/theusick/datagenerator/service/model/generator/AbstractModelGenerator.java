@@ -1,4 +1,4 @@
-package com.theusick.datagenerator.service.model;
+package com.theusick.datagenerator.service.model.generator;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

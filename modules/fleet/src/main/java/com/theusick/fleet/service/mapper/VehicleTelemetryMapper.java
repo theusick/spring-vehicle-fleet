@@ -7,6 +7,7 @@ import com.theusick.fleet.service.mapper.util.MappingTimeUtil;
 import com.theusick.fleet.service.model.VehicleTelemetryModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import java.util.Map;
@@ -39,5 +40,14 @@ public interface VehicleTelemetryMapper {
             "timestamp", model.getTimestamp()
         );
     }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "vehicle", ignore = true)
+    @Mapping(
+        target = "timestamp",
+        expression = "java(model.getTimestamp().toInstant())"
+    )
+    void updateVehicleTelemetryEntityFromModel(@MappingTarget VehicleTelemetryEntity entity,
+                                               VehicleTelemetryModel model);
 
 }

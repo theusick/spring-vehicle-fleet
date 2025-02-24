@@ -1,4 +1,4 @@
-package com.theusick.datagenerator.service.model;
+package com.theusick.datagenerator.service.model.generator;
 
 public interface ModelGenerator<T> {
 

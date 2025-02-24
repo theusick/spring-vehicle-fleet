@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @Jacksonized
 @Schema
-public class VehicleTelemetryFeatureCollection implements FeatureCollection<VehicleTelemetryFeature> {
+public class VehicleTelemetryFC implements FeatureCollection<VehicleTelemetryFeature> {
 
     List<VehicleTelemetryFeature> features;
 

@@ -83,6 +83,11 @@ security:
     secret-key: ${BACKEND_JWT_SECRET}
     expiration-time: 1800000
 
+graphhopper:
+  api:
+    url: ${BACKEND_GRAPHHOPPER_URL:https://graphhopper.com/api/1}
+    key: ${BACKEND_GRAPHHOPPER_API_KEY}
+
 springdoc:
   swagger-ui:
     path: /

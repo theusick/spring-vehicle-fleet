@@ -2,8 +2,8 @@ package com.theusick.datagenerator.service.impl;
 
 import com.theusick.datagenerator.service.GeneratorService;
 import com.theusick.datagenerator.service.exception.NoVehicleBrandsException;
-import com.theusick.datagenerator.service.model.DriverGenerator;
-import com.theusick.datagenerator.service.model.VehicleGenerator;
+import com.theusick.datagenerator.service.model.generator.DriverGenerator;
+import com.theusick.datagenerator.service.model.generator.VehicleGenerator;
 import com.theusick.fleet.service.DriverService;
 import com.theusick.fleet.service.VehicleBrandService;
 import com.theusick.fleet.service.VehicleService;
